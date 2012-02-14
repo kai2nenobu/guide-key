@@ -4,7 +4,7 @@
 (defvar guide-key:show-key-sequence '("C-c" "C-c &" "C-q" "C-x r" "C-x 4" "C-4")
   "*Key sequences to show its bindings.")
 
-(defvar guide-key:polling-time 0.05
+(defvar guide-key:polling-time 0.01
   "*Polling time to show bindings.")
 
 (defvar guide-key:polling-timer nil
