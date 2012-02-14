@@ -35,14 +35,17 @@
 (defun guide-key:popup-bindings ()
   "Pop up window to show bindings."
   (let ((cbuffer (current-buffer))
-        (key-seq (this-command-keys-vector)))
+        (key-seq (this-command-keys-vector))
+        (max-width 0))
     (if (guide-key:display-popup-p key-seq)
         (when (guide-key:update-popup-p key-seq)
           (with-current-buffer (get-buffer-create guide-key:buffer-name)
             (erase-buffer)
             (describe-buffer-bindings cbuffer key-seq)
             (guide-key:format-guide-buffer key-seq)
-            (popwin:popup-buffer (current-buffer) :width 65 :position 'right :noselect t))
+            (setq max-width (guide-key:buffer-max-width))
+            (popwin:popup-buffer (current-buffer)
+                                 :width max-width :position 'right :noselect t))
             ;; (popwin:popup-buffer (current-buffer) :height 20 :position 'bottom :noselect t))
           )
       (when (guide-key:poppedup-p)
@@ -94,6 +97,11 @@
     (delete-region last-end-pt (point-max))
     (goto-char (point-min))
     ))
+
+(defun guide-key:buffer-max-width ()
+  "Return max width in current buffer."
+  (let ((buf-str (buffer-substring-no-properties (point-min) (point-max))))
+    (apply 'max (mapcar 'length (split-string buf-str "\n")))))
 
 ;;; debug
 (defun guide-key:message-events ()
