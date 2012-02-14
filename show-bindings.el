@@ -52,15 +52,18 @@
   "Turn off polling timer."
   (cancel-timer show-bindings:polling-timer))
 
-;;; internal functions
+;;; debug
 (defun show-bindings:message-events ()
   ""
   (interactive)
-  (message (format "lce:%S tck:%S tckv:%S lie:%Suce:%S"
+  (message (format "lce:%S tck:%S tckv:%S lie:%S uce:%S popb:%S cls:%S"
            last-command-event
            (this-command-keys)
            (this-command-keys-vector)
            last-input-event
-           unread-command-events)))
+           unread-command-events
+           popwin:popup-buffer
+           (show-bindings:popuped-p)
+           )))
 ;; (setq ttt (run-at-time t 1 'show-bindings:message-events))
 ;; (cancel-timer ttt)
