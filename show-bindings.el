@@ -84,7 +84,7 @@
            last-input-event
            unread-command-events
            popwin:popup-buffer
-           (show-bindings:popuped-p)
+           (show-bindings:poppedup-p)
            )))
 ;; (setq ttt (run-at-time t 1 'show-bindings:message-events))
 ;; (cancel-timer ttt)
