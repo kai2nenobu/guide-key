@@ -1,80 +1,80 @@
 
 (require 'popwin)
 
-(defvar show-bindings:show-key-sequence '("\C-c" "\C-c&" "\C-q" "\C-xr" "\C-x4")
+(defvar guide-key:show-key-sequence '("\C-c" "\C-c&" "\C-q" "\C-xr" "\C-x4")
   "*Key sequences to show its bindings.")
 
-(defvar show-bindings:polling-time 0.05
+(defvar guide-key:polling-time 0.05
   "*Polling time to show bindings.")
 
-(defvar show-bindings:polling-timer nil
+(defvar guide-key:polling-timer nil
   "Polling timer for show bindings.")
 
-(defvar show-bindings:buffer-name "*show-bindings*"
+(defvar guide-key:buffer-name "*guide-key*"
   "Buffer name to show bindings.")
 
-(defvar show-bindings:last-command-keys-vector nil
+(defvar guide-key:last-command-keys-vector nil
   "Last command keys as vector.")
 
 ;; or hook
-;; (add-hook 'pre-command-hook 'show-bindings:hook-command)
+;; (add-hook 'pre-command-hook 'guide-key:hook-command)
 ;; (setq pre-command-hook nil)
-;; (add-hook 'post-command-hook 'show-bindings:key-event)
+;; (add-hook 'post-command-hook 'guide-key:key-event)
 ;; (add-hook 'pre-command-hook 'show-this-command)
 
 ;;; functions
 ;;;###autoload
-(define-minor-mode show-bindings-mode
+(define-minor-mode guide-key-mode
   "Show bindings automatically."
   :global t
-  (funcall (if show-bindings-mode
-               'show-bindings:turn-on-timer
-             'show-bindings:turn-off-timer)))
+  (funcall (if guide-key-mode
+               'guide-key:turn-on-timer
+             'guide-key:turn-off-timer)))
 
 ;;; internal functions
-(defun show-bindings:popup-bindings ()
+(defun guide-key:popup-bindings ()
   "Pop up window to show bindings."
   (let ((cbuffer (current-buffer))
         (key-seq (this-command-keys-vector)))
-    (if (show-bindings:display-popup-p key-seq)
-        (when (show-bindings:update-popup-p key-seq)
-          (with-current-buffer (get-buffer-create show-bindings:buffer-name)
+    (if (guide-key:display-popup-p key-seq)
+        (when (guide-key:update-popup-p key-seq)
+          (with-current-buffer (get-buffer-create guide-key:buffer-name)
             (erase-buffer)
             (describe-buffer-bindings cbuffer key-seq)
-            (show-bindings:format-guide-buffer key-seq)
+            (guide-key:format-guide-buffer key-seq)
             (popwin:popup-buffer (current-buffer) :width 65 :position 'right :noselect t))
             ;; (popwin:popup-buffer (current-buffer) :height 20 :position 'bottom :noselect t))
           )
-      (when (show-bindings:poppedup-p)
-        ;; (delete-windows-on show-bindings:buffer-name))
+      (when (guide-key:poppedup-p)
+        ;; (delete-windows-on guide-key:buffer-name))
         (popwin:close-popup-window t))
       )
-    (setq show-bindings:last-command-keys-vector key-seq)))
+    (setq guide-key:last-command-keys-vector key-seq)))
 
-(defun show-bindings:update-popup-p (key-seq)
+(defun guide-key:update-popup-p (key-seq)
   "Return t if show bindings buffer should be updated."
-  (not (equal show-bindings:last-command-keys-vector key-seq)))
+  (not (equal guide-key:last-command-keys-vector key-seq)))
 
-(defun show-bindings:display-popup-p (key-seq)
+(defun guide-key:display-popup-p (key-seq)
   "Return t if show bindings buffer should be displayed."
   (and (> (length key-seq) 0)
-       (member key-seq (mapcar 'vconcat show-bindings:show-key-sequence))
+       (member key-seq (mapcar 'vconcat guide-key:show-key-sequence))
        ))
 
-(defun show-bindings:poppedup-p ()
+(defun guide-key:poppedup-p ()
   "Return t if show bindings buffer is popped up."
-  (eq popwin:popup-buffer (get-buffer show-bindings:buffer-name)))
+  (eq popwin:popup-buffer (get-buffer guide-key:buffer-name)))
 
-(defun show-bindings:turn-on-timer ()
+(defun guide-key:turn-on-timer ()
   "Turn on polling timer."
-  (setq show-bindings:polling-timer
-        (run-at-time t show-bindings:polling-time 'show-bindings:popup-bindings)))
+  (setq guide-key:polling-timer
+        (run-at-time t guide-key:polling-time 'guide-key:popup-bindings)))
 
-(defun show-bindings:turn-off-timer ()
+(defun guide-key:turn-off-timer ()
   "Turn off polling timer."
-  (cancel-timer show-bindings:polling-timer))
+  (cancel-timer guide-key:polling-timer))
 
-(defun show-bindings:format-guide-buffer (key-seq)
+(defun guide-key:format-guide-buffer (key-seq)
   "Format a guide buffer."
   (let ((key-dsc (key-description key-seq))
         (last-end-pt 1))
@@ -91,7 +91,7 @@
     ))
 
 ;;; debug
-(defun show-bindings:message-events ()
+(defun guide-key:message-events ()
   ""
   (interactive)
   (message (format "lce:%S tck:%S tckv:%S lie:%S uce:%S popb:%S cls:%S"
@@ -101,9 +101,9 @@
                    last-input-event
                    unread-command-events
                    popwin:popup-buffer
-                   (show-bindings:poppedup-p)
+                   (guide-key:poppedup-p)
                    )))
-;; (setq ttt (run-at-time t 1 'show-bindings:message-events))
+;; (setq ttt (run-at-time t 1 'guide-key:message-events))
 ;; (cancel-timer ttt)
 
-(show-bindings-mode t)
+(guide-key-mode t)
