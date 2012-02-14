@@ -1,7 +1,7 @@
 
 (require 'popwin)
 
-(defvar guide-key:show-key-sequence '("\C-c" "\C-c&" "\C-q" "\C-xr" "\C-x4")
+(defvar guide-key:show-key-sequence '("C-c" "C-c &" "C-q" "C-x r" "C-x 4" "C-4")
   "*Key sequences to show its bindings.")
 
 (defvar guide-key:polling-time 0.05
@@ -58,8 +58,13 @@
 (defun guide-key:display-popup-p (key-seq)
   "Return t if show bindings buffer should be displayed."
   (and (> (length key-seq) 0)
-       (member key-seq (mapcar 'vconcat guide-key:show-key-sequence))
+       (member key-seq (mapcar 'guide-key:convert-key-sequence-to-vector
+                               guide-key:show-key-sequence))
        ))
+
+(defun guide-key:convert-key-sequence-to-vector (key-seq)
+  "Convert key sequence KEY-SEQ to vector representation."
+  (vconcat (read-kbd-macro key-seq)))
 
 (defun guide-key:poppedup-p ()
   "Return t if show bindings buffer is popped up."
