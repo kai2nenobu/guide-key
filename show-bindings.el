@@ -1,17 +1,20 @@
 
 (require 'popwin)
 
-(defvar show-bindings:buffer-name "*show-bindings*"
-  "Buffer name to show bindings.")
-
 (defvar show-bindings:show-key-sequence '("\C-c" "\C-q" "\C-xr")
   "*Key sequences to show its bindings.")
 
-(defvar show-bindings:polling-time 0.1
+(defvar show-bindings:polling-time 0.05
   "*Polling time to show bindings.")
 
 (defvar show-bindings:polling-timer nil
   "Polling timer for show bindings.")
+
+(defvar show-bindings:buffer-name "*show-bindings*"
+  "Buffer name to show bindings.")
+
+(defvar show-bindings:last-command-keys-vector nil
+  "Last command keys as vector.")
 
 ;; or hook
 ;; (add-hook 'pre-command-hook 'show-bindings:hook-command)
@@ -20,7 +23,6 @@
 ;; (add-hook 'pre-command-hook 'show-this-command)
 
 ;;; functions
-
 ;;;###autoload
 (define-minor-mode show-bindings-mode
   "Show bindings automatically."
@@ -29,19 +31,38 @@
                'show-bindings:turn-on-timer
              'show-bindings:turn-off-timer)))
 
+;;; internal functions
 (defun show-bindings:popup-bindings ()
   "Pop up window to show bindings."
   (let ((cbuffer (current-buffer))
-        (seq (this-command-keys-vector)))
-    (if (and (> (length seq) 0)
-             (member seq
-                     (mapcar 'vconcat show-bindings:show-key-sequence)))
-        (with-current-buffer (get-buffer-create show-bindings:buffer-name)
-          (erase-buffer)
-          (describe-buffer-bindings cbuffer seq)
-          ;; (display-buffer (current-buffer) t)
-          (popwin:popup-buffer (current-buffer) :width 65 :position 'right :noselect t))
-      (delete-windows-on show-bindings:buffer-name))))
+        (key-seq (this-command-keys-vector)))
+    (if (show-bindings:display-popup-p key-seq)
+        (when (show-bindings:update-popup-p key-seq)
+          (with-current-buffer (get-buffer-create show-bindings:buffer-name)
+            (erase-buffer)
+            (describe-buffer-bindings cbuffer key-seq)
+            (popwin:popup-buffer (current-buffer) :width 65 :position 'right :noselect t))
+            ;; (popwin:popup-buffer (current-buffer) :height 20 :position 'bottom :noselect t))
+          )
+      (when (show-bindings:poppedup-p)
+        ;; (delete-windows-on show-bindings:buffer-name))
+        (popwin:close-popup-window))
+      )
+    (setq show-bindings:last-command-keys-vector key-seq)))
+
+(defun show-bindings:update-popup-p (key-seq)
+  "Return t if show bindings buffer should be updated."
+  (not (equal show-bindings:last-command-keys-vector key-seq)))
+
+(defun show-bindings:display-popup-p (key-seq)
+  "Return t if show bindings buffer should be displayed."
+  (and (> (length key-seq) 0)
+       (member key-seq (mapcar 'vconcat show-bindings:show-key-sequence))
+       ))
+
+(defun show-bindings:poppedup-p ()
+  "Return t if show bindings buffer is popped up."
+  (eq popwin:popup-buffer (get-buffer show-bindings:buffer-name)))
 
 (defun show-bindings:turn-on-timer ()
   "Turn on polling timer."
