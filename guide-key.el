@@ -84,15 +84,15 @@
   (let ((key-dsc (key-description key-seq))
         (last-end-pt 1))
     (untabify (point-min) (point-max))    ; replace tab to space
-    (beginning-of-buffer)
+    (goto-char (point-min))
     (while (re-search-forward
             (format "^%s \\([^ \t]+\\)\\([ \t]+\\)\\(\\(?:[^ \t\n]+ ?\\)+\\)$" key-dsc) nil t)
       (replace-match "[\\1]\\2\\3")
       (when (> (- (point-at-bol) last-end-pt) 0)
         (delete-region last-end-pt (point-at-bol)))
       (setq last-end-pt (point-at-bol 2)))
-    (delete-region last-end-pt (progn (end-of-buffer) (point)))
-    (beginning-of-buffer)
+    (delete-region last-end-pt (point-max))
+    (goto-char (point-min))
     ))
 
 ;;; debug
