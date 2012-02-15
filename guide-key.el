@@ -59,8 +59,8 @@
   :group 'guide-key)
 
 ;;; internal variables
-(defvar guide-key:guide-list nil
-  "List of key guide. Element of this is like (KEY SPACE COMMAND).")
+;; (defvar guide-key:guide-list nil
+;;   "List of key guide. Element of this is like (KEY SPACE COMMAND).")
 
 (defvar guide-key:polling-timer nil
   "Polling timer for show bindings.")
