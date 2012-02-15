@@ -78,10 +78,10 @@
 
 (defun guide-key:display-popup-p (key-seq)
   "Return t if show bindings buffer should be displayed."
-  (and (> (length key-seq) 0)
+;  (and (> (length key-seq) 0)
        (member key-seq (mapcar 'guide-key:convert-key-sequence-to-vector
                                guide-key:show-key-sequence))
-       ))
+       );)
 
 (defun guide-key:convert-key-sequence-to-vector (key-seq)
   "Convert key sequence KEY-SEQ to vector representation."
