@@ -13,6 +13,16 @@
 (defvar guide-key:polling-time 0.01
   "*Polling time to show bindings.")
 
+(defface guide-key:key-face
+  '((t (:foreground "red")))
+  "Face for key"
+  :group 'guide-key)
+
+(defface guide-key:prefix-command-face
+  '((t (:foreground "cyan")))
+  "Face for prefix command"
+  :group 'guide-key)
+
 (defvar guide-key:polling-timer nil
   "Polling timer for show bindings.")
 
@@ -96,6 +106,7 @@
         (last-end-pt 1))
     (untabify (point-min) (point-max))    ; replace tab to space
     (goto-char (point-min))
+    ;; delete extra strings and format key guide
     (while (re-search-forward
             (format "^%s \\([^ \t]+\\)\\([ \t]+\\)\\(\\(?:[^ \t\n]+ ?\\)+\\)$" key-dsc) nil t)
       (replace-match "[\\1]\\2\\3")
@@ -103,6 +114,13 @@
         (delete-region last-end-pt (point-at-bol)))
       (setq last-end-pt (point-at-bol 2)))
     (delete-region last-end-pt (point-max))
+    ;; fontify key guide
+    (goto-char (point-min))
+    (while (re-search-forward
+            "\\(\\[[^ \t]+\\]\\)\\([ \t]+\\)\\(\\(?:[^ \t\n]+ ?\\)+\\)$" nil t)
+      (put-text-property (match-beginning 1) (1+ (match-beginning 1)) 'face 'guide-key:key-face)
+      (put-text-property (1- (match-end 1)) (match-end 1) 'face 'guide-key:key-face)
+      )
     (goto-char (point-min))
     ))
 
