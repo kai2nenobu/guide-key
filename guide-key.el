@@ -1,7 +1,13 @@
 
+;;; TODO:
+;; - enrichment of guide buffer
+;; - automatically guide all following keys
+;; - pop up guide buffer at top or bottom
+;; - cooperate with polling of popwin.el?
+
 (require 'popwin)
 
-(defvar guide-key:show-key-sequence '("C-c" "C-c &" "C-q" "C-x r" "C-x 4" "C-4")
+(defvar guide-key:show-key-sequence '("C-c" "C-c &" "C-q" "C-x r" "C-S-r" "C-x 4" "C-4")
   "*Key sequences to show its bindings.")
 
 (defvar guide-key:polling-time 0.01
