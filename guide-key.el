@@ -135,7 +135,7 @@
   (let ((guide-key:guide-list nil)
         (key-dsc (key-description key-seq))
         (last-end-pt 1))
-    (untabify (point-min) (point-max))    ; replace tab to space
+    (untabify (point-min) (point-max))  ; replace tab to space
     (goto-char (point-min))
     ;; extract key guide from buffer bindings
     (while (re-search-forward
