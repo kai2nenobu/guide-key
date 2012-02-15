@@ -16,24 +16,30 @@
 
 (require 'popwin)
 
-(defvar guide-key:show-key-sequence '("C-x" "C-x 8" "C-x 8 ^" "C-c" "C-c &" "C-q" "C-x r" "C-S-r" "C-x 4" "C-4")
-  "*Key sequences to show its bindings.")
+;;; variables
+(defgroup guide-key nil
+  "Guide key bidings."
+  :group 'help
+  :prefix "guide-key:")
 
-(defvar guide-key:polling-time 0.1
-  "*Polling time to show bindings.")
+(defcustom guide-key:show-key-sequence '("C-x" "C-x 8" "C-x 8 ^" "C-c" "C-c &" "C-q" "C-x r" "C-S-r" "C-x 4" "C-4")
+  "*Key sequences to show its bindings."
+  :type '(repeat string)
+  :group 'guide-key)
 
-(defvar guide-key:highlight-command-regexp "forward\\|rectangle"
-  "*Regexp of command to highlight.")
+(defcustom guide-key:polling-time 0.1
+  "*Polling time to show bindings."
+  :type 'float
+  :group 'guide-key)
 
-(defvar guide-key:align-command-by-space-flag nil
-  "*If non-nil, align command by space.")
+(defcustom guide-key:highlight-command-regexp "forward\\|rectangle"
+  "*Regexp of command to highlight."
+  :type 'regexp
+  :group 'guide-key)
 
-(defvar guide-key:guide-list nil
-  "List of key guide. Element of this is like (KEY SPACE COMMAND).")
-
-(defface guide-key:key-face
-  '((t (:foreground "red")))
-  "Face for key"
+(defcustom guide-key:align-command-by-space-flag nil
+  "*If non-nil, align command by space."
+  :type 'boolean
   :group 'guide-key)
 
 (defface guide-key:prefix-command-face
@@ -45,6 +51,15 @@
   '((t (:foreground "yellow")))
   "Face for command to highlight"
   :group 'guide-key)
+
+(defface guide-key:key-face
+  '((t (:foreground "red")))
+  "Face for key"
+  :group 'guide-key)
+
+;;; internal variables
+(defvar guide-key:guide-list nil
+  "List of key guide. Element of this is like (KEY SPACE COMMAND).")
 
 (defvar guide-key:polling-timer nil
   "Polling timer for show bindings.")
