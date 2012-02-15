@@ -43,6 +43,11 @@
   :type 'boolean
   :group 'guide-key)
 
+(defcustom guide-key:popup-window-position 'right
+  "*Position to pop up buffer. This variable must be one of `right', `bottom', `left' and `top'."
+  :type 'symbol
+  :group 'guide-key)
+
 (defface guide-key:prefix-command-face
   '((t (:foreground "cyan")))
   "Face for prefix command"
@@ -87,29 +92,37 @@
              'guide-key:turn-off-timer)))
 
 ;;; internal functions
-(defun guide-key:popup-bindings ()
-  "Pop up window to show bindings."
+(defun guide-key:polling-timer-function ()
+  "Function executed every `guide-key:polling-timer' second."
   (let ((dsc-buf (current-buffer))
         (key-seq (this-command-keys-vector))
         (max-width 0))
     (if (guide-key:display-popup-p key-seq)
         (when (guide-key:update-popup-p key-seq)
           (with-current-buffer (get-buffer-create guide-key:buffer-name)
-            (unless truncate-lines
-              (setq truncate-lines t))   ; don't fold
-            (when indent-tabs-mode
-              (setq indent-tabs-mode nil)) ; don't use tab as white space
+            (unless truncate-lines (setq truncate-lines t))   ; don't fold
+            (when indent-tabs-mode (setq indent-tabs-mode nil)) ; don't use tab as white space
             (erase-buffer)
             (describe-buffer-bindings dsc-buf key-seq)
-            (guide-key:format-guide-buffer key-seq)
-            (if (> (setq max-width (guide-key:buffer-max-width)) 0)
+            (if (> (guide-key:format-guide-buffer key-seq) 0)
                 (progn
                   (guide-key:pre-command-popup-close)
-                  (popwin:popup-buffer (current-buffer)
-                                       :width (+ max-width 3) :position 'right :noselect t))
+                  (guide-key:popup-guide-buffer))
               (message "No following key."))))
       (guide-key:pre-command-popup-close))
     (setq guide-key:last-command-keys-vector key-seq)))
+
+(defun guide-key:popup-guide-buffer ()
+  "Pop up guide buffer."
+  (with-current-buffer (get-buffer guide-key:buffer-name)
+    (apply 'popwin:popup-buffer (current-buffer)
+           :position guide-key:popup-window-position
+           :noselect t
+           (cond ((popwin:position-horizontal-p guide-key:popup-window-position)
+                  `(:width ,(+ (guide-key:buffer-max-width) 3)))
+                 ((popwin:position-vertical-p guide-key:popup-window-position)
+                  `(:height ,(1+ (count-lines (point-min) (point-max)))))))
+    ))
 
 (defun guide-key:pre-command-popup-close ()
   "Close guide buffer at `pre-command-hook'."
@@ -140,34 +153,48 @@
 (defun guide-key:turn-on-timer ()
   "Turn on polling timer."
   (setq guide-key:polling-timer
-        (run-at-time t guide-key:polling-time 'guide-key:popup-bindings)))
+        (run-at-time t guide-key:polling-time 'guide-key:polling-timer-function)))
 
 (defun guide-key:turn-off-timer ()
   "Turn off polling timer."
   (cancel-timer guide-key:polling-timer))
 
 (defun guide-key:format-guide-buffer (key-seq)
-  "Format a guide buffer."
-  (let ((guide-key:guide-list nil)
-        (key-dsc (key-description key-seq))
-        (last-end-pt 1))
+  "Format a guide buffer. This function returns the number of key guides."
+  (let ((guide-list nil)      ; list of (key space command)
+        (guide-str-list nil)  ; list of fontified string of key guides
+        (guide-list-len 0)    ; length of above lists
+        (key-dsc (key-description key-seq)))
     (untabify (point-min) (point-max))  ; replace tab to space
     (goto-char (point-min))
     ;; extract key guide from buffer bindings
     (while (re-search-forward
             (format "^%s \\([^ \t]+\\)\\([ \t]+\\)\\(\\(?:[^ \t\n]+ ?\\)+\\)$" key-dsc) nil t)
-      (add-to-list 'guide-key:guide-list
+      (add-to-list 'guide-list
                    (list (match-string 1) (match-string 2) (match-string 3)) t))
-    ;; fontify key guide
     (erase-buffer)
-    (loop with item-per-line = (1+ (/ (length guide-key:guide-list) (1- (frame-height))))
-          for (key space command) in guide-key:guide-list
-          for column from 1
-          do (insert (guide-key:fontified-string key space command)
-                     (if (= (mod column item-per-line) 0) "\n" " ")))
-    (align-regexp (point-min) (point-max) "\\(\\s-*\\) \\[" 1 1 t)
-    (goto-char (point-min))
-    ))
+    (when (> (setq guide-list-len (length guide-list)) 0)
+      ;; fontify key guide string
+      (setq guide-str-list
+            (loop for (key space command) in guide-list
+                  collect (guide-key:fontified-string key space command)))
+      ;; insert a few strings per line
+      (cond ((popwin:position-horizontal-p guide-key:popup-window-position)
+             (guide-key:insert-guide-str-list
+              guide-str-list (1+ (/ (length guide-str-list) (1- (frame-height))))))
+            ((popwin:position-vertical-p guide-key:popup-window-position)
+             (guide-key:insert-guide-str-list  ; caluculation of second argument is rough
+              guide-str-list (/ (frame-width)
+                                (apply 'max (mapcar 'length guide-str-list))))))
+      (align-regexp (point-min) (point-max) "\\(\\s-*\\) \\[" 1 1 t)
+      (goto-char (point-min)))
+    guide-list-len))
+
+(defun guide-key:insert-guide-str-list (guide-str-list columns)
+  "Insert GUIDE-STR-LIST COLUMNS."
+  (loop for guide-str in guide-str-list
+        for column from 1
+        do (insert guide-str (if (= (mod column columns) 0) "\n" " "))))
 
 (defun guide-key:fontified-string (key space command)
   "Fontified string for key guide"
