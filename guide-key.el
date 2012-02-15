@@ -25,6 +25,9 @@
 (defvar guide-key:highlight-command-regexp "forward\\|rectangle"
   "*Regexp of command to highlight.")
 
+(defvar guide-key:align-command-by-space-flag nil
+  "*If non-nil, align command by space.")
+
 (defvar guide-key:guide-list nil
   "List of key guide. Element of this is like (KEY SPACE COMMAND).")
 
@@ -155,7 +158,7 @@
   (concat (propertize "[" 'face 'guide-key:key-face)
           (guide-key:propertize-string-according-to-command key command)
           (propertize "]" 'face 'guide-key:key-face)
-          " " ;; space
+          (if guide-key:align-command-by-space-flag space " ") ; white space
           (guide-key:propertize-string-according-to-command command command)))
 
 (defun guide-key:propertize-string-according-to-command (string command)
