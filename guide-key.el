@@ -70,20 +70,24 @@
 ;;; internal functions
 (defun guide-key:popup-bindings ()
   "Pop up window to show bindings."
-  (let ((cbuffer (current-buffer))
+  (let ((dsc-buf (current-buffer))
         (key-seq (this-command-keys-vector))
         (max-width 0))
     (if (guide-key:display-popup-p key-seq)
         (when (guide-key:update-popup-p key-seq)
           (with-current-buffer (get-buffer-create guide-key:buffer-name)
+            (unless truncate-lines
+              (setq truncate-lines t))   ; don't fold
+            (when indent-tabs-mode
+              (setq indent-tabs-mode nil)) ; don't use tab as white space
             (erase-buffer)
-            (describe-buffer-bindings cbuffer key-seq)
+            (describe-buffer-bindings dsc-buf key-seq)
             (guide-key:format-guide-buffer key-seq)
             (if (> (setq max-width (guide-key:buffer-max-width)) 0)
                 (progn
                   (guide-key:pre-command-popup-close)
                   (popwin:popup-buffer (current-buffer)
-                                     :width (+ max-width 3) :position 'right :noselect t))
+                                       :width (+ max-width 3) :position 'right :noselect t))
               (message "No following key."))))
       (guide-key:pre-command-popup-close))
     (setq guide-key:last-command-keys-vector key-seq)))
