@@ -43,16 +43,18 @@
             (erase-buffer)
             (describe-buffer-bindings cbuffer key-seq)
             (guide-key:format-guide-buffer key-seq)
-            (setq max-width (guide-key:buffer-max-width))
-            (popwin:popup-buffer (current-buffer)
-                                 :width max-width :position 'right :noselect t))
-            ;; (popwin:popup-buffer (current-buffer) :height 20 :position 'bottom :noselect t))
-          )
-      (when (guide-key:poppedup-p)
-        ;; (delete-windows-on guide-key:buffer-name))
-        (popwin:close-popup-window t))
-      )
+            (if (> (setq max-width (guide-key:buffer-max-width)) 0)
+                (popwin:popup-buffer (current-buffer)
+                                     :width max-width :position 'right :noselect t)
+              (message "No following key.")))))
     (setq guide-key:last-command-keys-vector key-seq)))
+
+(defun guide-key:pre-command-popup-close ()
+  "Close guide buffer at `pre-command-hook'."
+  (when (guide-key:poppedup-p)
+    (popwin:close-popup-window)))
+
+(add-hook 'pre-command-hook 'guide-key:pre-command-popup-close)
 
 (defun guide-key:update-popup-p (key-seq)
   "Return t if show bindings buffer should be updated."
