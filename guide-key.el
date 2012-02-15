@@ -144,7 +144,7 @@
                    (list (match-string 1) (match-string 2) (match-string 3)) t))
     ;; fontify key guide
     (erase-buffer)
-    (loop with item-per-line = (1+ (/ (length guide-key:guide-list) (window-height)))
+    (loop with item-per-line = (1+ (/ (length guide-key:guide-list) (1- (frame-height))))
           for (key space command) in guide-key:guide-list
           for column from 1
           do (insert (guide-key:fontified-string key space command)
