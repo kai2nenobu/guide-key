@@ -152,17 +152,20 @@
 
 (defun guide-key:fontified-string (key space command)
   "Fontified string for key guide"
-  (format "%s %s"
-          (concat (propertize "[" 'face 'guide-key:key-face)
-                  key
-                  (propertize "]" 'face 'guide-key:key-face))
-          ;; space
-          (cond ((string-match "prefix" command)
-                 (propertize command 'face 'guide-key:prefix-command-face))
-                ((string-match guide-key:highlight-command-regexp command)
-                 (propertize command 'face 'guide-key:highlight-command-face))
-                (t
-                 command))))
+  (concat (propertize "[" 'face 'guide-key:key-face)
+          (guide-key:propertize-string-according-to-command key command)
+          (propertize "]" 'face 'guide-key:key-face)
+          " " ;; space
+          (guide-key:propertize-string-according-to-command command command)))
+
+(defun guide-key:propertize-string-according-to-command (string command)
+  "Return STRING putted text property accordinig to COMMAND"
+  (cond ((string-match "prefix" command)
+         (propertize string 'face 'guide-key:prefix-command-face))
+        ((string-match guide-key:highlight-command-regexp command)
+         (propertize string 'face 'guide-key:highlight-command-face))
+        (t
+         string)))
 
 (defun guide-key:buffer-max-width ()
   "Return max width in current buffer."
