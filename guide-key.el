@@ -1,10 +1,11 @@
+;;; guide-key.el
 
 ;;; TODO:
 ;; - write document
-;; - enrichment of guide buffer
+;; - DONE? enrichment of guide buffer
 ;;   - select color to be used
 ;; - DONE automatically guide all following keys
-;; - pop up guide buffer at top or bottom
+;; - DONE pop up guide buffer at top or bottom
 ;; - cooperate with polling of popwin.el?
 ;; - confine a length of command name
 ;; - confine the number of items to guide
@@ -206,3 +207,6 @@
 ;; (cancel-timer ttt)
 
 (guide-key-mode t)
+
+
+;;; guide-key.el ends here
