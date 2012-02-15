@@ -45,7 +45,7 @@
             (guide-key:format-guide-buffer key-seq)
             (if (> (setq max-width (guide-key:buffer-max-width)) 0)
                 (popwin:popup-buffer (current-buffer)
-                                     :width max-width :position 'right :noselect t)
+                                     :width (+ max-width 3) :position 'right :noselect t)
               (message "No following key.")))))
     (setq guide-key:last-command-keys-vector key-seq)))
 
