@@ -122,7 +122,12 @@
            (cond ((popwin:position-horizontal-p guide-key:popup-window-position)
                   `(:width ,(+ (guide-key:buffer-max-width) 3)))
                  ((popwin:position-vertical-p guide-key:popup-window-position)
-                  `(:height ,(1+ (count-lines (point-min) (point-max)))))))
+                  `(:height ,(+ (count-lines (point-min) (point-max)) 3)))))
+           ;; (case guide-key:popup-window-position
+           ;;   (right `(:width ,(+ (guide-key:buffer-max-width) 1)))
+           ;;   (bottom `(:height ,(+ (count-lines (point-min) (point-max)) 3)))
+           ;;   (left `(:width ,(+ (guide-key:buffer-max-width) 3)))
+           ;;   (top `(:height ,(+ (count-lines (point-min) (point-max)) 3)))))
     ))
 
 (defun guide-key:pre-command-popup-close ()
