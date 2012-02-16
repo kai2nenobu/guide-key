@@ -23,7 +23,7 @@
   :group 'help
   :prefix "guide-key:")
 
-(defcustom guide-key:show-key-sequence '("C-x" "C-x 8" "C-x 8 ^" "C-c" "C-c &" "C-q" "C-x r" "C-S-r" "C-x 4" "C-4")
+(defcustom guide-key:show-key-sequence nil
   "*Key sequences to show its bindings."
   :type '(repeat string)
   :group 'guide-key)
@@ -33,7 +33,7 @@
   :type 'float
   :group 'guide-key)
 
-(defcustom guide-key:highlight-command-regexp "forward\\|rectangle"
+(defcustom guide-key:highlight-command-regexp ""
   "*Regexp of command to highlight."
   :type 'regexp
   :group 'guide-key)
@@ -43,7 +43,7 @@
   :type 'boolean
   :group 'guide-key)
 
-(defcustom guide-key:popup-window-position 'right
+(defcustom guide-key:popup-window-position 'bottom
   "*Position to pop up buffer. This variable must be one of `right', `bottom', `left' and `top'."
   :type 'symbol
   :group 'guide-key)
