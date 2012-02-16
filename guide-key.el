@@ -87,13 +87,14 @@
 (define-minor-mode guide-key-mode
   "Show bindings automatically."
   :global t
+  :lighter " Guide"
   (funcall (if guide-key-mode
                'guide-key:turn-on-timer
              'guide-key:turn-off-timer)))
 
 ;;; internal functions
 (defun guide-key:polling-timer-function ()
-  "Function executed every `guide-key:polling-timer' second."
+  "Function executed every `guide-key:polling-time' second."
   (let ((dsc-buf (current-buffer))
         (key-seq (this-command-keys-vector))
         (max-width 0))
@@ -233,7 +234,5 @@
 ;; (setq ttt (run-at-time t 1 'guide-key:message-events))
 ;; (cancel-timer ttt)
 
-(guide-key-mode t)
-
-
+(provide 'guide-key)
 ;;; guide-key.el ends here
