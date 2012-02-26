@@ -96,6 +96,7 @@
 (defun guide-key:polling-timer-function ()
   "Function executed every `guide-key:polling-time' second."
   (let ((dsc-buf (current-buffer))
+        (hi-regexp guide-key:highlight-command-regexp)
         (key-seq (this-command-keys-vector))
         (max-width 0))
     (if (guide-key:display-popup-p key-seq)
@@ -105,7 +106,7 @@
             (when indent-tabs-mode (setq indent-tabs-mode nil)) ; don't use tab as white space
             (erase-buffer)
             (describe-buffer-bindings dsc-buf key-seq)
-            (if (> (guide-key:format-guide-buffer key-seq) 0)
+            (if (> (guide-key:format-guide-buffer key-seq hi-regexp) 0)
                 (progn
                   (guide-key:pre-command-popup-close)
                   (guide-key:popup-guide-buffer))
@@ -165,7 +166,7 @@
   "Turn off polling timer."
   (cancel-timer guide-key:polling-timer))
 
-(defun guide-key:format-guide-buffer (key-seq)
+(defun guide-key:format-guide-buffer (key-seq hi-regexp)
   "Format a guide buffer. This function returns the number of key guides."
   (let ((guide-list nil)      ; list of (key space command)
         (guide-str-list nil)  ; list of fontified string of key guides
@@ -183,7 +184,7 @@
       ;; fontify key guide string
       (setq guide-str-list
             (loop for (key space command) in guide-list
-                  collect (guide-key:fontified-string key space command)))
+                  collect (guide-key:fontified-string key space command hi-regexp)))
       ;; insert a few strings per line
       (cond ((popwin:position-horizontal-p guide-key:popup-window-position)
              (guide-key:insert-guide-str-list
@@ -202,19 +203,19 @@
         for column from 1
         do (insert guide-str (if (= (mod column columns) 0) "\n" " "))))
 
-(defun guide-key:fontified-string (key space command)
+(defun guide-key:fontified-string (key space command hi-regexp)
   "Fontified string for key guide"
   (concat (propertize "[" 'face 'guide-key:key-face)
-          (guide-key:propertize-string-according-to-command key command)
+          (guide-key:propertize-string-according-to-command key command hi-regexp)
           (propertize "]" 'face 'guide-key:key-face)
           (if guide-key:align-command-by-space-flag space " ") ; white space
-          (guide-key:propertize-string-according-to-command command command)))
+          (guide-key:propertize-string-according-to-command command command hi-regexp)))
 
-(defun guide-key:propertize-string-according-to-command (string command)
+(defun guide-key:propertize-string-according-to-command (string command hi-regexp)
   "Return STRING putted text property accordinig to COMMAND"
   (cond ((string-match "prefix" command)
          (propertize string 'face 'guide-key:prefix-command-face))
-        ((string-match guide-key:highlight-command-regexp command)
+        ((string-match hi-regexp command)
          (propertize string 'face 'guide-key:highlight-command-face))
         (t
          string)))
