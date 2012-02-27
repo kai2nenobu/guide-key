@@ -11,6 +11,7 @@
 ;; - confine the number of items to guide
 ;; - a feature to exclude or include guide by command name
 ;; - define (buffer local) minor mode instead of global minor mode
+;; - prefix argument processing
 
 (eval-when-compile
   (require 'cl))
