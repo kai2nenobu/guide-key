@@ -12,6 +12,7 @@
 ;; - a feature to exclude or include guide by command name
 ;; - define (buffer local) minor mode instead of global minor mode
 ;; - prefix argument processing
+;; - define global minor mode
 
 (eval-when-compile
   (require 'cl))
@@ -87,7 +88,7 @@
 ;;;###autoload
 (define-minor-mode guide-key-mode
   "Show bindings automatically."
-  :global t
+  ;; :global t
   :lighter " Guide"
   (funcall (if guide-key-mode
                'guide-key:turn-on-timer
@@ -96,24 +97,25 @@
 ;;; internal functions
 (defun guide-key:polling-timer-function ()
   "Function executed every `guide-key:polling-time' second."
-  (let ((dsc-buf (current-buffer))
-        (hi-regexp guide-key:highlight-command-regexp)
-        (key-seq (this-command-keys-vector))
-        (max-width 0))
-    (if (guide-key:display-popup-p key-seq)
-        (when (guide-key:update-popup-p key-seq)
-          (with-current-buffer (get-buffer-create guide-key:buffer-name)
-            (unless truncate-lines (setq truncate-lines t))   ; don't fold
-            (when indent-tabs-mode (setq indent-tabs-mode nil)) ; don't use tab as white space
-            (erase-buffer)
-            (describe-buffer-bindings dsc-buf key-seq)
-            (if (> (guide-key:format-guide-buffer key-seq hi-regexp) 0)
-                (progn
-                  (guide-key:pre-command-popup-close)
-                  (guide-key:popup-guide-buffer))
-              (message "No following key."))))
-      (guide-key:pre-command-popup-close))
-    (setq guide-key:last-command-keys-vector key-seq)))
+  (when guide-key-mode
+    (let ((dsc-buf (current-buffer))
+          (hi-regexp guide-key:highlight-command-regexp)
+          (key-seq (this-command-keys-vector))
+          (max-width 0))
+      (if (guide-key:display-popup-p key-seq)
+          (when (guide-key:update-popup-p key-seq)
+            (with-current-buffer (get-buffer-create guide-key:buffer-name)
+              (unless truncate-lines (setq truncate-lines t))   ; don't fold
+              (when indent-tabs-mode (setq indent-tabs-mode nil)) ; don't use tab as white space
+              (erase-buffer)
+              (describe-buffer-bindings dsc-buf key-seq)
+              (if (> (guide-key:format-guide-buffer key-seq hi-regexp) 0)
+                  (progn
+                    (guide-key:pre-command-popup-close)
+                    (guide-key:popup-guide-buffer))
+                (message "No following key."))))
+        (guide-key:pre-command-popup-close))
+      (setq guide-key:last-command-keys-vector key-seq))))
 
 (defun guide-key:popup-guide-buffer ()
   "Pop up guide buffer."
