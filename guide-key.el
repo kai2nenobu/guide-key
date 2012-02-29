@@ -226,6 +226,13 @@
   (let ((buf-str (buffer-substring-no-properties (point-min) (point-max))))
     (apply 'max (mapcar 'length (split-string buf-str "\n")))))
 
+(defun guide-key:add-local-show-key-sequence (key)
+  (add-to-list (make-local-variable 'guide-key:show-key-sequence) key))
+
+(defun guide-key:add-local-highlight-command-regexp (regexp)
+  (set (make-local-variable 'guide-key:highlight-command-regexp)
+       (concat guide-key:highlight-command-regexp regexp)))
+
 ;;; debug
 (defun guide-key:message-events ()
   ""
