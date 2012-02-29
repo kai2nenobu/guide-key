@@ -94,6 +94,13 @@
                'guide-key:turn-on-timer
              'guide-key:turn-off-timer)))
 
+;;;###autoload
+(define-globalized-minor-mode global-guide-key-mode guide-key-mode guide-key-on)
+
+(defun guide-key-on ()
+  (unless (minibufferp)
+    (guide-key-mode 1)))
+
 ;;; internal functions
 (defun guide-key:polling-timer-function ()
   "Function executed every `guide-key:polling-time' second."
