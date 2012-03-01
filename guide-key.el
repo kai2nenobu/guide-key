@@ -72,7 +72,7 @@
 (defvar guide-key:polling-timer nil
   "Polling timer for show bindings.")
 
-(defvar guide-key:buffer-name "*guide-key*"
+(defvar guide-key:buffer-name " *guide-key*"
   "Buffer name to show bindings.")
 
 (defvar guide-key:last-command-keys-vector nil
