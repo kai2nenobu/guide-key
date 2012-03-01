@@ -35,6 +35,11 @@
   :type 'float
   :group 'guide-key)
 
+(defcustom guide-key:highlight-prefix-regexp "prefix"
+  "*Regexp of prefix command to highlight."
+  :type 'regexp
+  :group 'guide-key)
+
 (defcustom guide-key:highlight-command-regexp ""
   "*Regexp of command to highlight."
   :type 'regexp
