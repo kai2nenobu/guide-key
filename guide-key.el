@@ -10,9 +10,9 @@
 ;; - confine a length of command name
 ;; - confine the number of items to guide
 ;; - a feature to exclude or include guide by command name
-;; - define (buffer local) minor mode instead of global minor mode
+;; - DONE define (buffer local) minor mode instead of global minor mode
 ;; - prefix argument processing
-;; - define global minor mode
+;; - DONE define global minor mode
 
 (eval-when-compile
   (require 'cl))
