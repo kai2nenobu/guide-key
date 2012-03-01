@@ -223,9 +223,10 @@
 
 (defun guide-key:propertize-string-according-to-command (string command hi-regexp)
   "Return STRING putted text property accordinig to COMMAND"
-  (cond ((string-match "prefix" command)
+  (cond ((string-match guide-key:highlight-prefix-regexp command)
          (propertize string 'face 'guide-key:prefix-command-face))
-        ((string-match hi-regexp command)
+        ((and (not (string= hi-regexp ""))
+              (string-match hi-regexp command))
          (propertize string 'face 'guide-key:highlight-command-face))
         (t
          string)))
@@ -240,7 +241,9 @@
 
 (defun guide-key:add-local-highlight-command-regexp (regexp)
   (set (make-local-variable 'guide-key:highlight-command-regexp)
-       (concat guide-key:highlight-command-regexp regexp)))
+       (if (string= guide-key:highlight-command-regexp "")
+           regexp
+         (concat regexp "\\|" guide-key:highlight-command-regexp))))
 
 ;;; debug
 (defun guide-key:message-events ()
