@@ -56,17 +56,26 @@
   :group 'guide-key)
 
 (defface guide-key:prefix-command-face
-  '((t (:foreground "cyan")))
+  '((((class color) (background dark))
+     (:foreground "cyan"))
+    (((class color) (background light))
+     (:foreground "blue")))
   "Face for prefix command"
   :group 'guide-key)
 
 (defface guide-key:highlight-command-face
-  '((t (:foreground "yellow")))
+  '((((class color) (background dark))
+     (:foreground "yellow"))
+    (((class color) (background light))
+     (:foreground "orange red")))
   "Face for command to highlight"
   :group 'guide-key)
 
 (defface guide-key:key-face
-  '((t (:foreground "red")))
+  '((((class color) (background dark))
+     (:foreground "red"))
+    (((class color) (background light))
+     (:foreground "dark green")))
   "Face for key"
   :group 'guide-key)
 
