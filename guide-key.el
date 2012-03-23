@@ -127,14 +127,14 @@
 ;;;###autoload
 (define-minor-mode guide-key-mode
   "Show bindings automatically."
-  ;; :global t
+  :global t
   :lighter " Guide"
   (funcall (if guide-key-mode
                'guide-key:turn-on-timer
              'guide-key:turn-off-timer)))
 
 ;;;###autoload
-(define-globalized-minor-mode global-guide-key-mode guide-key-mode guide-key-on)
+;; (define-globalized-minor-mode global-guide-key-mode guide-key-mode guide-key-on)
 
 (defun guide-key-on ()
   (unless (minibufferp)
@@ -208,12 +208,14 @@
 
 (defun guide-key:turn-on-timer ()
   "Turn on polling timer."
-  (setq guide-key:polling-timer
-        (run-at-time t guide-key:polling-time 'guide-key:polling-timer-function)))
+  (when (null guide-key:polling-timer)
+    (setq guide-key:polling-timer
+          (run-at-time t guide-key:polling-time 'guide-key:polling-timer-function))))
 
 (defun guide-key:turn-off-timer ()
   "Turn off polling timer."
-  (cancel-timer guide-key:polling-timer))
+  (cancel-timer guide-key:polling-timer)
+  (setq guide-key:polling-timer nil))
 
 (defun guide-key:format-guide-buffer (key-seq hi-regexp)
   "Format a guide buffer. This function returns the number of key guides."
