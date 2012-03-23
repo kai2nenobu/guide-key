@@ -3,7 +3,7 @@
 ;; Copyright (C) 2012 kbkbkbkb1
 
 ;; Author: kbkbkbkb1 <kbkbkbkb1@gmail.com>
-;; Version: 0.1
+;; Version: 0.1.1
 ;; Keyvords: help convenience
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -36,6 +36,12 @@
 ;; - DONE define (buffer local) minor mode instead of global minor mode
 ;; - prefix argument processing
 ;; - DONE define global minor mode
+
+;;; ChangeLog:
+;; - Version 0.1.1
+;;   - Make `guide-key-mode' global minor mode.
+;; - Version 0.1.0
+;;   - Initial version.
 
 ;;; Code:
 
