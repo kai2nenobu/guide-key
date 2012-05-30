@@ -292,6 +292,27 @@
            regexp
          (concat regexp "\\|" guide-key:highlight-command-regexp))))
 
+;;; key-chord hack
+(defadvice this-command-keys (after my-key-chord-hack activate)
+  ""
+  (condition-case nil
+      (if (equal ad-return-value [key-chord])
+          (let ((rkeys (recent-keys)))
+            (setq ad-return-value
+                  (vector 'key-chord (aref rkeys (- (length rkeys) 2))
+                          (aref rkeys (- (length rkeys) 1))))))
+    (error "")))
+
+(defadvice this-command-keys-vector (after my-key-chord-hack activate)
+  ""
+  (condition-case nil
+      (if (equal ad-return-value [key-chord])
+          (let ((rkeys (recent-keys)))
+            (setq ad-return-value
+                  (vector 'key-chord (aref rkeys (- (length rkeys) 2))
+                          (aref rkeys (- (length rkeys) 1))))))
+    (error [])))
+
 ;;; debug
 (defun guide-key:message-events ()
   ""
