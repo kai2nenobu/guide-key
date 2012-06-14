@@ -318,14 +318,16 @@
   (interactive)
   (dolist (fn '(this-command-keys this-command-keys-vector))
     (ad-enable-advice fn 'after 'key-chord-hack)
-    (ad-activate fn)))
+    (ad-activate fn))
+  (message "Turn on key-chord hack of guide-key"))
 
 (defun guide-key:key-chord-hack-off ()
   "Turn off key-chord hack of guide-key."
   (interactive)
   (dolist (fn '(this-command-keys this-command-keys-vector))
     (ad-disable-advice fn 'after 'key-chord-hack)
-    (ad-activate fn)))
+    (ad-activate fn))
+  (message "Turn on key-chord hack of guide-key"))
 
 ;;; debug
 (defun guide-key:message-events ()
