@@ -293,7 +293,7 @@
          (concat regexp "\\|" guide-key:highlight-command-regexp))))
 
 ;;; key-chord hack
-(defadvice this-command-keys (after my-key-chord-hack activate)
+(defadvice this-command-keys (after key-chord-hack disable)
   ""
   (condition-case nil
       (if (equal ad-return-value [key-chord])
@@ -303,7 +303,7 @@
                           (aref rkeys (- (length rkeys) 1))))))
     (error "")))
 
-(defadvice this-command-keys-vector (after my-key-chord-hack activate)
+(defadvice this-command-keys-vector (after key-chord-hack disable)
   ""
   (condition-case nil
       (if (equal ad-return-value [key-chord])
@@ -312,6 +312,20 @@
                   (vector 'key-chord (aref rkeys (- (length rkeys) 2))
                           (aref rkeys (- (length rkeys) 1))))))
     (error [])))
+
+(defun guide-key:key-chord-hack-on ()
+  "Turn on key-chord hack of guide-key."
+  (interactive)
+  (dolist (fn '(this-command-keys this-command-keys-vector))
+    (ad-enable-advice fn 'after 'key-chord-hack)
+    (ad-activate fn)))
+
+(defun guide-key:key-chord-hack-off ()
+  "Turn off key-chord hack of guide-key."
+  (interactive)
+  (dolist (fn '(this-command-keys this-command-keys-vector))
+    (ad-disable-advice fn 'after 'key-chord-hack)
+    (ad-activate fn)))
 
 ;;; debug
 (defun guide-key:message-events ()
