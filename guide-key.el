@@ -1,10 +1,10 @@
 ;;; guide-key.el --- Guide key bindings.
 
-;; Copyright (C) 2012 kbkbkbkb1
+;; Copyright (C) 2012 Tsunenobu Kai
 
-;; Author: kbkbkbkb1 <kbkbkbkb1@gmail.com>
+;; Author: Tsunenobu Kai <kbkbkbkb1@gmail.com>
 ;; Version: 0.1.1
-;; Keyvords: help convenience
+;; Keywords: help convenience
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
