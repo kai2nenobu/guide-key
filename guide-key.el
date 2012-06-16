@@ -3,7 +3,7 @@
 ;; Copyright (C) 2012 Tsunenobu Kai
 
 ;; Author: Tsunenobu Kai <kbkbkbkb1@gmail.com>
-;; Version: 0.1.1
+;; Version: 0.1.2
 ;; Keywords: help convenience
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -38,6 +38,8 @@
 ;; - DONE define global minor mode
 
 ;;; ChangeLog:
+;; - Version 0.1.2
+;;   - Enable to guide key-chord bindings.
 ;; - Version 0.1.1
 ;;   - Make `guide-key-mode' global minor mode.
 ;; - Version 0.1.0
