@@ -189,7 +189,7 @@ positive, and disable it otherwise."
 
 (defun guide-key:close-guide-buffer ()
   "Close a guide buffer."
-  (when (guide-key:poppedup-p)
+  (when (eq popwin:popup-buffer (get-buffer guide-key:guide-buffer-name))
     (popwin:close-popup-window)))
 
 (add-hook 'pre-command-hook 'guide-key:close-guide-buffer)
@@ -207,10 +207,6 @@ positive, and disable it otherwise."
 (defun guide-key:convert-key-sequence-to-vector (key-seq)
   "Convert key sequence KEY-SEQ to vector representation."
   (vconcat (read-kbd-macro key-seq)))
-
-(defun guide-key:poppedup-p ()
-  "Return t if show bindings buffer is popped up."
-  (eq popwin:popup-buffer (get-buffer guide-key:guide-buffer-name)))
 
 (defun guide-key:turn-on-timer ()
   "Turn on a polling timer."
@@ -332,14 +328,12 @@ positive, and disable it otherwise."
 ;;; debug
 (defun guide-key:message-events ()
   ""
-  (message (format "lce:%S tck:%S tckv:%S lie:%S uce:%S popb:%S cls:%S"
+  (message (format "lce:%S tck:%S tckv:%S lie:%S uce:%S"
                    last-command-event
                    (this-command-keys)
                    (this-command-keys-vector)
                    last-input-event
                    unread-command-events
-                   popwin:popup-buffer
-                   (guide-key:poppedup-p)
                    )))
 ;; (setq ttt (run-at-time t 1 'guide-key:message-events))
 ;; (cancel-timer ttt)
