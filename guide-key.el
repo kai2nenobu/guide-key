@@ -1,4 +1,4 @@
-;;; guide-key.el --- Guide key bindings.
+;;; guide-key.el --- pop up following keys to an input key sequence
 
 ;; Copyright (C) 2012 Tsunenobu Kai
 
@@ -58,33 +58,37 @@
   :group 'help
   :prefix "guide-key:")
 
-(defcustom guide-key:show-key-sequence nil
-  "*Key sequences to show its bindings."
+(defcustom guide-key:guide-key-sequence nil
+  "*Key sequences to guide in `guide-key-mode'.
+This variable is a list of string representation.
+Both representations, like \"C-x r\" or \"\\C-xr\",
+are allowed."
   :type '(repeat string)
   :group 'guide-key)
 
 (defcustom guide-key:polling-time 0.1
-  "*Polling time to show bindings."
+  "*Polling time to check an input key sequence."
   :type 'float
   :group 'guide-key)
 
 (defcustom guide-key:highlight-prefix-regexp "prefix"
-  "*Regexp of prefix command to highlight."
+  "*Regexp for prefix commands to highlight."
   :type 'regexp
   :group 'guide-key)
 
 (defcustom guide-key:highlight-command-regexp ""
-  "*Regexp of command to highlight."
+  "*Regexp for commands to highlight."
   :type 'regexp
   :group 'guide-key)
 
 (defcustom guide-key:align-command-by-space-flag nil
-  "*If non-nil, align command by space."
+  "*If non-nil, align a guide buffer by space."
   :type 'boolean
   :group 'guide-key)
 
-(defcustom guide-key:popup-window-position 'bottom
-  "*Position to pop up buffer. This variable must be one of `right', `bottom', `left' and `top'."
+(defcustom guide-key:popup-window-position 'right
+  "*Position where guide buffer is popped up.
+This variable must be one of `right', `bottom', `left' and `top'."
   :type 'symbol
   :group 'guide-key)
 
@@ -93,7 +97,7 @@
      (:foreground "cyan"))
     (((class color) (background light))
      (:foreground "blue")))
-  "Face for prefix command"
+  "Face for prefix commands to highlight"
   :group 'guide-key)
 
 (defface guide-key:highlight-command-face
@@ -101,7 +105,7 @@
      (:foreground "yellow"))
     (((class color) (background light))
      (:foreground "orange red")))
-  "Face for command to highlight"
+  "Face for commands to highlight"
   :group 'guide-key)
 
 (defface guide-key:key-face
@@ -109,21 +113,18 @@
      (:foreground "red"))
     (((class color) (background light))
      (:foreground "dark green")))
-  "Face for key"
+  "Face for keys following to a key sequence"
   :group 'guide-key)
 
 ;;; internal variables
-;; (defvar guide-key:guide-list nil
-;;   "List of key guide. Element of this is like (KEY SPACE COMMAND).")
-
 (defvar guide-key:polling-timer nil
-  "Polling timer for show bindings.")
+  "Polling timer to check an input key sequence.")
 
-(defvar guide-key:buffer-name " *guide-key*"
-  "Buffer name to show bindings.")
+(defvar guide-key:guide-buffer-name " *guide-key*"
+  "Buffer name of a guide buffer.")
 
-(defvar guide-key:last-command-keys-vector nil
-  "Last command keys as vector.")
+(defvar guide-key:last-key-sequence-vector nil
+  "Key sequence input at the last polling operation.")
 
 ;; or hook
 ;; (add-hook 'pre-command-hook 'guide-key:hook-command)
@@ -134,46 +135,44 @@
 ;;; functions
 ;;;###autoload
 (define-minor-mode guide-key-mode
-  "Show bindings automatically."
+  "Toggle guide key mode.
+
+In guide key mode, automatically and dynamically.
+
+With a prefix argument ARG, enable guide key mode if ARG is
+positive, and disable it otherwise."
   :global t
   :lighter " Guide"
   (funcall (if guide-key-mode
                'guide-key:turn-on-timer
              'guide-key:turn-off-timer)))
 
-;;;###autoload
-;; (define-globalized-minor-mode global-guide-key-mode guide-key-mode guide-key-on)
-
-(defun guide-key-on ()
-  (unless (minibufferp)
-    (guide-key-mode 1)))
-
 ;;; internal functions
-(defun guide-key:polling-timer-function ()
-  "Function executed every `guide-key:polling-time' second."
+(defun guide-key:polling-function ()
+  "Polling function executed every `guide-key:polling-time' second."
   (when guide-key-mode
     (let ((dsc-buf (current-buffer))
           (hi-regexp guide-key:highlight-command-regexp)
           (key-seq (this-command-keys-vector))
           (max-width 0))
-      (if (guide-key:display-popup-p key-seq)
-          (when (guide-key:update-popup-p key-seq)
-            (with-current-buffer (get-buffer-create guide-key:buffer-name)
-              (unless truncate-lines (setq truncate-lines t))   ; don't fold
+      (if (guide-key:popup-guide-buffer-p key-seq)
+          (when (guide-key:update-guide-buffer-p key-seq)
+            (with-current-buffer (get-buffer-create guide-key:guide-buffer-name)
+              (unless truncate-lines (setq truncate-lines t))   ; don't fold line
               (when indent-tabs-mode (setq indent-tabs-mode nil)) ; don't use tab as white space
               (erase-buffer)
               (describe-buffer-bindings dsc-buf key-seq)
               (if (> (guide-key:format-guide-buffer key-seq hi-regexp) 0)
                   (progn
-                    (guide-key:pre-command-popup-close)
+                    (guide-key:close-guide-buffer)
                     (guide-key:popup-guide-buffer))
                 (message "No following key."))))
-        (guide-key:pre-command-popup-close))
-      (setq guide-key:last-command-keys-vector key-seq))))
+        (guide-key:close-guide-buffer))
+      (setq guide-key:last-key-sequence-vector key-seq))))
 
 (defun guide-key:popup-guide-buffer ()
-  "Pop up guide buffer."
-  (with-current-buffer (get-buffer guide-key:buffer-name)
+  "Pop up a guide buffer."
+  (with-current-buffer (get-buffer guide-key:guide-buffer-name)
     (apply 'popwin:popup-buffer (current-buffer)
            :position guide-key:popup-window-position
            :noselect t
@@ -188,22 +187,22 @@
            ;;   (top `(:height ,(+ (count-lines (point-min) (point-max)) 3)))))
     ))
 
-(defun guide-key:pre-command-popup-close ()
-  "Close guide buffer at `pre-command-hook'."
+(defun guide-key:close-guide-buffer ()
+  "Close a guide buffer."
   (when (guide-key:poppedup-p)
     (popwin:close-popup-window)))
 
-(add-hook 'pre-command-hook 'guide-key:pre-command-popup-close)
+(add-hook 'pre-command-hook 'guide-key:close-guide-buffer)
 
-(defun guide-key:update-popup-p (key-seq)
-  "Return t if show bindings buffer should be updated."
-  (not (equal guide-key:last-command-keys-vector key-seq)))
+(defun guide-key:update-guide-buffer-p (key-seq)
+  "Return t if a guide buffer should be updated."
+  (not (equal guide-key:last-key-sequence-vector key-seq)))
 
-(defun guide-key:display-popup-p (key-seq)
-  "Return t if show bindings buffer should be displayed."
+(defun guide-key:popup-guide-buffer-p (key-seq)
+  "Return t if a guide buffer should be popped up."
 ;  (and (> (length key-seq) 0)
        (member key-seq (mapcar 'guide-key:convert-key-sequence-to-vector
-                               guide-key:show-key-sequence))
+                               guide-key:guide-key-sequence))
        );)
 
 (defun guide-key:convert-key-sequence-to-vector (key-seq)
@@ -212,16 +211,16 @@
 
 (defun guide-key:poppedup-p ()
   "Return t if show bindings buffer is popped up."
-  (eq popwin:popup-buffer (get-buffer guide-key:buffer-name)))
+  (eq popwin:popup-buffer (get-buffer guide-key:guide-buffer-name)))
 
 (defun guide-key:turn-on-timer ()
-  "Turn on polling timer."
+  "Turn on a polling timer."
   (when (null guide-key:polling-timer)
     (setq guide-key:polling-timer
-          (run-at-time t guide-key:polling-time 'guide-key:polling-timer-function))))
+          (run-at-time t guide-key:polling-time 'guide-key:polling-function))))
 
 (defun guide-key:turn-off-timer ()
-  "Turn off polling timer."
+  "Turn off a polling timer."
   (cancel-timer guide-key:polling-timer)
   (setq guide-key:polling-timer nil))
 
@@ -285,8 +284,8 @@
   (let ((buf-str (buffer-substring-no-properties (point-min) (point-max))))
     (apply 'max (mapcar 'length (split-string buf-str "\n")))))
 
-(defun guide-key:add-local-show-key-sequence (key)
-  (add-to-list (make-local-variable 'guide-key:show-key-sequence) key))
+(defun guide-key:add-local-guide-key-sequence (key)
+  (add-to-list (make-local-variable 'guide-key:guide-key-sequence) key))
 
 (defun guide-key:add-local-highlight-command-regexp (regexp)
   (set (make-local-variable 'guide-key:highlight-command-regexp)
