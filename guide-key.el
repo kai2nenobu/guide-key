@@ -200,10 +200,9 @@ positive, and disable it otherwise."
 
 (defun guide-key:popup-guide-buffer-p (key-seq)
   "Return t if a guide buffer should be popped up."
-;  (and (> (length key-seq) 0)
+  (and (> (length key-seq) 0)
        (member key-seq (mapcar 'guide-key:convert-key-sequence-to-vector
-                               guide-key:guide-key-sequence))
-       );)
+                               guide-key:guide-key-sequence))))
 
 (defun guide-key:convert-key-sequence-to-vector (key-seq)
   "Convert key sequence KEY-SEQ to vector representation."
