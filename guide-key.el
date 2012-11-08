@@ -89,7 +89,7 @@ are allowed."
 (defcustom guide-key:popup-window-position 'right
   "*Position where guide buffer is popped up.
 This variable must be one of `right', `bottom', `left' and `top'."
-  :type 'symbol
+  :type '(radio (const right) (const bottom) (const left) (const top))
   :group 'guide-key)
 
 (defface guide-key:prefix-command-face
