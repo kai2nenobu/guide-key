@@ -4,6 +4,7 @@
 
 ;; Author: Tsunenobu Kai <kbkbkbkb1@gmail.com>
 ;; Version: 0.1.2
+;; Package-Requires: ((popwin "0.3.0"))
 ;; Keywords: help convenience
 
 ;; This program is free software; you can redistribute it and/or modify
