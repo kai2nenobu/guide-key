@@ -1,4 +1,4 @@
-;;; guide-key.el --- pop up following keys to an input key sequence
+;;; guide-key.el --- Guide following keys to an input key sequence automatically and dynamically
 
 ;; Copyright (C) 2012 Tsunenobu Kai
 
@@ -61,7 +61,7 @@
 (defcustom guide-key:guide-key-sequence nil
   "*Key sequences to guide in `guide-key-mode'.
 This variable is a list of string representation.
-Both representations, like \"C-x r\" or \"\\C-xr\",
+Both representations, like \"C-x r\" and \"\\C-xr\",
 are allowed."
   :type '(repeat string)
   :group 'guide-key)
@@ -72,7 +72,7 @@ are allowed."
   :group 'guide-key)
 
 (defcustom guide-key:highlight-prefix-regexp "prefix"
-  "*Regexp for prefix commands to highlight."
+  "*Regexp for prefix commands."
   :type 'regexp
   :group 'guide-key)
 
@@ -82,7 +82,7 @@ are allowed."
   :group 'guide-key)
 
 (defcustom guide-key:align-command-by-space-flag nil
-  "*If non-nil, align a guide buffer by space."
+  "*If non-nil, align guide buffer by space."
   :type 'boolean
   :group 'guide-key)
 
@@ -121,7 +121,7 @@ This variable must be one of `right', `bottom', `left' and `top'."
   "Polling timer to check an input key sequence.")
 
 (defvar guide-key:guide-buffer-name " *guide-key*"
-  "Buffer name of a guide buffer.")
+  "Buffer name of guide buffer.")
 
 (defvar guide-key:last-key-sequence-vector nil
   "Key sequence input at the last polling operation.")
@@ -137,10 +137,10 @@ This variable must be one of `right', `bottom', `left' and `top'."
 (define-minor-mode guide-key-mode
   "Toggle guide key mode.
 
-In guide key mode, automatically and dynamically.
-
+In guide key mode, Guide following keys to an input key sequence
+automatically and dynamically.
 With a prefix argument ARG, enable guide key mode if ARG is
-positive, and disable it otherwise."
+positive, otherwise disable."
   :global t
   :lighter " Guide"
   (funcall (if guide-key-mode
@@ -170,7 +170,7 @@ positive, and disable it otherwise."
     (setq guide-key:last-key-sequence-vector key-seq)))
 
 (defun guide-key:popup-guide-buffer ()
-  "Pop up a guide buffer."
+  "Pop up guide buffer at `guide-key:popup-window-position'."
   (with-current-buffer (get-buffer guide-key:guide-buffer-name)
     (apply 'popwin:popup-buffer (current-buffer)
            :position guide-key:popup-window-position
@@ -187,24 +187,25 @@ positive, and disable it otherwise."
     ))
 
 (defun guide-key:close-guide-buffer ()
-  "Close a guide buffer."
+  "Close guide buffer."
   (when (eq popwin:popup-buffer (get-buffer guide-key:guide-buffer-name))
     (popwin:close-popup-window)))
 
 (add-hook 'pre-command-hook 'guide-key:close-guide-buffer)
 
 (defun guide-key:update-guide-buffer-p (key-seq)
-  "Return t if a guide buffer should be updated."
+  "Return t if guide buffer should be updated."
   (not (equal guide-key:last-key-sequence-vector key-seq)))
 
 (defun guide-key:popup-guide-buffer-p (key-seq)
-  "Return t if a guide buffer should be popped up."
+  "Return t if guide buffer should be popped up."
   (and (> (length key-seq) 0)
        (member key-seq (mapcar 'guide-key:convert-key-sequence-to-vector
                                guide-key:guide-key-sequence))))
 
 (defun guide-key:convert-key-sequence-to-vector (key-seq)
-  "Convert key sequence KEY-SEQ to vector representation."
+  "Convert key sequence KEY-SEQ to vector representation.
+For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
   (vconcat (read-kbd-macro key-seq)))
 
 (defun guide-key:turn-on-timer ()
@@ -219,44 +220,44 @@ positive, and disable it otherwise."
   (setq guide-key:polling-timer nil))
 
 (defun guide-key:format-guide-buffer (key-seq hi-regexp)
-  "Format a guide buffer. This function returns the number of key guides."
-  (let ((guide-list nil)      ; list of (key space command)
-        (guide-str-list nil)  ; list of fontified string of key guides
-        (guide-list-len 0)    ; length of above lists
+  "Format guide buffer. This function returns the number of following keys."
+  (let ((fkey-list nil)      ; list of (following-key space command)
+        (fkey-str-list nil)  ; fontified string of `fkey-list'
+        (fkey-list-len 0)    ; length of above lists
         (key-dsc (key-description key-seq)))
     (untabify (point-min) (point-max))  ; replace tab to space
     (goto-char (point-min))
-    ;; extract key guide from buffer bindings
+    ;; extract following keys from buffer bindings
     (while (re-search-forward
             (format "^%s \\([^ \t]+\\)\\([ \t]+\\)\\(\\(?:[^ \t\n]+ ?\\)+\\)$" key-dsc) nil t)
-      (add-to-list 'guide-list
+      (add-to-list 'fkey-list
                    (list (match-string 1) (match-string 2) (match-string 3)) t))
     (erase-buffer)
-    (when (> (setq guide-list-len (length guide-list)) 0)
-      ;; fontify key guide string
-      (setq guide-str-list
-            (loop for (key space command) in guide-list
+    (when (> (setq fkey-list-len (length fkey-list)) 0)
+      ;; fontify following keys as string
+      (setq fkey-str-list
+            (loop for (key space command) in fkey-list
                   collect (guide-key:fontified-string key space command hi-regexp)))
-      ;; insert a few strings per line
+      ;; insert a few following keys per line
       (cond ((popwin:position-horizontal-p guide-key:popup-window-position)
-             (guide-key:insert-guide-str-list
-              guide-str-list (1+ (/ (length guide-str-list) (1- (frame-height))))))
+             (guide-key:insert-following-key
+              fkey-str-list (1+ (/ (length fkey-str-list) (1- (frame-height))))))
             ((popwin:position-vertical-p guide-key:popup-window-position)
-             (guide-key:insert-guide-str-list  ; caluculation of second argument is rough
-              guide-str-list (/ (frame-width)
-                                (apply 'max (mapcar 'length guide-str-list))))))
+             (guide-key:insert-following-key  ; caluculation of second argument is rough
+              fkey-str-list (/ (frame-width)
+                                (apply 'max (mapcar 'length fkey-str-list))))))
       (align-regexp (point-min) (point-max) "\\(\\s-*\\) \\[" 1 1 t)
       (goto-char (point-min)))
-    guide-list-len))
+    fkey-list-len))
 
-(defun guide-key:insert-guide-str-list (guide-str-list columns)
-  "Insert GUIDE-STR-LIST COLUMNS."
-  (loop for guide-str in guide-str-list
+(defun guide-key:insert-following-key (fkey-str-list columns)
+  "Insert following keys by COLUMNS per line."
+  (loop for fkey-str in fkey-str-list
         for column from 1
-        do (insert guide-str (if (= (mod column columns) 0) "\n" " "))))
+        do (insert fkey-str (if (= (mod column columns) 0) "\n" " "))))
 
 (defun guide-key:fontified-string (key space command hi-regexp)
-  "Fontified string for key guide"
+  "Return fontified string of following key"
   (concat (propertize "[" 'face 'guide-key:key-face)
           (guide-key:propertize-string-according-to-command key command hi-regexp)
           (propertize "]" 'face 'guide-key:key-face)
