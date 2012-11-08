@@ -179,11 +179,6 @@ positive, otherwise disable."
                   `(:width ,(+ (guide-key:buffer-max-width) 3)))
                  ((popwin:position-vertical-p guide-key:popup-window-position)
                   `(:height ,(+ (count-lines (point-min) (point-max)) 3)))))
-           ;; (case guide-key:popup-window-position
-           ;;   (right `(:width ,(+ (guide-key:buffer-max-width) 1)))
-           ;;   (bottom `(:height ,(+ (count-lines (point-min) (point-max)) 3)))
-           ;;   (left `(:width ,(+ (guide-key:buffer-max-width) 3)))
-           ;;   (top `(:height ,(+ (count-lines (point-min) (point-max)) 3)))))
     ))
 
 (defun guide-key:close-guide-buffer ()
