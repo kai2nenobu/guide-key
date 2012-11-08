@@ -56,9 +56,9 @@
 (defgroup guide-key nil
   "Guide key bidings."
   :group 'help
-  :prefix "guide-key:")
+  :prefix "guide-key/")
 
-(defcustom guide-key:guide-key-sequence nil
+(defcustom guide-key/guide-key-sequence nil
   "*Key sequences to guide in `guide-key-mode'.
 This variable is a list of string representation.
 Both representations, like \"C-x r\" and \"\\C-xr\",
@@ -66,33 +66,33 @@ are allowed."
   :type '(repeat string)
   :group 'guide-key)
 
-(defcustom guide-key:polling-time 0.1
+(defcustom guide-key/polling-time 0.1
   "*Polling time to check an input key sequence."
   :type 'float
   :group 'guide-key)
 
-(defcustom guide-key:highlight-prefix-regexp "prefix"
+(defcustom guide-key/highlight-prefix-regexp "prefix"
   "*Regexp for prefix commands."
   :type 'regexp
   :group 'guide-key)
 
-(defcustom guide-key:highlight-command-regexp ""
+(defcustom guide-key/highlight-command-regexp ""
   "*Regexp for commands to highlight."
   :type 'regexp
   :group 'guide-key)
 
-(defcustom guide-key:align-command-by-space-flag nil
+(defcustom guide-key/align-command-by-space-flag nil
   "*If non-nil, align guide buffer by space."
   :type 'boolean
   :group 'guide-key)
 
-(defcustom guide-key:popup-window-position 'right
+(defcustom guide-key/popup-window-position 'right
   "*Position where guide buffer is popped up.
 This variable must be one of `right', `bottom', `left' and `top'."
   :type '(radio (const right) (const bottom) (const left) (const top))
   :group 'guide-key)
 
-(defface guide-key:prefix-command-face
+(defface guide-key/prefix-command-face
   '((((class color) (background dark))
      (:foreground "cyan"))
     (((class color) (background light))
@@ -100,7 +100,7 @@ This variable must be one of `right', `bottom', `left' and `top'."
   "Face for prefix commands to highlight"
   :group 'guide-key)
 
-(defface guide-key:highlight-command-face
+(defface guide-key/highlight-command-face
   '((((class color) (background dark))
      (:foreground "yellow"))
     (((class color) (background light))
@@ -108,7 +108,7 @@ This variable must be one of `right', `bottom', `left' and `top'."
   "Face for commands to highlight"
   :group 'guide-key)
 
-(defface guide-key:key-face
+(defface guide-key/key-face
   '((((class color) (background dark))
      (:foreground "red"))
     (((class color) (background light))
@@ -117,19 +117,19 @@ This variable must be one of `right', `bottom', `left' and `top'."
   :group 'guide-key)
 
 ;;; internal variables
-(defvar guide-key:polling-timer nil
+(defvar guide-key/polling-timer nil
   "Polling timer to check an input key sequence.")
 
-(defvar guide-key:guide-buffer-name " *guide-key*"
+(defvar guide-key/guide-buffer-name " *guide-key*"
   "Buffer name of guide buffer.")
 
-(defvar guide-key:last-key-sequence-vector nil
+(defvar guide-key/last-key-sequence-vector nil
   "Key sequence input at the last polling operation.")
 
 ;; or hook
-;; (add-hook 'pre-command-hook 'guide-key:hook-command)
+;; (add-hook 'pre-command-hook 'guide-key/hook-command)
 ;; (setq pre-command-hook nil)
-;; (add-hook 'post-command-hook 'guide-key:key-event)
+;; (add-hook 'post-command-hook 'guide-key/key-event)
 ;; (add-hook 'pre-command-hook 'show-this-command)
 
 ;;; functions
@@ -144,77 +144,77 @@ positive, otherwise disable."
   :global t
   :lighter " Guide"
   (funcall (if guide-key-mode
-               'guide-key:turn-on-timer
-             'guide-key:turn-off-timer)))
+               'guide-key/turn-on-timer
+             'guide-key/turn-off-timer)))
 
 ;;; internal functions
-(defun guide-key:polling-function ()
-  "Polling function executed every `guide-key:polling-time' second."
+(defun guide-key/polling-function ()
+  "Polling function executed every `guide-key/polling-time' second."
   (let ((key-seq (this-command-keys-vector)))
-    (if (guide-key:popup-guide-buffer-p key-seq)
-        (when (guide-key:update-guide-buffer-p key-seq)
+    (if (guide-key/popup-guide-buffer-p key-seq)
+        (when (guide-key/update-guide-buffer-p key-seq)
           (let ((dsc-buf (current-buffer))
-                (hi-regexp guide-key:highlight-command-regexp)
+                (hi-regexp guide-key/highlight-command-regexp)
                 (max-width 0))
-            (with-current-buffer (get-buffer-create guide-key:guide-buffer-name)
+            (with-current-buffer (get-buffer-create guide-key/guide-buffer-name)
               (unless truncate-lines (setq truncate-lines t))   ; don't fold line
               (when indent-tabs-mode (setq indent-tabs-mode nil)) ; don't use tab as white space
               (erase-buffer)
               (describe-buffer-bindings dsc-buf key-seq)
-              (if (> (guide-key:format-guide-buffer key-seq hi-regexp) 0)
+              (if (> (guide-key/format-guide-buffer key-seq hi-regexp) 0)
                   (progn
-                    (guide-key:close-guide-buffer)
-                    (guide-key:popup-guide-buffer))
+                    (guide-key/close-guide-buffer)
+                    (guide-key/popup-guide-buffer))
                 (message "No following key.")))))
-      (guide-key:close-guide-buffer))
-    (setq guide-key:last-key-sequence-vector key-seq)))
+      (guide-key/close-guide-buffer))
+    (setq guide-key/last-key-sequence-vector key-seq)))
 
-(defun guide-key:popup-guide-buffer ()
-  "Pop up guide buffer at `guide-key:popup-window-position'."
-  (with-current-buffer (get-buffer guide-key:guide-buffer-name)
+(defun guide-key/popup-guide-buffer ()
+  "Pop up guide buffer at `guide-key/popup-window-position'."
+  (with-current-buffer (get-buffer guide-key/guide-buffer-name)
     (apply 'popwin:popup-buffer (current-buffer)
-           :position guide-key:popup-window-position
+           :position guide-key/popup-window-position
            :noselect t
-           (cond ((popwin:position-horizontal-p guide-key:popup-window-position)
-                  `(:width ,(+ (guide-key:buffer-max-width) 3)))
-                 ((popwin:position-vertical-p guide-key:popup-window-position)
+           (cond ((popwin:position-horizontal-p guide-key/popup-window-position)
+                  `(:width ,(+ (guide-key/buffer-max-width) 3)))
+                 ((popwin:position-vertical-p guide-key/popup-window-position)
                   `(:height ,(+ (count-lines (point-min) (point-max)) 3)))))
     ))
 
-(defun guide-key:close-guide-buffer ()
+(defun guide-key/close-guide-buffer ()
   "Close guide buffer."
-  (when (eq popwin:popup-buffer (get-buffer guide-key:guide-buffer-name))
+  (when (eq popwin:popup-buffer (get-buffer guide-key/guide-buffer-name))
     (popwin:close-popup-window)))
 
-(add-hook 'pre-command-hook 'guide-key:close-guide-buffer)
+(add-hook 'pre-command-hook 'guide-key/close-guide-buffer)
 
-(defun guide-key:update-guide-buffer-p (key-seq)
+(defun guide-key/update-guide-buffer-p (key-seq)
   "Return t if guide buffer should be updated."
-  (not (equal guide-key:last-key-sequence-vector key-seq)))
+  (not (equal guide-key/last-key-sequence-vector key-seq)))
 
-(defun guide-key:popup-guide-buffer-p (key-seq)
+(defun guide-key/popup-guide-buffer-p (key-seq)
   "Return t if guide buffer should be popped up."
   (and (> (length key-seq) 0)
-       (member key-seq (mapcar 'guide-key:convert-key-sequence-to-vector
-                               guide-key:guide-key-sequence))))
+       (member key-seq (mapcar 'guide-key/convert-key-sequence-to-vector
+                               guide-key/guide-key-sequence))))
 
-(defun guide-key:convert-key-sequence-to-vector (key-seq)
+(defun guide-key/convert-key-sequence-to-vector (key-seq)
   "Convert key sequence KEY-SEQ to vector representation.
 For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
   (vconcat (read-kbd-macro key-seq)))
 
-(defun guide-key:turn-on-timer ()
+(defun guide-key/turn-on-timer ()
   "Turn on a polling timer."
-  (when (null guide-key:polling-timer)
-    (setq guide-key:polling-timer
-          (run-at-time t guide-key:polling-time 'guide-key:polling-function))))
+  (when (null guide-key/polling-timer)
+    (setq guide-key/polling-timer
+          (run-at-time t guide-key/polling-time 'guide-key/polling-function))))
 
-(defun guide-key:turn-off-timer ()
+(defun guide-key/turn-off-timer ()
   "Turn off a polling timer."
-  (cancel-timer guide-key:polling-timer)
-  (setq guide-key:polling-timer nil))
+  (cancel-timer guide-key/polling-timer)
+  (setq guide-key/polling-timer nil))
 
-(defun guide-key:format-guide-buffer (key-seq hi-regexp)
+(defun guide-key/format-guide-buffer (key-seq hi-regexp)
   "Format guide buffer. This function returns the number of following keys."
   (let ((fkey-list nil)      ; list of (following-key space command)
         (fkey-str-list nil)  ; fontified string of `fkey-list'
@@ -232,56 +232,56 @@ For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
       ;; fontify following keys as string
       (setq fkey-str-list
             (loop for (key space command) in fkey-list
-                  collect (guide-key:fontified-string key space command hi-regexp)))
+                  collect (guide-key/fontified-string key space command hi-regexp)))
       ;; insert a few following keys per line
-      (cond ((popwin:position-horizontal-p guide-key:popup-window-position)
-             (guide-key:insert-following-key
+      (cond ((popwin:position-horizontal-p guide-key/popup-window-position)
+             (guide-key/insert-following-key
               fkey-str-list (1+ (/ (length fkey-str-list) (1- (frame-height))))))
-            ((popwin:position-vertical-p guide-key:popup-window-position)
-             (guide-key:insert-following-key  ; caluculation of second argument is rough
+            ((popwin:position-vertical-p guide-key/popup-window-position)
+             (guide-key/insert-following-key  ; caluculation of second argument is rough
               fkey-str-list (/ (frame-width)
                                 (apply 'max (mapcar 'length fkey-str-list))))))
       (align-regexp (point-min) (point-max) "\\(\\s-*\\) \\[" 1 1 t)
       (goto-char (point-min)))
     fkey-list-len))
 
-(defun guide-key:insert-following-key (fkey-str-list columns)
+(defun guide-key/insert-following-key (fkey-str-list columns)
   "Insert following keys by COLUMNS per line."
   (loop for fkey-str in fkey-str-list
         for column from 1
         do (insert fkey-str (if (= (mod column columns) 0) "\n" " "))))
 
-(defun guide-key:fontified-string (key space command hi-regexp)
+(defun guide-key/fontified-string (key space command hi-regexp)
   "Return fontified string of following key"
-  (concat (propertize "[" 'face 'guide-key:key-face)
-          (guide-key:propertize-string-according-to-command key command hi-regexp)
-          (propertize "]" 'face 'guide-key:key-face)
-          (if guide-key:align-command-by-space-flag space " ") ; white space
-          (guide-key:propertize-string-according-to-command command command hi-regexp)))
+  (concat (propertize "[" 'face 'guide-key/key-face)
+          (guide-key/propertize-string-according-to-command key command hi-regexp)
+          (propertize "]" 'face 'guide-key/key-face)
+          (if guide-key/align-command-by-space-flag space " ") ; white space
+          (guide-key/propertize-string-according-to-command command command hi-regexp)))
 
-(defun guide-key:propertize-string-according-to-command (string command hi-regexp)
+(defun guide-key/propertize-string-according-to-command (string command hi-regexp)
   "Return STRING putted text property accordinig to COMMAND"
-  (cond ((string-match guide-key:highlight-prefix-regexp command)
-         (propertize string 'face 'guide-key:prefix-command-face))
+  (cond ((string-match guide-key/highlight-prefix-regexp command)
+         (propertize string 'face 'guide-key/prefix-command-face))
         ((and (not (string= hi-regexp ""))
               (string-match hi-regexp command))
-         (propertize string 'face 'guide-key:highlight-command-face))
+         (propertize string 'face 'guide-key/highlight-command-face))
         (t
          string)))
 
-(defun guide-key:buffer-max-width ()
+(defun guide-key/buffer-max-width ()
   "Return max width in current buffer."
   (let ((buf-str (buffer-substring-no-properties (point-min) (point-max))))
     (apply 'max (mapcar 'length (split-string buf-str "\n")))))
 
-(defun guide-key:add-local-guide-key-sequence (key)
-  (add-to-list (make-local-variable 'guide-key:guide-key-sequence) key))
+(defun guide-key/add-local-guide-key-sequence (key)
+  (add-to-list (make-local-variable 'guide-key/guide-key-sequence) key))
 
-(defun guide-key:add-local-highlight-command-regexp (regexp)
-  (set (make-local-variable 'guide-key:highlight-command-regexp)
-       (if (string= guide-key:highlight-command-regexp "")
+(defun guide-key/add-local-highlight-command-regexp (regexp)
+  (set (make-local-variable 'guide-key/highlight-command-regexp)
+       (if (string= guide-key/highlight-command-regexp "")
            regexp
-         (concat regexp "\\|" guide-key:highlight-command-regexp))))
+         (concat regexp "\\|" guide-key/highlight-command-regexp))))
 
 ;;; key-chord hack
 (defadvice this-command-keys (after key-chord-hack disable)
@@ -304,7 +304,7 @@ For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
                           (aref rkeys (- (length rkeys) 1))))))
     (error [])))
 
-(defun guide-key:key-chord-hack-on ()
+(defun guide-key/key-chord-hack-on ()
   "Turn on key-chord hack of guide-key."
   (interactive)
   (dolist (fn '(this-command-keys this-command-keys-vector))
@@ -312,7 +312,7 @@ For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
     (ad-activate fn))
   (message "Turn on key-chord hack of guide-key"))
 
-(defun guide-key:key-chord-hack-off ()
+(defun guide-key/key-chord-hack-off ()
   "Turn off key-chord hack of guide-key."
   (interactive)
   (dolist (fn '(this-command-keys this-command-keys-vector))
@@ -321,7 +321,7 @@ For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
   (message "Turn on key-chord hack of guide-key"))
 
 ;;; debug
-(defun guide-key:message-events ()
+(defun guide-key/message-events ()
   ""
   (message (format "lce:%S tck:%S tckv:%S lie:%S uce:%S"
                    last-command-event
@@ -330,7 +330,7 @@ For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
                    last-input-event
                    unread-command-events
                    )))
-;; (setq ttt (run-at-time t 1 'guide-key:message-events))
+;; (setq ttt (run-at-time t 1 'guide-key/message-events))
 ;; (cancel-timer ttt)
 
 (provide 'guide-key)
