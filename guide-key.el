@@ -4,7 +4,7 @@
 
 ;; Author: Tsunenobu Kai <kbkbkbkb1@gmail.com>
 ;; URL: https://github.com/kbkbkbkb1/guide-key
-;; Version: 0.1.2
+;; Version: 1.0.0
 ;; Package-Requires: ((popwin "0.3.0"))
 ;; Keywords: help convenience
 
@@ -128,6 +128,10 @@
 
 ;;; ChangeLog:
 
+;; - Version 1.0.0
+;;   - First release version
+;;   - Adjust names of functions and variables
+;;   - Add some documentations
 ;; - Version 0.1.2
 ;;   - Enable to guide key-chord bindings.
 ;; - Version 0.1.1
