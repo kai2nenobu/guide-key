@@ -265,15 +265,16 @@ positive, otherwise disable."
 
 (defun guide-key/popup-guide-buffer ()
   "Pop up guide buffer at `guide-key/popup-window-position'."
-  (with-current-buffer (get-buffer guide-key/guide-buffer-name)
-    (apply 'popwin:popup-buffer (current-buffer)
-           :position guide-key/popup-window-position
-           :noselect t
-           (cond ((popwin:position-horizontal-p guide-key/popup-window-position)
-                  `(:width ,(+ (guide-key/buffer-max-width) 3)))
-                 ((popwin:position-vertical-p guide-key/popup-window-position)
-                  `(:height ,(+ (count-lines (point-min) (point-max)) 3)))))
-    ))
+  (let ((last-config popwin:popup-last-config))
+    (with-current-buffer (get-buffer guide-key/guide-buffer-name)
+      (apply 'popwin:popup-buffer (current-buffer)
+             :position guide-key/popup-window-position
+             :noselect t
+             (cond ((popwin:position-horizontal-p guide-key/popup-window-position)
+                    `(:width ,(+ (guide-key/buffer-max-width) 3)))
+                   ((popwin:position-vertical-p guide-key/popup-window-position)
+                    `(:height ,(+ (count-lines (point-min) (point-max)) 3))))))
+    (setq popwin:popup-last-config last-config)))
 
 (defun guide-key/close-guide-buffer ()
   "Close guide buffer."
