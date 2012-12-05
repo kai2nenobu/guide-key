@@ -4,7 +4,7 @@
 
 ;; Author: Tsunenobu Kai <kbkbkbkb1@gmail.com>
 ;; URL: https://github.com/kbkbkbkb1/guide-key
-;; Version: 1.0.0
+;; Version: 1.0.1
 ;; Package-Requires: ((popwin "0.3.0"))
 ;; Keywords: help convenience
 
@@ -128,6 +128,8 @@
 
 ;;; ChangeLog:
 
+;; - Version 1.0.1
+;;   - Change to save and restore a last config of popwin
 ;; - Version 1.0.0
 ;;   - First release version
 ;;   - Adjust names of functions and variables
