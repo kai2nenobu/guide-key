@@ -188,6 +188,13 @@ This variable must be one of `right', `bottom', `left' and `top'."
   :type '(radio (const right) (const bottom) (const left) (const top))
   :group 'guide-key)
 
+(defcustom guide-key/popup-if-super-key-sequence nil
+  "*If non-nil, guide buffer is poped up if a super sequense was inputed.
+For example, guide buffer is poped up when `guide-key/guide-key-sequence'
+include \"\\C-h\" and you input \"\\C-h4\""
+  :type 'boolean
+  :group 'guide-key)
+
 (defface guide-key/prefix-command-face
   '((((class color) (background dark))
      (:foreground "cyan"))
@@ -290,10 +297,12 @@ positive, otherwise disable."
   (not (equal guide-key/last-key-sequence-vector key-seq)))
 
 (defun guide-key/popup-guide-buffer-p (key-seq)
-  "Return t if guide buffer should be popped up."
-  (and (> (length key-seq) 0)
-       (member key-seq (mapcar 'guide-key/convert-key-sequence-to-vector
-                               guide-key/guide-key-sequence))))
+    "Return t if guide buffer should be popped up."
+    (and (> (length key-seq) 0)
+         (or (member key-seq (mapcar 'guide-key/convert-key-sequence-to-vector
+                                     guide-key/guide-key-sequence))
+             (and guide-key/popup-if-super-key-sequence
+                  (guide-key/popup-guide-buffer-p (kui/vbutlast key-seq))))))
 
 (defun guide-key/convert-key-sequence-to-vector (key-seq)
   "Convert key sequence KEY-SEQ to vector representation.
