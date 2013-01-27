@@ -297,12 +297,12 @@ positive, otherwise disable."
   (not (equal guide-key/last-key-sequence-vector key-seq)))
 
 (defun guide-key/popup-guide-buffer-p (key-seq)
-    "Return t if guide buffer should be popped up."
-    (and (> (length key-seq) 0)
-         (or (member key-seq (mapcar 'guide-key/convert-key-sequence-to-vector
-                                     guide-key/guide-key-sequence))
-             (and guide-key/popup-if-super-key-sequence
-                  (guide-key/popup-guide-buffer-p (kui/vbutlast key-seq))))))
+  "Return t if guide buffer should be popped up."
+  (and (> (length key-seq) 0)
+       (or (member key-seq (mapcar 'guide-key/convert-key-sequence-to-vector
+                                   guide-key/guide-key-sequence))
+           (and guide-key/popup-if-super-key-sequence
+                (guide-key/popup-guide-buffer-p (kui/vbutlast key-seq))))))
 
 (defun guide-key/convert-key-sequence-to-vector (key-seq)
   "Convert key sequence KEY-SEQ to vector representation.
