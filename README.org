@@ -96,7 +96,7 @@ emacs behaves as below.
 *** Other functions and variables
 Here are some functions and variables which control guide-key.
 - *(guide-key-mode ARG)*: guide-key-mode is implemented as a minor mode.
-     Excuting M-x guide-key-mode toggles whether guide-key is enabled or not.
+     Executing M-x guide-key-mode toggles whether guide-key is enabled or not.
      Because guide-key-mode is a global minor mode, guide-key-mode is enabled
      in all buffers or disabled in all buffers.
 - *guide-key/popup-window-position*: This variable controls where a guide-key
@@ -106,7 +106,7 @@ Here are some functions and variables which control guide-key.
      default value is 0.1 (in seconds).
 ** Known issues
 Here are some issues and drawbacks.
-- Because guide-key tries to pop up all keybidings, a size of popup window
+- Because guide-key tries to pop up all key bindings, a size of popup window
   tends to be big. If the popup window is bigger than the current frame,
   guide-key cannot pop up normally. I recommend you not to add a prefix which
   has many key bindings like "C-x".
@@ -129,7 +129,7 @@ Here are some issues and drawbacks.
 - [X] define global minor mode
 ** ChangeLog
 - Version 1.0.1
-  - Change to save and restore a last config of popwin
+  - Change to save and restore a last configuration of popwin
 - Version 1.0.0
   - First release version
   - Adjust names of functions and variables
