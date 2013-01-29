@@ -298,9 +298,9 @@ positive, otherwise disable."
            (and guide-key/recursive-key-sequence-flag
                 (guide-key/popup-guide-buffer-p (guide-key/vbutlast key-seq))))))
 
-(defun guide-key/vbutlast (vector &optional n)
-  "Return a copy of VECTOR with the last N elements removed."
-  (vconcat (butlast (append vector nil) n)))
+(defun guide-key/vbutlast (vec &optional n)
+  "Return a copy of vector VEC with the last N elements removed."
+  (vconcat (butlast (append vec nil) n)))
 
 (defun guide-key/convert-key-sequence-to-vector (key-seq)
   "Convert key sequence KEY-SEQ to vector representation.
