@@ -188,10 +188,11 @@ This variable must be one of `right', `bottom', `left' and `top'."
   :type '(radio (const right) (const bottom) (const left) (const top))
   :group 'guide-key)
 
-(defcustom guide-key/popup-if-super-key-sequence nil
-  "*If non-nil, guide buffer is poped up if a super sequense was inputed.
-For example, guide buffer is poped up when `guide-key/guide-key-sequence'
-include \"\\C-h\" and you input \"\\C-h4\""
+(defcustom guide-key/recursive-key-sequence-flag nil
+  "*If non-nil, check an input key sequence recursively.
+For example, if `guide-key/guide-key-sequence' includes \"C-x\",
+guide buffer is popped up when you input \"C-x r\", \"C-x 4\" and
+any other prefixes following \"C-x\"."
   :type 'boolean
   :group 'guide-key)
 
@@ -301,7 +302,7 @@ positive, otherwise disable."
   (and (> (length key-seq) 0)
        (or (member key-seq (mapcar 'guide-key/convert-key-sequence-to-vector
                                    guide-key/guide-key-sequence))
-           (and guide-key/popup-if-super-key-sequence
+           (and guide-key/recursive-key-sequence-flag
                 (guide-key/popup-guide-buffer-p (guide-key/vbutlast key-seq))))))
 
 (defun guide-key/vbutlast (vector &optional n)
