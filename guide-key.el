@@ -37,6 +37,7 @@
 ;; - guide-key doesn't overwrite existing commands and key bindings. So, there
 ;;   is no bad effect on using `describe-key' and `describe-bindings'.
 ;;
+;;
 ;; Installation:
 ;;
 ;; I added guide-key to MELPA. You can install guide-key with package.el,
@@ -48,7 +49,8 @@
 ;; https://github.com/kbkbkbkb1/guide-key, and then put them in your
 ;; `load-path'.
 ;;
-;; Usage:
+;;
+;; Basic usage:
 ;;
 ;; You just add your favorite prefix keys to `guide-key/guide-key-sequence'
 ;; as below.
@@ -75,6 +77,31 @@
 ;;
 ;; Moreover, prefix commands are automatically highlighted.
 ;;
+;; I've confirmed that guide-key works well in these environments.
+;; - Emacs 24.2, Ubuntu 12.04 or Windows 7 64bit
+;; - Emacs 23.3, Ubuntu 12.04 or Windows 7 64bit
+;; - Emacs 22.3, Windows 7 64bit
+;; If popwin works good, I think guide-key also works good. You can use
+;; guide-key with Emacs working in terminal.
+;;
+;;
+;; Advanced usage:
+;;
+;; You can add extra settings in a particular mode. Please use
+;; `guide-key/add-local-guide-key-sequence',
+;; `guide-key/add-local-highlight-command-regexp' and hook of
+;; that mode.
+;;
+;;
+;; This code is a example of org-mode.
+;;
+;;   (defun guide-key/my-hook-function-for-org-mode ()
+;;     (guide-key/add-local-guide-key-sequence "C-c")
+;;     (guide-key/add-local-guide-key-sequence "C-c C-x")
+;;     (guide-key/add-local-highlight-command-regexp "org-"))
+;;   (add-hook 'org-mode-hook 'guide-key/my-hook-function-for-org-mode)
+;;
+;;
 ;; Here are some functions and variables which control guide-key.
 ;; - `guide-key-mode':
 ;;    guide-key-mode is implemented as a minor mode.
@@ -87,26 +114,6 @@
 ;;   value is `right'.
 ;; - `guide-key/polling-time':
 ;;    This variable controls a polling time. The default value is 0.1 (in seconds).
-;;
-;; I've confirmed that guide-key works well in these environments.
-;; - Emacs 24.2, Ubuntu 12.04 or Windows 7 64bit
-;; - Emacs 23.3, Ubuntu 12.04 or Windows 7 64bit
-;; - Emacs 22.3, Windows 7 64bit
-;; If popwin works good, I think guide-key also works good. You can use
-;; guide-key with Emacs working in terminal.
-;;
-;; You can add extra settings in a particular mode. Please use
-;; `guide-key/add-local-guide-key-sequence',
-;; `guide-key/add-local-highlight-command-regexp' and hook of
-;; that mode.
-;;
-;; This code is a example of org-mode.
-;;
-;;   (defun guide-key/my-hook-function-for-org-mode ()
-;;     (guide-key/add-local-guide-key-sequence "C-c")
-;;     (guide-key/add-local-guide-key-sequence "C-c C-x")
-;;     (guide-key/add-local-highlight-command-regexp "org-"))
-;;   (add-hook 'org-mode-hook 'guide-key/my-hook-function-for-org-mode)
 ;;
 ;;
 ;; Enjoy!

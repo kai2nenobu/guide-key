@@ -22,7 +22,7 @@ time.
 If you don't have package.el, please download popwin.el and guide-key.el
 directly from [[https://github.com/m2ym/popwin-el][m2ym/popwin-el]] and [[https://github.com/kbkbkbkb1/guide-key][kbkbkbkb1/guide-key]], and then put them in
 your `load-path'.
-** Usage
+** Basic usage
 You just add your favorite prefix keys to `guide-key/guide-key-sequence' as
 below.
 #+BEGIN_SRC emacs-lisp
@@ -53,23 +53,13 @@ adequate regular expression like this.
 #+END_SRC
 Moreover, prefix commands are automatically highlighted.
 
-Here are some functions and variables which control guide-key.
-- *(guide-key-mode ARG)*: guide-key-mode is implemented as a minor mode.
-     Excuting M-x guide-key-mode toggles whether guide-key is enabled or not.
-     Because guide-key-mode is a global minor mode, guide-key-mode is enabled
-     in all buffers or disabled in all buffers.
-- *guide-key/popup-window-position*: This variable controls where a guide-key
-     buffer is popped up. A value of this variable is one of ~right~, ~bottom~,
-     ~left~, ~top~. The default value is ~right~.
-- *guide-key/polling-time*: This variable controls a polling time. The
-     default value is 0.1 (in seconds).
-
 I've confirmed that guide-key works well in these environments.
 - Emacs 24.2, Ubuntu 12.04 or Windows 7 64bit
 - Emacs 23.3, Ubuntu 12.04 or Windows 7 64bit
 - Emacs 22.3, Windows 7 64bit
 If popwin works good, I think guide-key also works good. You can use
 guide-key with Emacs working in terminal.
+** Advanced Usage
 *** Add settings in a particular mode
 You can add extra settings in a particular mode. Please use
 `guide-key/add-local-guide-key-sequence',
@@ -88,6 +78,17 @@ If you execute `org-set-property' by pressing "C-c C-x p" in org-mode buffer,
 emacs behaves as below.
 
 [[http://www.kaichan.mydns.jp/~kai/wordpress/wp-content/uploads/2012/12/wpid-guide-key-example-org-anime.gif]]
+*** Other functions and variables
+Here are some functions and variables which control guide-key.
+- *(guide-key-mode ARG)*: guide-key-mode is implemented as a minor mode.
+     Excuting M-x guide-key-mode toggles whether guide-key is enabled or not.
+     Because guide-key-mode is a global minor mode, guide-key-mode is enabled
+     in all buffers or disabled in all buffers.
+- *guide-key/popup-window-position*: This variable controls where a guide-key
+     buffer is popped up. A value of this variable is one of ~right~, ~bottom~,
+     ~left~, ~top~. The default value is ~right~.
+- *guide-key/polling-time*: This variable controls a polling time. The
+     default value is 0.1 (in seconds).
 ** Known issues
 Here are some issues and drawbacks.
 - Because guide-key tries to pop up all keybidings, a size of popup window
