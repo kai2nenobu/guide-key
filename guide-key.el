@@ -111,36 +111,6 @@
 ;;
 ;; Enjoy!
 
-;;; TODO:
-
-;; - write document
-;; - DONE? enrichment of guide buffer
-;;   - select color to be used
-;; - DONE automatically guide all following keys
-;; - DONE pop up guide buffer at top or bottom
-;; - cooperate with polling of popwin.el?
-;; - confine a length of command name
-;; - confine the number of items to guide
-;; - a feature to exclude or include guide by command name
-;; - DONE define (buffer local) minor mode instead of global minor mode
-;; - prefix argument processing
-;; - DONE define global minor mode
-
-;;; ChangeLog:
-
-;; - Version 1.0.1
-;;   - Change to save and restore a last config of popwin
-;; - Version 1.0.0
-;;   - First release version
-;;   - Adjust names of functions and variables
-;;   - Add some documentations
-;; - Version 0.1.2
-;;   - Enable to guide key-chord bindings.
-;; - Version 0.1.1
-;;   - Make `guide-key-mode' global minor mode.
-;; - Version 0.1.0
-;;   - Initial version.
-
 ;;; Code:
 
 (eval-when-compile

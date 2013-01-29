@@ -101,3 +101,27 @@ Here are some issues and drawbacks.
   is an advantage to creating template manually. In contrast, because
   guide-key extracts key bindings dynamically, guide-key can display nothing
   except a command name.
+** TODOs
+- [ ] confine a length of command name
+- [ ] confine the number of items to guide
+- [ ] a feature to exclude or include guide by command name
+- [X] enrichment of guide buffer
+  - [ ] select more user-friendly colors
+- [X] automatically guide all following keys
+- [X] pop up guide buffer at top or bottom
+- [X] prefix argument processing
+- [X] define global minor mode
+** ChangeLog
+- Version 1.0.1
+  - Change to save and restore a last config of popwin
+- Version 1.0.0
+  - First release version
+  - Adjust names of functions and variables
+  - Add some documentations
+- Version 0.1.2
+  - Enable to guide key-chord bindings.
+- Version 0.1.1
+  - Make `guide-key-mode' global minor mode.
+- Version 0.1.0
+  - Initial version.
+
