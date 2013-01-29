@@ -14,7 +14,7 @@ Here are some features of this library.
 ** Installation
 I added guide-key to [[http://melpa.milkbox.net/][MELPA]]. You can install guide-key with package.el,
 
-[[file:img/guide-key-package-install.png]]
+[[http://www.kaichan.mydns.jp/~kai/wordpress/wp-content/uploads/2012/12/wpid-guide-key-package-install.png]]
 
 Because guide-key depends on [[https://github.com/m2ym/popwin-el][popwin.el]], popwin.el is also installed at a
 time.
@@ -33,7 +33,7 @@ below.
 When you press these prefix keys, key bindings are automatically popped up.
 This is a screenshot when you press "C-x r".
 
-[[file:img/guide-key-example.png]]
+[[http://www.kaichan.mydns.jp/~kai/wordpress/wp-content/uploads/2012/12/wpid-guide-key-example.png]]
 
 guide-key can highlight commands which match a specified regular expression.
 Key bindings following "C-x r" are rectangle family and register family.
@@ -43,7 +43,7 @@ in your init.el.
 (setq guide-key/highlight-command-regexp "rectangle")
 #+END_SRC
 
-[[file:img/guide-key-example2.png]]
+[[http://www.kaichan.mydns.jp/~kai/wordpress/wp-content/uploads/2012/12/wpid-guide-key-example2.png]]
 
 This feature makes it easy to find commands and learn their key bindings. If
 you want to highlight both rectangle family and register family, set an
@@ -92,7 +92,7 @@ This code is a example of org-mode.
 If you execute `org-set-property' by pressing "C-c C-x p" in org-mode buffer,
 emacs behaves as below.
 
-[[file:img/guide-key-example-org-anime.gif]]
+[[http://www.kaichan.mydns.jp/~kai/wordpress/wp-content/uploads/2012/12/wpid-guide-key-example-org-anime.gif]]
 *** Other functions and variables
 Here are some functions and variables which control guide-key.
 - *(guide-key-mode ARG)*: guide-key-mode is implemented as a minor mode.
