@@ -302,7 +302,11 @@ positive, otherwise disable."
        (or (member key-seq (mapcar 'guide-key/convert-key-sequence-to-vector
                                    guide-key/guide-key-sequence))
            (and guide-key/popup-if-super-key-sequence
-                (guide-key/popup-guide-buffer-p (kui/vbutlast key-seq))))))
+                (guide-key/popup-guide-buffer-p (guide-key/vbutlast key-seq))))))
+
+(defun guide-key/vbutlast (vector &optional n)
+  "Return a copy of VECTOR with the last N elements removed."
+  (vconcat (butlast (append vector nil) n)))
 
 (defun guide-key/convert-key-sequence-to-vector (key-seq)
   "Convert key sequence KEY-SEQ to vector representation.
