@@ -87,6 +87,22 @@
 ;;
 ;; Advanced usage:
 ;;
+;; It is bothering to add many prefixes to `guide-key/guide-key-sequence'.
+;; `guide-key/recursive-key-sequence-flag' releases you from this problem.
+;; If `guide-key/recursive-key-sequence-flag' is non-nil, guide-key checks a
+;; input key sequence recursively. That is, if "C-x 8 ^" is an input key
+;; sequence, guide-key checks whether `guide-key/guide-key-sequence' includes
+;; "C-x 8" and "C-x".
+;;
+;; For example, if you configure as below,
+;;
+;;   (setq guide-key/guide-key-sequence '("C-x"))
+;;   (setq guide-key/recursive-key-sequence-flag t)
+;;
+;; guide buffer is popped up when you input "C-x r", "C-x 8" and
+;; any other prefixes following "C-x".
+;;
+;;
 ;; You can add extra settings in a particular mode. Please use
 ;; `guide-key/add-local-guide-key-sequence',
 ;; `guide-key/add-local-highlight-command-regexp' and hook of
