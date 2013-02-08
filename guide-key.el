@@ -258,11 +258,9 @@ positive, otherwise disable."
               (when indent-tabs-mode (setq indent-tabs-mode nil)) ; don't use tab as white space
               (erase-buffer)
               (describe-buffer-bindings dsc-buf key-seq)
-              (if (> (guide-key/format-guide-buffer key-seq hi-regexp) 0)
-                  (progn
-                    (guide-key/close-guide-buffer)
-                    (guide-key/popup-guide-buffer))
-                (message "No following key.")))))
+              (when (> (guide-key/format-guide-buffer key-seq hi-regexp) 0)
+                (guide-key/close-guide-buffer)
+                (guide-key/popup-guide-buffer)))))
       (guide-key/close-guide-buffer))
     (setq guide-key/last-key-sequence-vector key-seq)))
 
