@@ -10,7 +10,7 @@ Here are some features of this library.
 - guide-key can highlight particular commands. This makes it easy to find a
   command you are looking for, and to learn its key binding.
 - guide-key doesn't overwrite existing commands and key bindings. So, there
-  is no bad effect on using `describe-key' and `describe-bindings'.
+  is no bad effect on using =describe-key= and =describe-bindings=.
 ** Installation
 I added guide-key to [[http://melpa.milkbox.net/][MELPA]]. You can install guide-key with package.el,
 
@@ -21,9 +21,9 @@ time.
 
 If you don't have package.el, please download popwin.el and guide-key.el
 directly from [[https://github.com/m2ym/popwin-el][m2ym/popwin-el]] and [[https://github.com/kbkbkbkb1/guide-key][kbkbkbkb1/guide-key]], and then put them in
-your `load-path'.
+your =load-path=.
 ** Basic usage
-You just add your favorite prefix keys to `guide-key/guide-key-sequence' as
+You just add your favorite prefix keys to =guide-key/guide-key-sequence= as
 below.
 #+BEGIN_SRC emacs-lisp
 (require 'guide-key)
@@ -61,11 +61,11 @@ If popwin works good, I think guide-key also works good. You can use
 guide-key with Emacs working in terminal.
 ** Advanced Usage
 *** Check key sequence recursively
-It is bothering to add many prefixes to `guide-key/guide-key-sequence'.
-`guide-key/recursive-key-sequence-flag' releases you from this problem.  If
-`guide-key/recursive-key-sequence-flag' is non-nil, guide-key checks a input
+It is bothering to add many prefixes to =guide-key/guide-key-sequence=.
+=guide-key/recursive-key-sequence-flag= releases you from this problem.  If
+=guide-key/recursive-key-sequence-flag= is non-nil, guide-key checks a input
 key sequence recursively. That is, if "C-x 8 ^" is an input key sequence,
-guide-key checks whether `guide-key/guide-key-sequence' includes "C-x 8" and
+guide-key checks whether =guide-key/guide-key-sequence= includes "C-x 8" and
 "C-x".
 
 For example, if you configure as below,
@@ -77,8 +77,8 @@ guide buffer is popped up when you input "C-x r", "C-x 8" and
 any other prefixes following "C-x".
 *** Add settings in a particular mode
 You can add extra settings in a particular mode. Please use
-`guide-key/add-local-guide-key-sequence',
-`guide-key/add-local-highlight-command-regexp' and hook of
+=guide-key/add-local-guide-key-sequence=,
+=guide-key/add-local-highlight-command-regexp= and hook of
 that mode.
 
 This code is a example of org-mode.
@@ -89,7 +89,7 @@ This code is a example of org-mode.
   (guide-key/add-local-highlight-command-regexp "org-"))
 (add-hook 'org-mode-hook 'guide-key/my-hook-function-for-org-mode)
 #+END_SRC
-If you execute `org-set-property' by pressing "C-c C-x p" in org-mode buffer,
+If you execute =org-set-property= by pressing "C-c C-x p" in org-mode buffer,
 emacs behaves as below.
 
 [[http://www.kaichan.mydns.jp/~kai/wordpress/wp-content/uploads/2012/12/wpid-guide-key-example-org-anime.gif]]
@@ -132,7 +132,7 @@ Here are some issues and drawbacks.
   - Suppress an annoying message, "No following key".
 - Version 1.1.0
   - Add a functionality to check an input key sequence recursively. This
-    enables to avoid adding many prefixes to `guide-key/guide-key-sequence'.
+    enables to avoid adding many prefixes to =guide-key/guide-key-sequence=.
 - Version 1.0.1
   - Change to save and restore a last configuration of popwin
 - Version 1.0.0
@@ -142,7 +142,6 @@ Here are some issues and drawbacks.
 - Version 0.1.2
   - Enable to guide key-chord bindings.
 - Version 0.1.1
-  - Make `guide-key-mode' global minor mode.
+  - Make =guide-key-mode= global minor mode.
 - Version 0.1.0
   - Initial version.
-
