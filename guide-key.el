@@ -160,7 +160,7 @@ are allowed."
   :type 'float
   :group 'guide-key)
 
-(defcustom guide-key/idle-delay 0.5
+(defcustom guide-key/idle-delay 1.0
   "*Delay in seconds before guide buffer is displayed."
   :type 'float
   :group 'guide-key)
