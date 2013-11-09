@@ -28,8 +28,9 @@ below.
 (setq guide-key/guide-key-sequence '("C-x r" "C-x 4"))
 (guide-key-mode 1)  ; Enable guide-key-mode
 #+END_SRC
-When you press these prefix keys, key bindings are automatically popped up.
-This is a screenshot when you press "C-x r".
+When you press these prefix keys, key bindings are automatically
+popped up after a short delay (1 second by default).  This is a
+screenshot when you press "C-x r".
 
 [[img/guide-key-example.png]]
 
@@ -51,10 +52,21 @@ adequate regular expression like this.
 #+END_SRC
 Moreover, prefix commands are automatically highlighted.
 
+Depending on your level of emacs experience, you may want a shorter or
+longer delay between pressing a key and the appearance of the guide
+buffer.  This can be controlled by setting =guide-key/idle-delay=:
+#+BEGIN_SRC emacs-lisp
+(setq guide-key/idle-delay 0.1)
+#+END_SRC
+The guide buffer is displayed only when you pause between keystrokes
+for longer than this delay, so it will keep out of your way when you
+are typing key sequences that you already know well.
+
 I've confirmed that guide-key works well in these environments.
 - Emacs 24.2, Ubuntu 12.04 or Windows 7 64bit
 - Emacs 23.3, Ubuntu 12.04 or Windows 7 64bit
 - Emacs 22.3, Windows 7 64bit
+- Emacs 24.3.1, OS X 10.9
 If popwin works, I think guide-key will work as well. You can use
 guide-key with Emacs working in terminal.
 ** Advanced Usage
@@ -102,6 +114,11 @@ Here are some functions and variables which control guide-key.
      =left=, =top=. The default value is =right=.
 - =guide-key/polling-time=: This variable controls a polling time. The
      default value is 0.1 (in seconds).
+- =guide-key/idle-delay=: This variable controls the delay between
+  starting a key sequence and popping up the guide buffer. The default
+  value is 1.0 (in seconds), which means that guide-key will keep out
+  of your way unless you hesitate in the middle of a key sequence .
+  Set this to 0.0 to revert to the old default behavior.
 ** Known issues
 Here are some issues and drawbacks.
 - Because guide-key tries to pop up all key bindings, a size of popup window
