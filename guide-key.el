@@ -25,24 +25,23 @@
 
 ;; Overview:
 ;;
-;; guide-key.el enables to guide the following key bindings automatically and
-;; dynamically. guide-key aims to be an alternative of one-key.el.
+;; guide-key.el displays the available key bindings automatically and dynamically.
+;; guide-key aims to be an alternative of one-key.el.
 ;;
 ;; Here are some features of this library.
-;; - guide-key automatically pop up the keys following your favorite
-;;   prefixes. Moreover, even if you change key bindings, guide-key follows its
+;; - guide-key automatically pops up the keys following your favorite
+;;   prefixes. Moreover, even if you change key bindings, guide-key follows the
 ;;   change dynamically.
 ;; - guide-key can highlight particular commands. This makes it easy to find a
 ;;   command you are looking for, and to learn its key binding.
-;; - guide-key doesn't overwrite existing commands and key bindings. So, there
-;;   is no bad effect on using `describe-key' and `describe-bindings'.
+;; - guide-key doesn't overwrite existing commands and key bindings, so there
+;;   is no interference with `describe-key' and `describe-bindings'.
 ;;
 ;;
 ;; Installation:
 ;;
-;; I added guide-key to MELPA. You can install guide-key with package.el,
-;; Because guide-key depends on popwin.el, popwin.el is also installed at a
-;; time.
+;; I added guide-key to MELPA. You can install guide-key with package.el.
+;; Because guide-key depends on popwin.el, popwin.el is also installed.
 ;;
 ;; If you don't have package.el, please download popwin.el and guide-key.el
 ;; directly from https://github.com/m2ym/popwin-el and
@@ -59,13 +58,13 @@
 ;;   (setq guide-key/guide-key-sequence '("C-x r" "C-x 4"))
 ;;   (guide-key-mode 1) ; Enable guide-key-mode
 ;;
-;; When you press these "C-x r" or "C-x 4", key bindings are automatically
-;; popped up.
+;; When you press these prefix keys, key bindings are automatically
+;; popped up after a short delay (1 second by default).
 ;;
-;; guide-key can highlight commands which match a specified regular
-;; expression.  Key bindings following "C-x r" are rectangle family and
-;; register family.  If you want to highlight only rectangle family commands,
-;; put this setting in your init.el.
+;; guide-key can highlight commands which match a specified regular expression.
+;; Key bindings following "C-x r" are rectangle family and register family.
+;; If you want to highlight only rectangle family commands, put this setting
+;; in your init.el.
 ;;
 ;;   (setq guide-key/highlight-command-regexp "rectangle")
 ;;
@@ -77,11 +76,22 @@
 ;;
 ;; Moreover, prefix commands are automatically highlighted.
 ;;
+;; Depending on your level of emacs experience, you may want a shorter or
+;; longer delay between pressing a key and the appearance of the guide
+;; buffer.  This can be controlled by setting `guide-key/idle-delay':
+;;
+;;   (setq guide-key/idle-delay 0.1)
+;;
+;; The guide buffer is displayed only when you pause between keystrokes
+;; for longer than this delay, so it will keep out of your way when you
+;; are typing key sequences that you already know well.
+;;
 ;; I've confirmed that guide-key works well in these environments.
 ;; - Emacs 24.2, Ubuntu 12.04 or Windows 7 64bit
 ;; - Emacs 23.3, Ubuntu 12.04 or Windows 7 64bit
 ;; - Emacs 22.3, Windows 7 64bit
-;; If popwin works good, I think guide-key also works good. You can use
+;; - Emacs 24.3.1, OS X 10.9
+;; If popwin works, I think guide-key will work as well. You can use
 ;; guide-key with Emacs working in terminal.
 ;;
 ;;
@@ -99,13 +109,13 @@
 ;;   (setq guide-key/guide-key-sequence '("C-x"))
 ;;   (setq guide-key/recursive-key-sequence-flag t)
 ;;
-;; guide buffer is popped up when you input "C-x r", "C-x 8" and
+;; the guide buffer is popped up when you input "C-x r", "C-x 8" and
 ;; any other prefixes following "C-x".
 ;;
 ;;
 ;; You can add extra settings in a particular mode. Please use
 ;; `guide-key/add-local-guide-key-sequence',
-;; `guide-key/add-local-highlight-command-regexp' and hook of
+;; `guide-key/add-local-highlight-command-regexp' and the hook of
 ;; that mode.
 ;;
 ;;
@@ -120,17 +130,26 @@
 ;;
 ;; Here are some functions and variables which control guide-key.
 ;; - `guide-key-mode':
-;;    guide-key-mode is implemented as a minor mode.
-;;    Excuting M-x guide-key-mode toggles whether guide-key is enabled or
-;;    not.  Because guide-key-mode is a global minor mode, guide-key-mode is
-;;    enabled in all buffers or disabled in all buffers.
+;;   guide-key-mode is implemented as a minor mode.
+;;   Excuting M-x guide-key-mode toggles whether guide-key is enabled or
+;;   not.  Because guide-key-mode is a global minor mode, guide-key-mode is
+;;   enabled in all buffers or disabled in all buffers.
 ;; - `guide-key/popup-window-position':
 ;;   This variable controls where a guide-key buffer is popped up. A value of
 ;;   this variable is one of `right', `bottom', `left', `top'. The default
 ;;   value is `right'.
 ;; - `guide-key/polling-time':
-;;    This variable controls a polling time. The default value is 0.1 (in seconds).
-;;
+;;   This variable controls a polling time. The default value is 0.1 (in seconds).
+;; - `guide-key/idle-delay':
+;;   This variable controls the delay between starting a key sequence and
+;;   popping up the guide buffer. The default value is 1.0 (in seconds),
+;;   which means that guide-key will keep out of your way unless you hesitate
+;;   in the middle of a key sequence .  Set this to 0.0 to revert to the old
+;;   default behavior.
+;; - `guide-key/text-scale-amount':
+;;   This variable controls the size of text in guide buffer. The default
+;;   value is 0 (it means default size in Emacs). If you want to enlarge
+;;   text, set positive number. Otherwise, set negative number.
 ;;
 ;; Enjoy!
 
