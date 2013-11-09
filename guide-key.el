@@ -1,10 +1,10 @@
 ;;; guide-key.el --- Guide the following key bindings automatically and dynamically
 
-;; Copyright (C) 2012 Tsunenobu Kai
+;; Copyright (C) 2012, 2013 Tsunenobu Kai
 
 ;; Author: Tsunenobu Kai <kbkbkbkb1@gmail.com>
 ;; URL: https://github.com/kbkbkbkb1/guide-key
-;; Version: 1.1.1
+;; Version: 1.2.0
 ;; Package-Requires: ((popwin "0.3.0"))
 ;; Keywords: help convenience
 
