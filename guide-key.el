@@ -186,6 +186,15 @@ This variable must be one of `right', `bottom', `left' and `top'."
   :type '(radio (const right) (const bottom) (const left) (const top))
   :group 'guide-key)
 
+(defcustom guide-key/text-scale-amount 0
+  "*Amount of scaling text in guide buffer.
+
+If positive number, the text becomes larger.  If negative number,
+the text becomes smaller.  Scale of the text is detemined by the
+value of variable `text-scale-mode-step'."
+  :type 'float
+  :group 'guide-key)
+
 (defcustom guide-key/recursive-key-sequence-flag nil
   "*If non-nil, check an input key sequence recursively.
 For example, if `guide-key/guide-key-sequence' includes \"C-x\",
@@ -262,7 +271,7 @@ positive, otherwise disable."
 	(unless truncate-lines (setq truncate-lines t))   ; don't fold line
 	(when indent-tabs-mode (setq indent-tabs-mode nil)) ; don't use tab as white space
 	(setq mode-line-format nil)
-	(text-scale-set -2)
+	(text-scale-set guide-key/text-scale-amount)
 	(erase-buffer)
 	(describe-buffer-bindings dsc-buf key-seq)
 	(when (> (guide-key/format-guide-buffer key-seq hi-regexp) 0)
