@@ -329,7 +329,7 @@ all key bindings in guide buffer.
 If HORIZONTAL is omitted or nil, return the height of popup
 window.  Otherwise, return the width of popup window"
   (with-current-buffer (get-buffer guide-key/guide-buffer-name)
-    (let ((margin 3)
+    (let ((margin (if horizontal 5 1))
           (scale (expt text-scale-mode-step text-scale-mode-amount)))
       (if horizontal
           (ceiling (* scale (+ (guide-key/buffer-max-width) margin)))
