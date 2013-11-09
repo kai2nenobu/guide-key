@@ -140,6 +140,7 @@
   (require 'cl))
 
 (require 'popwin)
+(require 'face-remap)
 
 ;;; variables
 (defgroup guide-key nil
@@ -302,6 +303,20 @@ positive, otherwise disable."
                    ((popwin:position-vertical-p guide-key/popup-window-position)
                     `(:height ,(+ (count-lines (point-min) (point-max)) 3))))))
     (setq popwin:popup-last-config last-config)))
+
+(defun guide-key/popup-window-size (&optional horizontal)
+  "Return an enough height or width of popup window to display
+all key bindings in guide buffer.
+
+If HORIZONTAL is omitted or nil, return the height of popup
+window.  Otherwise, return the width of popup window"
+  (with-current-buffer (get-buffer guide-key/guide-buffer-name)
+    (let ((margin 3)
+          (scale (expt text-scale-mode-step text-scale-mode-amount)))
+      (if horizontal
+          (ceiling (* scale (+ (guide-key/buffer-max-width) margin)))
+        (ceiling (* scale (+ (count-lines (point-min) (point-max)) margin))))
+      )))
 
 (defun guide-key/close-guide-buffer ()
   "Close guide buffer."
