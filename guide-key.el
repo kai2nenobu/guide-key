@@ -294,14 +294,13 @@ positive, otherwise disable."
 (defun guide-key/popup-guide-buffer ()
   "Pop up guide buffer at `guide-key/popup-window-position'."
   (let ((last-config popwin:popup-last-config))
-    (with-current-buffer (get-buffer guide-key/guide-buffer-name)
-      (apply 'popwin:popup-buffer (current-buffer)
+      (apply 'popwin:popup-buffer (get-buffer guide-key/guide-buffer-name)
              :position guide-key/popup-window-position
              :noselect t
              (cond ((popwin:position-horizontal-p guide-key/popup-window-position)
                     `(:width ,(guide-key/popup-window-size 'horizontal)))
                    ((popwin:position-vertical-p guide-key/popup-window-position)
-                    `(:height ,(guide-key/popup-window-size))))))
+                    `(:height ,(guide-key/popup-window-size)))))
     (setq popwin:popup-last-config last-config)))
 
 (defun guide-key/popup-window-size (&optional horizontal)
