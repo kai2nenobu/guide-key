@@ -411,22 +411,30 @@ For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
             (loop for (key space command) in fkey-list
                   collect (guide-key/fontified-string key space command hi-regexp)))
       ;; insert a few following keys per line
-      (cond ((popwin:position-horizontal-p guide-key/popup-window-position)
-             (guide-key/insert-following-key
-              fkey-str-list (1+ (/ (length fkey-str-list) (1- (frame-height))))))
-            ((popwin:position-vertical-p guide-key/popup-window-position)
-             (guide-key/insert-following-key  ; caluculation of second argument is rough
-              fkey-str-list (/ (frame-width)
-                                (apply 'max (mapcar 'length fkey-str-list))))))
-      (align-regexp (point-min) (point-max) "\\(\\s-*\\) \\[" 1 1 t)
+      (guide-key/insert-following-key fkey-str-list
+       (popwin:position-horizontal-p guide-key/popup-window-position))
       (goto-char (point-min)))
     fkey-list-len))
 
-(defun guide-key/insert-following-key (fkey-str-list columns)
-  "Insert following keys by COLUMNS per line."
-  (loop for fkey-str in fkey-str-list
-        for column from 1
-        do (insert fkey-str (if (= (mod column columns) 0) "\n" " "))))
+(defun guide-key/insert-following-key (fkey-str-list horizontal)
+  "Insert a few following keys per line.
+
+If HORIZONTAL is omitted or nil, assume that guide buffer is
+popped up at top or bottom. Otherwise, assume that guide buffer
+is popped up at left or right."
+  (let* ((scale (expt text-scale-mode-step text-scale-mode-amount))
+         ;; Calculate the number of items per line
+         (columns
+          (if horizontal
+              (ceiling (/ (* (length fkey-str-list) scale)
+                          (- (frame-height) (if tool-bar-mode 2 0) (if menu-bar-mode 1 0))))
+            (floor (/ (frame-width)
+                      (* (apply 'max (mapcar 'length fkey-str-list)) scale))))))
+    ;; Insert following keys by columns per line.
+    (loop for fkey-str in fkey-str-list
+          for column from 1
+          do (insert fkey-str (if (= (mod column columns) 0) "\n" " ")))
+    (align-regexp (point-min) (point-max) "\\(\\s-*\\) \\[" 1 1 t)))
 
 (defun guide-key/fontified-string (key space command hi-regexp)
   "Return fontified string of following key"
