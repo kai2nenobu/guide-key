@@ -119,6 +119,10 @@ Here are some functions and variables which control guide-key.
   value is 1.0 (in seconds), which means that guide-key will keep out
   of your way unless you hesitate in the middle of a key sequence .
   Set this to 0.0 to revert to the old default behavior.
+- =guide-key/text-scale-amount=: This variable controls the size of text in
+  guide buffer. The default value is 0 (it means default size in Emacs). If
+  you want to enlarge text, set positive number. Otherwise, set negative
+  number.
 ** Known issues
 Here are some issues and drawbacks.
 - Because guide-key tries to pop up all key bindings, a size of popup window
