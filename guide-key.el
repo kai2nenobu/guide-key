@@ -171,8 +171,15 @@
   "*Key sequences to guide in `guide-key-mode'.
 This variable is a list of string representation.
 Both representations, like \"C-x r\" and \"\\C-xr\",
-are allowed."
-  :type '(repeat string)
+are allowed.
+
+In addition, an element of this list can be a list with car a
+symbol representing major mode, and cdr a list of key sequences
+to consider only if this major mode is active."
+  :type '(repeat (choice (string :tag "Prefix key sequence")
+                         (cons :tag "Major-mode specific sequence"
+                               (symbol :tag "Major mode")
+                               (repeat (string :tag "Prefix key sequence")))))
   :group 'guide-key)
 
 (defcustom guide-key/polling-time 0.1
@@ -353,7 +360,8 @@ window.  Otherwise, return the width of popup window"
   "Return t if guide buffer should be popped up."
   (and (> (length key-seq) 0)
        (or (member key-seq (mapcar 'guide-key/convert-key-sequence-to-vector
-                                   guide-key/guide-key-sequence))
+                                   (append (cl-remove-if 'listp guide-key/guide-key-sequence)
+                                           (cdr (assoc major-mode guide-key/guide-key-sequence)))))
            (and guide-key/recursive-key-sequence-flag
                 (guide-key/popup-guide-buffer-p (guide-key/vbutlast key-seq))))))
 
