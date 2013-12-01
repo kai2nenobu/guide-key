@@ -372,6 +372,10 @@ window.  Otherwise, return the width of popup window"
         (setq lst (cons ks lst))))
     ;; major-mode specific key sequences
     (setq lst (append (assoc-default major-mode guide-key/guide-key-sequence) lst))
+    ;; minor-mode specific key sequences
+    (dolist (mmode minor-mode-list)
+      (when (and (boundp mmode) (symbol-value mmode))
+        (setq lst (append (assoc-default mmode guide-key/guide-key-sequence) lst))))
     ;; convert key sequences to vector representation
     (mapcar 'guide-key/convert-key-sequence-to-vector lst)))
 
