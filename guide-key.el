@@ -365,9 +365,15 @@ window.  Otherwise, return the width of popup window"
 
 (defun guide-key/buffer-key-seqences ()
   "Construct key sequences according to mode of current buffer."
-  (mapcar 'guide-key/convert-key-sequence-to-vector
-          (append (cl-remove-if 'listp guide-key/guide-key-sequence)
-                  (cdr (assoc major-mode guide-key/guide-key-sequence)))))
+  (let (lst)
+    ;; global key sequences
+    (dolist (ks guide-key/guide-key-sequence)
+      (when (stringp ks)
+        (setq lst (cons ks lst))))
+    ;; major-mode specific key sequences
+    (setq lst (append (assoc-default major-mode guide-key/guide-key-sequence) lst))
+    ;; convert key sequences to vector representation
+    (mapcar 'guide-key/convert-key-sequence-to-vector lst)))
 
 (defun guide-key/vbutlast (vec &optional n)
   "Return a copy of vector VEC with the last N elements removed."
