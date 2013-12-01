@@ -359,11 +359,15 @@ window.  Otherwise, return the width of popup window"
 (defun guide-key/popup-guide-buffer-p (key-seq)
   "Return t if guide buffer should be popped up."
   (and (> (length key-seq) 0)
-       (or (member key-seq (mapcar 'guide-key/convert-key-sequence-to-vector
-                                   (append (cl-remove-if 'listp guide-key/guide-key-sequence)
-                                           (cdr (assoc major-mode guide-key/guide-key-sequence)))))
+       (or (member key-seq (guide-key/buffer-key-seqences))
            (and guide-key/recursive-key-sequence-flag
                 (guide-key/popup-guide-buffer-p (guide-key/vbutlast key-seq))))))
+
+(defun guide-key/buffer-key-seqences ()
+  "Construct key sequences according to mode of current buffer."
+  (mapcar 'guide-key/convert-key-sequence-to-vector
+          (append (cl-remove-if 'listp guide-key/guide-key-sequence)
+                  (cdr (assoc major-mode guide-key/guide-key-sequence)))))
 
 (defun guide-key/vbutlast (vec &optional n)
   "Return a copy of vector VEC with the last N elements removed."
