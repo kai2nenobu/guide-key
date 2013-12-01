@@ -323,9 +323,8 @@ positive, otherwise disable."
   "Polling function executed every `guide-key/polling-time' second."
   (let ((key-seq (this-command-keys-vector)))
     (if (guide-key/popup-guide-buffer-p key-seq)
-	(progn
-	  (when (guide-key/update-guide-buffer-p key-seq)
-	    (guide-key/turn-on-idle-timer)))
+        (when (guide-key/update-guide-buffer-p key-seq)
+          (guide-key/turn-on-idle-timer))
       (guide-key/close-guide-buffer))
     (setq guide-key/last-key-sequence-vector key-seq)))
 
