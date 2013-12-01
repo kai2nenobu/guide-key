@@ -173,12 +173,12 @@ This variable is a list of string representation.
 Both representations, like \"C-x r\" and \"\\C-xr\",
 are allowed.
 
-In addition, an element of this list can be a list with car a
-symbol representing major mode, and cdr a list of key sequences
-to consider only if this major mode is active."
+In addition, an element of this list can be a list whose car is
+the symbol for a certain mode, and whose cdr is a list of key
+sequences to consider only if that mode is active."
   :type '(repeat (choice (string :tag "Prefix key sequence")
-                         (cons :tag "Major-mode specific sequence"
-                               (symbol :tag "Major mode")
+                         (cons :tag "Mode specific sequence"
+                               (symbol :tag "Symbol for mode")
                                (repeat (string :tag "Prefix key sequence")))))
   :group 'guide-key)
 
@@ -364,7 +364,7 @@ window.  Otherwise, return the width of popup window"
                 (guide-key/popup-guide-buffer-p (guide-key/vbutlast key-seq))))))
 
 (defun guide-key/buffer-key-seqences ()
-  "Construct key sequences according to mode of current buffer."
+  "Return a list of key sequences (vector representation) in current buffer."
   (let (lst)
     ;; global key sequences
     (dolist (ks guide-key/guide-key-sequence)
