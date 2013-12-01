@@ -127,6 +127,18 @@
 ;;     (guide-key/add-local-highlight-command-regexp "org-"))
 ;;   (add-hook 'org-mode-hook 'guide-key/my-hook-function-for-org-mode)
 ;;
+;; In respect of `guide-key/guide-key-sequence', you can add mode specific key
+;; sequences without `guide-key/add-local-guide-key-sequence'. For example,
+;; configure as below.
+;;
+;;   (setq guide-key/guide-key-sequence
+;;         '("C-x r" "C-x 4"
+;;           (org-mode "C-c C-x")
+;;           (outline-minor-mode "C-c @")))
+;;
+;; In this case, if the current major mode is `org-mode', guide key bindings
+;; following "C-c C-x".  If `outline-minor-mode' is enabled, guide key bindings
+;; following "C-c @".
 ;;
 ;; Here are some functions and variables which control guide-key.
 ;; - `guide-key-mode':
@@ -173,12 +185,12 @@ This variable is a list of string representation.
 Both representations, like \"C-x r\" and \"\\C-xr\",
 are allowed.
 
-In addition, an element of this list can be a list with car a
-symbol representing major mode, and cdr a list of key sequences
-to consider only if this major mode is active."
+In addition, an element of this list can be a list whose car is
+the symbol for a certain mode, and whose cdr is a list of key
+sequences to consider only if that mode is active."
   :type '(repeat (choice (string :tag "Prefix key sequence")
-                         (cons :tag "Major-mode specific sequence"
-                               (symbol :tag "Major mode")
+                         (cons :tag "Mode specific sequence"
+                               (symbol :tag "Symbol for mode")
                                (repeat (string :tag "Prefix key sequence")))))
   :group 'guide-key)
 
@@ -359,11 +371,25 @@ window.  Otherwise, return the width of popup window"
 (defun guide-key/popup-guide-buffer-p (key-seq)
   "Return t if guide buffer should be popped up."
   (and (> (length key-seq) 0)
-       (or (member key-seq (mapcar 'guide-key/convert-key-sequence-to-vector
-                                   (append (cl-remove-if 'listp guide-key/guide-key-sequence)
-                                           (cdr (assoc major-mode guide-key/guide-key-sequence)))))
+       (or (member key-seq (guide-key/buffer-key-seqences))
            (and guide-key/recursive-key-sequence-flag
                 (guide-key/popup-guide-buffer-p (guide-key/vbutlast key-seq))))))
+
+(defun guide-key/buffer-key-seqences ()
+  "Return a list of key sequences (vector representation) in current buffer."
+  (let (lst)
+    ;; global key sequences
+    (dolist (ks guide-key/guide-key-sequence)
+      (when (stringp ks)
+        (setq lst (cons ks lst))))
+    ;; major-mode specific key sequences
+    (setq lst (append (assoc-default major-mode guide-key/guide-key-sequence) lst))
+    ;; minor-mode specific key sequences
+    (dolist (mmode minor-mode-list)
+      (when (and (boundp mmode) (symbol-value mmode))
+        (setq lst (append (assoc-default mmode guide-key/guide-key-sequence) lst))))
+    ;; convert key sequences to vector representation
+    (mapcar 'guide-key/convert-key-sequence-to-vector lst)))
 
 (defun guide-key/vbutlast (vec &optional n)
   "Return a copy of vector VEC with the last N elements removed."
