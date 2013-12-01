@@ -91,7 +91,7 @@ You can add extra settings in a particular mode. Please use
 =guide-key/add-local-highlight-command-regexp= and the hook of
 that mode.
 
-This code is a example for org-mode.
+This code is an example for org-mode.
 #+BEGIN_SRC emacs-lisp
 (defun guide-key/my-hook-function-for-org-mode ()
   (guide-key/add-local-guide-key-sequence "C-c")
