@@ -160,6 +160,9 @@ Here are some issues and drawbacks.
 - [X] prefix argument processing
 - [X] define global minor mode
 ** ChangeLog
+- Version 1.2.1
+  - Support for mode specific key sequences in
+    =guide-key/guide-key-sequence=. (Thanks to @Fuco1)
 - Version 1.2.0
   - Add a feature to scale the text size in the guide buffer.
   - Add a feature to popup the guide buffer with delay. (Thanks to
