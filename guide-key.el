@@ -127,6 +127,18 @@
 ;;     (guide-key/add-local-highlight-command-regexp "org-"))
 ;;   (add-hook 'org-mode-hook 'guide-key/my-hook-function-for-org-mode)
 ;;
+;; In respect of `guide-key/guide-key-sequence', you can add mode specific key
+;; sequences without `guide-key/add-local-guide-key-sequence'. For example,
+;; configure as below.
+;;
+;;   (setq guide-key/guide-key-sequence
+;;         '("C-x r" "C-x 4"
+;;           (org-mode "C-c C-x")
+;;           (outline-minor-mode "C-c @")))
+;;
+;; In this case, if the current major mode is `org-mode', guide key bindings
+;; following "C-c C-x".  If `outline-minor-mode' is enabled, guide key bindings
+;; following "C-c @".
 ;;
 ;; Here are some functions and variables which control guide-key.
 ;; - `guide-key-mode':

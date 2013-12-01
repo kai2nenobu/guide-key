@@ -103,6 +103,19 @@ If you execute =org-set-property= by pressing "C-c C-x p" in org-mode buffer,
 Emacs behaves as below.
 
 [[img/guide-key-example-org-anime.gif]]
+
+In respect of =guide-key/guide-key-sequence=, you can add mode specific key
+sequences without =guide-key/add-local-guide-key-sequence=. For example,
+configure as below.
+#+BEGIN_SRC emacs-lisp
+(setq guide-key/guide-key-sequence
+      '("C-x r" "C-x 4"
+        (org-mode "C-c C-x")
+        (outline-minor-mode "C-c @")))
+#+END_SRC
+In this case, if the current major mode is =org-mode=, guide key bindings
+following "C-c C-x".  If =outline-minor-mode= is enabled, guide key bindings
+following "C-c @".
 *** Other functions and variables
 Here are some functions and variables which control guide-key.
 - =(guide-key-mode ARG)=: =guide-key-mode= is implemented as a minor mode.
