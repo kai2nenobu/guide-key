@@ -194,7 +194,8 @@ Here are some issues and drawbacks.
   - Suppress an annoying message, "No following key".
 - Version 1.1.0
   - Add a functionality to check an input key sequence recursively. This
-    enables to avoid adding many prefixes to =guide-key/guide-key-sequence=.
+    enables to avoid adding many prefixes to
+    =guide-key/guide-key-sequence=. (Thanks @kui)
 - Version 1.0.1
   - Change to save and restore a last configuration of popwin
 - Version 1.0.0
