@@ -503,7 +503,12 @@ is popped up at left or right."
 
 ;;; key-chord hack
 (defadvice this-command-keys (after key-chord-hack disable)
-  ""
+  "Add key chord to the key sequence returned by `this-command-keys'.
+
+Original `this-command-keys' returns \"[key-chord]\" when you
+type any of key chords, so it is difficult to know which key
+chord is pressed.  This advice enables to distinguish pressed key
+chord."
   (condition-case nil
       (if (equal ad-return-value [key-chord])
           (let ((rkeys (recent-keys)))
@@ -513,7 +518,12 @@ is popped up at left or right."
     (error "")))
 
 (defadvice this-command-keys-vector (after key-chord-hack disable)
-  ""
+  "Add key chord to the key sequence returned by `this-command-keys-vector'.
+
+Original `this-command-keys-vector' returns \"[key-chord]\" when you
+type any of key chords, so it is difficult to know which key
+chord is pressed.  This advice enables to distinguish pressed key
+chord."
   (condition-case nil
       (if (equal ad-return-value [key-chord])
           (let ((rkeys (recent-keys)))
@@ -523,7 +533,10 @@ is popped up at left or right."
     (error [])))
 
 (defun guide-key/key-chord-hack-on ()
-  "Turn on key-chord hack of guide-key."
+  "Turn on key-chord hack of guide-key.
+
+This hack *may be dangerous* because it advices primitive
+functions; this-command-keys and this-command-keys-vector."
   (interactive)
   (dolist (fn '(this-command-keys this-command-keys-vector))
     (ad-enable-advice fn 'after 'key-chord-hack)
@@ -536,7 +549,7 @@ is popped up at left or right."
   (dolist (fn '(this-command-keys this-command-keys-vector))
     (ad-disable-advice fn 'after 'key-chord-hack)
     (ad-activate fn))
-  (message "Turn on key-chord hack of guide-key"))
+  (message "Turn off key-chord hack of guide-key"))
 
 ;;; debug
 (defun guide-key/message-events ()
