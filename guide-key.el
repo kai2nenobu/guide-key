@@ -140,6 +140,29 @@
 ;; following "C-c C-x".  If `outline-minor-mode' is enabled, guide key bindings
 ;; following "C-c @".
 ;;
+;;
+;; `guide-key' can work with key-chord.el.  If you want to guide key bindings
+;; following key chord, you need to execute
+;; `guide-key/key-chord-hack-on'.  Then, add your favorite key chord to
+;; `guide-key/guide-key-sequence' as below.
+;;
+;;   (key-chord-define global-map "@4" 'ctl-x-4-prefix)
+;;
+;;   (guide-key/key-chord-hack-on)
+;;   (setq guide-key/guide-key-sequence '("<key-chord> @ 4" "<key-chord> 4 @"))
+;;
+;; If =guide-key/recursive-key-sequence-flag= is non-nil, more simple.
+;;
+;;   (guide-key/key-chord-hack-on)
+;;   (setq guide-key/recursive-key-sequence-flag t)
+;;   (setq guide-key/guide-key-sequence '("<key-chord>"))
+;;
+;; In this case, key bindings are popped up when you type any of key chords.
+;;
+;; This hack *may be dangerous* because it advices primitive functions;
+;; `this-command-keys' and `this-command-keys-vector'.
+;;
+;;
 ;; Here are some functions and variables which control guide-key.
 ;; - `guide-key-mode':
 ;;   guide-key-mode is implemented as a minor mode.
