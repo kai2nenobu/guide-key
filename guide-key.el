@@ -323,9 +323,9 @@ positive, otherwise disable."
                'guide-key/turn-on-timer
              'guide-key/turn-off-timer)))
 
-(defun guide-key/popup-function ()
+(defun guide-key/popup-function (&optional input)
   "Popup function called after delay of `guide-key/idle-delay' second."
-  (let ((key-seq (this-command-keys-vector)))
+  (let ((key-seq (or input (this-command-keys-vector))))
     (let ((dsc-buf (current-buffer))
 	  (hi-regexp guide-key/highlight-command-regexp)
 	  (max-width 0))
