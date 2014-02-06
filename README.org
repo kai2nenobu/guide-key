@@ -1,7 +1,7 @@
 * guide-key.el
 ** Overview
 guide-key.el displays the available key bindings automatically and dynamically.
-guide-key aims to be an alternative of [[http://emacswiki.org/emacs/one-key.el][one-key.el]].
+guide-key aims to be an alternative of [[https://github.com/vapniks/one-key][one-key]].
 
 Here are some features of this library.
 - guide-key automatically pops up the keys following your favorite
