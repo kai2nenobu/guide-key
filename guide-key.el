@@ -457,7 +457,7 @@ For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
     (goto-char (point-min))
     ;; extract following keys from buffer bindings
     (while (re-search-forward
-            (format "^%s \\([^ \t]+\\)\\([ \t]+\\)\\(\\(?:[^ \t\n]+ ?\\)+\\)$" key-dsc) nil t)
+            (format "^%s \\([^ \t]+\\)\\([ \t]+\\)\\(\\(?:[^ \t\n]+ ?\\)+\\)$" (regexp-quote key-dsc)) nil t)
       (add-to-list 'fkey-list
                    (list (match-string 1) (match-string 2) (match-string 3)) t))
     (erase-buffer)
