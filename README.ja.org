@@ -1,6 +1,6 @@
 * guide-key.el
 ** 概要
-guide-keyはキーバインドを自動的かつ動的に表示します。guide-keyは[[http://emacswiki.org/emacs/one-key.el][one-key.el]]の置
+guide-keyはキーバインドを自動的かつ動的に表示します。guide-keyは[[http://www.emacswiki.org/emacs/OneKey][one-key.el]]の置
 き換えを狙っています。
 
 このライブラリの特徴は以下のようなものです。
