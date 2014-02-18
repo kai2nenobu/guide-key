@@ -233,7 +233,15 @@ sequences to consider only if that mode is active."
   :group 'guide-key)
 
 (defcustom guide-key/highlight-command-regexp nil
-  "*Regexp for commands to highlight."
+  "*Regexp for commands to highlight.
+If a command name matches this regexp, it is highlighted with
+`guide-key/highlight-command-face'.
+
+This variable can be a list and its element is either a regexp or
+a cons cell, its car is a regexp and its cdr is a face. If
+regexp, commands matches its regexp are highlighted with
+`guide-key/highlight-command-face'. If cons cell, commands
+matches its car (regexp) are highlighted with its cdr (face)."
   :type '(choice (regexp :tag "Regexp to highlight")
                  (repeat (choice (regexp :tag "Regexp to highlight")
                                  (cons (regexp :tag "Regexp to highlight")
