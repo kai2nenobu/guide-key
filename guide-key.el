@@ -509,6 +509,30 @@ is popped up at left or right."
         (t
          string)))
 
+(defun guide-key/get-highlight-face (string)
+  "Return an appropriate face for highlighting STRING according
+to `guide-key/highlight-prefix-regexp' and
+`guide-key/highlight-command-regexp'. Return nil if an
+appropriate face is not found."
+  (let ((regexp guide-key/highlight-command-regexp))
+    ;; `guide-key/highlight-prefix-regexp' has the highest priority
+    (if (string-match guide-key/highlight-prefix-regexp string)
+        'guide-key/prefix-command-face
+      ;; Else look up the first match in `guide-key/highlight-command-regexp'
+      (cond ((stringp regexp)
+             (when (string-match regexp string)
+               'guide-key/highlight-command-face))
+            ((listp regexp)
+             (loop for elm in regexp
+                   if (cond ((stringp elm)
+                             (when (string-match elm string)
+                               'guide-key/highlight-command-face))
+                            ((consp elm)
+                             (when (string-match (car elm) string)
+                               (cdr elm))))
+                   return it)))
+      )))
+
 (defun guide-key/buffer-max-width ()
   "Return max width in current buffer."
   (let ((buf-str (buffer-substring-no-properties (point-min) (point-max))))
