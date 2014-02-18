@@ -500,16 +500,6 @@ is popped up at left or right."
           (if guide-key/align-command-by-space-flag space " ") ; white space
           (if highlight-face (propertize command 'face highlight-face) command))))
 
-(defun guide-key/propertize-string-according-to-command (string command)
-  "Return STRING putted text property accordinig to COMMAND"
-  (cond ((string-match guide-key/highlight-prefix-regexp command)
-         (propertize string 'face 'guide-key/prefix-command-face))
-        ((and (not (string= guide-key/highlight-command-regexp ""))
-              (string-match guide-key/highlight-command-regexp command))
-         (propertize string 'face 'guide-key/highlight-command-face))
-        (t
-         string)))
-
 (defun guide-key/get-highlight-face (string)
   "Return an appropriate face for highlighting STRING according
 to `guide-key/highlight-prefix-regexp' and
