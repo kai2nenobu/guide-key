@@ -536,10 +536,12 @@ appropriate face is not found."
   (add-to-list (make-local-variable 'guide-key/guide-key-sequence) key))
 
 (defun guide-key/add-local-highlight-command-regexp (regexp)
-  (set (make-local-variable 'guide-key/highlight-command-regexp)
-       (if (string= guide-key/highlight-command-regexp "")
-           regexp
-         (concat regexp "\\|" guide-key/highlight-command-regexp))))
+  (make-local-variable 'guide-key/highlight-command-regexp)
+  (cond ((stringp guide-key/highlight-command-regexp)
+         (setq guide-key/highlight-command-regexp
+               (list regexp guide-key/highlight-command-regexp)))
+        ((listp guide-key/highlight-command-regexp)
+         (add-to-list guide-key/highlight-command-regexp regexp))))
 
 ;;; key-chord hack
 (defadvice this-command-keys (after key-chord-hack disable)
