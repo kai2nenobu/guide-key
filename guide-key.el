@@ -493,11 +493,12 @@ is popped up at left or right."
 
 (defun guide-key/fontified-string (key space command)
   "Return fontified string of following key"
+  (let ((highlight-face (guide-key/get-highlight-face command)))
   (concat (propertize "[" 'face 'guide-key/key-face)
-          (guide-key/propertize-string-according-to-command key command)
+          (if highlight-face (propertize key 'face highlight-face) key)
           (propertize "]" 'face 'guide-key/key-face)
           (if guide-key/align-command-by-space-flag space " ") ; white space
-          (guide-key/propertize-string-according-to-command command command)))
+          (if highlight-face (propertize command 'face highlight-face) command))))
 
 (defun guide-key/propertize-string-according-to-command (string command)
   "Return STRING putted text property accordinig to COMMAND"
