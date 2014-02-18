@@ -327,7 +327,6 @@ positive, otherwise disable."
   "Popup function called after delay of `guide-key/idle-delay' second."
   (let ((key-seq (this-command-keys-vector)))
     (let ((dsc-buf (current-buffer))
-	  (hi-regexp guide-key/highlight-command-regexp)
 	  (max-width 0))
       (with-current-buffer (get-buffer-create guide-key/guide-buffer-name)
 	(unless truncate-lines (setq truncate-lines t))   ; don't fold line
@@ -336,7 +335,7 @@ positive, otherwise disable."
 	(text-scale-set guide-key/text-scale-amount)
 	(erase-buffer)
 	(describe-buffer-bindings dsc-buf key-seq)
-	(when (> (guide-key/format-guide-buffer key-seq hi-regexp) 0)
+	(when (> (guide-key/format-guide-buffer key-seq) 0)
 	  (guide-key/close-guide-buffer)
 	  (guide-key/popup-guide-buffer))))))
 
@@ -447,7 +446,7 @@ For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
   (cancel-timer guide-key/polling-timer)
   (setq guide-key/polling-timer nil))
 
-(defun guide-key/format-guide-buffer (key-seq hi-regexp)
+(defun guide-key/format-guide-buffer (key-seq)
   "Format guide buffer. This function returns the number of following keys."
   (let ((fkey-list nil)      ; list of (following-key space command)
         (fkey-str-list nil)  ; fontified string of `fkey-list'
@@ -465,7 +464,7 @@ For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
       ;; fontify following keys as string
       (setq fkey-str-list
             (loop for (key space command) in fkey-list
-                  collect (guide-key/fontified-string key space command hi-regexp)))
+                  collect (guide-key/fontified-string key space command)))
       ;; insert a few following keys per line
       (guide-key/insert-following-key fkey-str-list
        (popwin:position-horizontal-p guide-key/popup-window-position))
@@ -492,20 +491,20 @@ is popped up at left or right."
           do (insert fkey-str (if (= (mod column columns) 0) "\n" " ")))
     (align-regexp (point-min) (point-max) "\\(\\s-*\\) \\[" 1 1 t)))
 
-(defun guide-key/fontified-string (key space command hi-regexp)
+(defun guide-key/fontified-string (key space command)
   "Return fontified string of following key"
   (concat (propertize "[" 'face 'guide-key/key-face)
-          (guide-key/propertize-string-according-to-command key command hi-regexp)
+          (guide-key/propertize-string-according-to-command key command)
           (propertize "]" 'face 'guide-key/key-face)
           (if guide-key/align-command-by-space-flag space " ") ; white space
-          (guide-key/propertize-string-according-to-command command command hi-regexp)))
+          (guide-key/propertize-string-according-to-command command command)))
 
-(defun guide-key/propertize-string-according-to-command (string command hi-regexp)
+(defun guide-key/propertize-string-according-to-command (string command)
   "Return STRING putted text property accordinig to COMMAND"
   (cond ((string-match guide-key/highlight-prefix-regexp command)
          (propertize string 'face 'guide-key/prefix-command-face))
-        ((and (not (string= hi-regexp ""))
-              (string-match hi-regexp command))
+        ((and (not (string= guide-key/highlight-command-regexp ""))
+              (string-match guide-key/highlight-command-regexp command))
          (propertize string 'face 'guide-key/highlight-command-face))
         (t
          string)))
