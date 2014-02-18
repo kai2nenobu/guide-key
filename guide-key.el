@@ -232,9 +232,12 @@ sequences to consider only if that mode is active."
   :type 'regexp
   :group 'guide-key)
 
-(defcustom guide-key/highlight-command-regexp ""
+(defcustom guide-key/highlight-command-regexp nil
   "*Regexp for commands to highlight."
-  :type 'regexp
+  :type '(choice (regexp :tag "Regexp to highlight")
+                 (repeat (choice (regexp :tag "Regexp to highlight")
+                                 (cons (regexp :tag "Regexp to highlight")
+                                       (face   :tag "Face on command")))))
   :group 'guide-key)
 
 (defcustom guide-key/align-command-by-space-flag nil
