@@ -182,6 +182,13 @@ guide-keyを操作するその他の関数や変数を以下に示します。
 - [X] prefix argument processing
 - [X] define global minor mode
 ** ChangeLog
+- Version 1.2.3
+  - Modify a link of one-key to more explanatory page
+  - Allow key sequences with regexp special characters. (Thanks to @mrc)
+  - Allow popup function to be called directly. (Thanks to @mlf176f2)
+- Version 1.2.2
+  - Add a Japanese README.
+  - Add a documentation about key-chord hack.
 - Version 1.2.1
   - Support for mode specific key sequences in
     =guide-key/guide-key-sequence=. (Thanks to @Fuco1)
