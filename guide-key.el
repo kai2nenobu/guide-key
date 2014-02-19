@@ -239,9 +239,9 @@ If a command name matches this regexp, it is highlighted with
 
 This variable can be a list and its element is either a regexp or
 a cons cell, its car is a regexp and its cdr is a face. If
-regexp, commands matches its regexp are highlighted with
+regexp, commands which match the regexp are highlighted with
 `guide-key/highlight-command-face'. If cons cell, commands
-matches its car (regexp) are highlighted with its cdr (face)."
+which match the car regexp are highlighted with the cdr face."
   :type '(choice (regexp :tag "Regexp to highlight")
                  (repeat (choice (regexp :tag "Regexp to highlight")
                                  (cons (regexp :tag "Regexp to highlight")
