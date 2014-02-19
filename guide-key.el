@@ -437,7 +437,7 @@ For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
   (when (null guide-key/idle-timer)
     (setq guide-key/idle-timer
           (run-with-idle-timer guide-key/idle-delay t 'guide-key/popup-function))
-))
+    ))
 
 (defun guide-key/turn-off-idle-timer ()
   "Turn off the idle timer."
@@ -478,7 +478,7 @@ For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
                   collect (guide-key/fontified-string key space command)))
       ;; insert a few following keys per line
       (guide-key/insert-following-key fkey-str-list
-       (popwin:position-horizontal-p guide-key/popup-window-position))
+                                      (popwin:position-horizontal-p guide-key/popup-window-position))
       (goto-char (point-min)))
     fkey-list-len))
 
@@ -505,11 +505,11 @@ is popped up at left or right."
 (defun guide-key/fontified-string (key space command)
   "Return fontified string of following key"
   (let ((highlight-face (guide-key/get-highlight-face command)))
-  (concat (propertize "[" 'face 'guide-key/key-face)
-          (if highlight-face (propertize key 'face highlight-face) key)
-          (propertize "]" 'face 'guide-key/key-face)
-          (if guide-key/align-command-by-space-flag space " ") ; white space
-          (if highlight-face (propertize command 'face highlight-face) command))))
+    (concat (propertize "[" 'face 'guide-key/key-face)
+            (if highlight-face (propertize key 'face highlight-face) key)
+            (propertize "]" 'face 'guide-key/key-face)
+            (if guide-key/align-command-by-space-flag space " ") ; white space
+            (if highlight-face (propertize command 'face highlight-face) command))))
 
 (defun guide-key/get-highlight-face (string)
   "Return an appropriate face for highlighting STRING according
