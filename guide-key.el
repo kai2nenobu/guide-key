@@ -232,9 +232,20 @@ sequences to consider only if that mode is active."
   :type 'regexp
   :group 'guide-key)
 
-(defcustom guide-key/highlight-command-regexp ""
-  "*Regexp for commands to highlight."
-  :type 'regexp
+(defcustom guide-key/highlight-command-regexp nil
+  "*Regexp for commands to highlight.
+If a command name matches this regexp, it is highlighted with
+`guide-key/highlight-command-face'.
+
+This variable can be a list and its element is either a regexp or
+a cons cell, its car is a regexp and its cdr is a face. If
+regexp, commands which match the regexp are highlighted with
+`guide-key/highlight-command-face'. If cons cell, commands
+which match the car regexp are highlighted with the cdr face."
+  :type '(choice (regexp :tag "Regexp to highlight")
+                 (repeat (choice (regexp :tag "Regexp to highlight")
+                                 (cons (regexp :tag "Regexp to highlight")
+                                       (face   :tag "Face on command")))))
   :group 'guide-key)
 
 (defcustom guide-key/align-command-by-space-flag nil
@@ -327,7 +338,6 @@ positive, otherwise disable."
   "Popup function called after delay of `guide-key/idle-delay' second."
   (let ((key-seq (or input (this-command-keys-vector))))
     (let ((dsc-buf (current-buffer))
-	  (hi-regexp guide-key/highlight-command-regexp)
 	  (max-width 0))
       (with-current-buffer (get-buffer-create guide-key/guide-buffer-name)
 	(unless truncate-lines (setq truncate-lines t))   ; don't fold line
@@ -336,7 +346,7 @@ positive, otherwise disable."
 	(text-scale-set guide-key/text-scale-amount)
 	(erase-buffer)
 	(describe-buffer-bindings dsc-buf key-seq)
-	(when (> (guide-key/format-guide-buffer key-seq hi-regexp) 0)
+	(when (> (guide-key/format-guide-buffer key-seq) 0)
 	  (guide-key/close-guide-buffer)
 	  (guide-key/popup-guide-buffer))))))
 
@@ -447,7 +457,7 @@ For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
   (cancel-timer guide-key/polling-timer)
   (setq guide-key/polling-timer nil))
 
-(defun guide-key/format-guide-buffer (key-seq hi-regexp)
+(defun guide-key/format-guide-buffer (key-seq)
   "Format guide buffer. This function returns the number of following keys."
   (let ((fkey-list nil)      ; list of (following-key space command)
         (fkey-str-list nil)  ; fontified string of `fkey-list'
@@ -465,7 +475,7 @@ For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
       ;; fontify following keys as string
       (setq fkey-str-list
             (loop for (key space command) in fkey-list
-                  collect (guide-key/fontified-string key space command hi-regexp)))
+                  collect (guide-key/fontified-string key space command)))
       ;; insert a few following keys per line
       (guide-key/insert-following-key fkey-str-list
        (popwin:position-horizontal-p guide-key/popup-window-position))
@@ -492,23 +502,38 @@ is popped up at left or right."
           do (insert fkey-str (if (= (mod column columns) 0) "\n" " ")))
     (align-regexp (point-min) (point-max) "\\(\\s-*\\) \\[" 1 1 t)))
 
-(defun guide-key/fontified-string (key space command hi-regexp)
+(defun guide-key/fontified-string (key space command)
   "Return fontified string of following key"
+  (let ((highlight-face (guide-key/get-highlight-face command)))
   (concat (propertize "[" 'face 'guide-key/key-face)
-          (guide-key/propertize-string-according-to-command key command hi-regexp)
+          (if highlight-face (propertize key 'face highlight-face) key)
           (propertize "]" 'face 'guide-key/key-face)
           (if guide-key/align-command-by-space-flag space " ") ; white space
-          (guide-key/propertize-string-according-to-command command command hi-regexp)))
+          (if highlight-face (propertize command 'face highlight-face) command))))
 
-(defun guide-key/propertize-string-according-to-command (string command hi-regexp)
-  "Return STRING putted text property accordinig to COMMAND"
-  (cond ((string-match guide-key/highlight-prefix-regexp command)
-         (propertize string 'face 'guide-key/prefix-command-face))
-        ((and (not (string= hi-regexp ""))
-              (string-match hi-regexp command))
-         (propertize string 'face 'guide-key/highlight-command-face))
-        (t
-         string)))
+(defun guide-key/get-highlight-face (string)
+  "Return an appropriate face for highlighting STRING according
+to `guide-key/highlight-prefix-regexp' and
+`guide-key/highlight-command-regexp'. Return nil if an
+appropriate face is not found."
+  (let ((regexp guide-key/highlight-command-regexp))
+    ;; `guide-key/highlight-prefix-regexp' has the highest priority
+    (if (string-match guide-key/highlight-prefix-regexp string)
+        'guide-key/prefix-command-face
+      ;; Else look up the first match in `guide-key/highlight-command-regexp'
+      (cond ((stringp regexp)
+             (when (string-match regexp string)
+               'guide-key/highlight-command-face))
+            ((listp regexp)
+             (loop for elm in regexp
+                   if (cond ((stringp elm)
+                             (when (string-match elm string)
+                               'guide-key/highlight-command-face))
+                            ((consp elm)
+                             (when (string-match (car elm) string)
+                               (cdr elm))))
+                   return it)))
+      )))
 
 (defun guide-key/buffer-max-width ()
   "Return max width in current buffer."
@@ -519,10 +544,12 @@ is popped up at left or right."
   (add-to-list (make-local-variable 'guide-key/guide-key-sequence) key))
 
 (defun guide-key/add-local-highlight-command-regexp (regexp)
-  (set (make-local-variable 'guide-key/highlight-command-regexp)
-       (if (string= guide-key/highlight-command-regexp "")
-           regexp
-         (concat regexp "\\|" guide-key/highlight-command-regexp))))
+  (make-local-variable 'guide-key/highlight-command-regexp)
+  (cond ((stringp guide-key/highlight-command-regexp)
+         (setq guide-key/highlight-command-regexp
+               (list regexp guide-key/highlight-command-regexp)))
+        ((listp guide-key/highlight-command-regexp)
+         (add-to-list guide-key/highlight-command-regexp regexp))))
 
 ;;; key-chord hack
 (defadvice this-command-keys (after key-chord-hack disable)
