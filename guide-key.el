@@ -549,7 +549,7 @@ appropriate face is not found."
          (setq guide-key/highlight-command-regexp
                (list regexp guide-key/highlight-command-regexp)))
         ((listp guide-key/highlight-command-regexp)
-         (add-to-list guide-key/highlight-command-regexp regexp))))
+         (add-to-list 'guide-key/highlight-command-regexp regexp))))
 
 ;;; key-chord hack
 (defadvice this-command-keys (after key-chord-hack disable)
