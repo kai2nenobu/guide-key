@@ -1,4 +1,4 @@
-* guide-key.el
+* guide-key.el [[https://travis-ci.org/kbkbkbkb1/guide-key][https://api.travis-ci.org/kbkbkbkb1/guide-key.png]]
 ** 概要
 guide-keyはキーバインドを自動的かつ動的に表示します。guide-keyは[[http://www.emacswiki.org/emacs/OneKey][one-key.el]]の置
 き換えを狙っています。
