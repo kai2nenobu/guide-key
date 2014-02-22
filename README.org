@@ -1,4 +1,4 @@
-* guide-key.el
+* guide-key.el [[https://travis-ci.org/kbkbkbkb1/guide-key][https://api.travis-ci.org/kbkbkbkb1/guide-key.png]]
 ** Overview
 guide-key.el displays the available key bindings automatically and dynamically.
 guide-key aims to be an alternative of [[http://www.emacswiki.org/emacs/OneKey][one-key.el]].
