@@ -9,7 +9,10 @@ all:
 	${MAKE} clean
 
 compile:
-	${CASK} exec ${EMACS} -Q -batch -f batch-byte-compile guide-key.el
+	${CASK} exec ${EMACS} -Q -batch -L . -eval \
+	"(progn \
+	(setq byte-compile-error-on-warn t) \
+	(batch-byte-compile))" guide-key.el
 test:
 	${CASK} exec ${EMACS} -Q -batch -L . -l test/guide-key-test.el -f ert-run-tests-batch-and-exit
 clean:
