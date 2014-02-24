@@ -552,6 +552,12 @@ appropriate face is not found."
          (add-to-list 'guide-key/highlight-command-regexp regexp))))
 
 (defmacro* guide-key/setup-local-keystroke (mode &key kbd not-highlight)
+  "Setup hook for MODE about the keystroke for popup guide on MODE.
+
+MODE is a symbol like 'org-mode.
+KBD is a string or list of string as keystroke.
+If NOT-HIGHLIGHT is non-nil, the MODE commands is not highlighted.
+In default, highlight the commands that matches the beginning of the name is MODE."
   (let ((forms (loop for keystroke in (if (stringp (eval kbd))
                                           (list (eval kbd))
                                         (eval kbd))
@@ -571,6 +577,10 @@ appropriate face is not found."
           (add-hook ',hook ',func t)))))
 
 (defmacro guide-key/setup-local-highlight (mode &rest regexp-list)
+  "Setup hook for MODE about the highlight of guide on MODE.
+
+MODE is a symbol like 'org-mode.
+REGEXP-LIST is argument for `guide-key/add-local-highlight-command-regexp'."
   (let ((forms (loop for re in regexp-list
                      collect `(guide-key/add-local-highlight-command-regexp ,re)))
         (hook (intern-soft (concat (symbol-name (eval mode)) "-hook")))
