@@ -336,7 +336,8 @@ positive, otherwise disable."
 
 (defun guide-key/popup-function (&optional input)
   "Popup function called after delay of `guide-key/idle-delay' second."
-  (let ((key-seq (or input (this-command-keys-vector))))
+  (let ((key-seq (or input (this-command-keys-vector)))
+        (regexp guide-key/highlight-command-regexp))
     (let ((dsc-buf (current-buffer))
 	  (max-width 0))
       (with-current-buffer (get-buffer-create guide-key/guide-buffer-name)
@@ -346,7 +347,7 @@ positive, otherwise disable."
 	(text-scale-set guide-key/text-scale-amount)
 	(erase-buffer)
 	(describe-buffer-bindings dsc-buf key-seq)
-	(when (> (guide-key/format-guide-buffer key-seq) 0)
+	(when (> (guide-key/format-guide-buffer key-seq regexp) 0)
 	  (guide-key/close-guide-buffer)
 	  (guide-key/popup-guide-buffer))))))
 
@@ -457,7 +458,7 @@ For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
   (cancel-timer guide-key/polling-timer)
   (setq guide-key/polling-timer nil))
 
-(defun guide-key/format-guide-buffer (key-seq)
+(defun guide-key/format-guide-buffer (key-seq &optional regexp)
   "Format guide buffer. This function returns the number of following keys."
   (let ((fkey-list nil)      ; list of (following-key space command)
         (fkey-str-list nil)  ; fontified string of `fkey-list'
@@ -475,7 +476,7 @@ For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
       ;; fontify following keys as string
       (setq fkey-str-list
             (loop for (key space command) in fkey-list
-                  collect (guide-key/fontified-string key space command)))
+                  collect (guide-key/fontified-string key space command regexp)))
       ;; insert a few following keys per line
       (guide-key/insert-following-key fkey-str-list
                                       (popwin:position-horizontal-p guide-key/popup-window-position))
@@ -502,21 +503,21 @@ is popped up at left or right."
           do (insert fkey-str (if (= (mod column columns) 0) "\n" " ")))
     (align-regexp (point-min) (point-max) "\\(\\s-*\\) \\[" 1 1 t)))
 
-(defun guide-key/fontified-string (key space command)
+(defun guide-key/fontified-string (key space command &optional regexp)
   "Return fontified string of following key"
-  (let ((highlight-face (guide-key/get-highlight-face command)))
+  (let ((highlight-face (guide-key/get-highlight-face command regexp)))
     (concat (propertize "[" 'face 'guide-key/key-face)
             (if highlight-face (propertize key 'face highlight-face) key)
             (propertize "]" 'face 'guide-key/key-face)
             (if guide-key/align-command-by-space-flag space " ") ; white space
             (if highlight-face (propertize command 'face highlight-face) command))))
 
-(defun guide-key/get-highlight-face (string)
+(defun guide-key/get-highlight-face (string &optional regexp)
   "Return an appropriate face for highlighting STRING according
 to `guide-key/highlight-prefix-regexp' and
 `guide-key/highlight-command-regexp'. Return nil if an
 appropriate face is not found."
-  (let ((regexp guide-key/highlight-command-regexp))
+  (let ((regexp (or regexp guide-key/highlight-command-regexp)))
     ;; `guide-key/highlight-prefix-regexp' has the highest priority
     (if (string-match guide-key/highlight-prefix-regexp string)
         'guide-key/prefix-command-face
