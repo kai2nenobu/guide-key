@@ -195,6 +195,7 @@
 
 (require 'popwin)
 (require 'face-remap)
+(require 'pos-tip nil t)
 
 ;;; variables
 (defgroup guide-key nil
@@ -276,6 +277,11 @@ any other prefixes following \"C-x\"."
   :type 'boolean
   :group 'guide-key)
 
+(defcustom guide-key/popup-function 'guide-key/popup-function
+  "*Funtion for popup guide."
+  :type 'function
+  :group 'guide-key)
+
 (defface guide-key/prefix-command-face
   '((((class color) (background dark))
      (:foreground "cyan"))
@@ -298,6 +304,10 @@ any other prefixes following \"C-x\"."
     (((class color) (background light))
      (:foreground "dark green")))
   "Face for keys following to a key sequence"
+  :group 'guide-key)
+
+(defface guide-key/pos-tip-face '((t (:bold t)))
+  "Face for the tip of pos-tip.el"
   :group 'guide-key)
 
 ;;; internal variables
@@ -350,6 +360,42 @@ positive, otherwise disable."
 	(when (> (guide-key/format-guide-buffer key-seq regexp) 0)
 	  (guide-key/close-guide-buffer)
 	  (guide-key/popup-guide-buffer))))))
+
+(defun guide-key/pos-tip-show (&optional input)
+  "Popup function called after delay of `guide-key/idle-delay' second."
+  (if (or (not window-system)
+          (not (featurep 'pos-tip)))
+      (guide-key/popup-function input)
+    (let ((key-seq (or input (this-command-keys-vector)))
+          (dsc-buf (current-buffer)))
+      (multiple-value-bind (wnd rightpt bottompt) (guide-key/get-pos-tip-location)
+        (with-temp-buffer
+          (setq truncate-lines t)     ; don't fold line
+          (setq indent-tabs-mode nil) ; don't use tab as white space
+          (text-scale-set guide-key/text-scale-amount)
+          (describe-buffer-bindings dsc-buf key-seq)
+          (when (> (guide-key/format-guide-buffer key-seq) 0)
+            (guide-key/turn-off-idle-timer)
+            (copy-face 'guide-key/pos-tip-face 'pos-tip-temp)
+            (when (eq (face-attribute 'pos-tip-temp :font) 'unspecified)
+              (set-face-font 'pos-tip-temp (frame-parameter nil 'font)))
+            (let* ((string (buffer-string))
+                   (string (propertize string 'face 'pos-tip-temp))
+                   (max-width (pos-tip-x-display-width))
+                   (max-height (pos-tip-x-display-height))
+                   (tipsize (guide-key/get-pos-tip-size string))
+                   (tipsize (cond ((or (> (car tipsize) max-width)
+                                       (> (cdr tipsize) max-height))
+                                   (setq string (pos-tip-truncate-string string max-width max-height))
+                                   (guide-key/get-pos-tip-size string))
+                                  (t
+                                   tipsize)))
+                   (tipwidth (car tipsize))
+                   (tipheight (cdr tipsize))
+                   (dx (- rightpt tipwidth 10))
+                   (dy (- bottompt tipheight)))
+              (pos-tip-show-no-propertize
+               string 'pos-tip-temp 1 wnd 300 tipwidth tipheight nil dx dy))))))))
 
 
 ;;; internal functions
@@ -437,7 +483,7 @@ For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
   "Turn on an idle timer for popping up guide buffer."
   (when (null guide-key/idle-timer)
     (setq guide-key/idle-timer
-          (run-with-idle-timer guide-key/idle-delay t 'guide-key/popup-function))
+          (run-with-idle-timer guide-key/idle-delay t guide-key/popup-function))
     ))
 
 (defun guide-key/turn-off-idle-timer ()
@@ -601,6 +647,36 @@ functions; this-command-keys and this-command-keys-vector."
     (ad-disable-advice fn 'after 'key-chord-hack)
     (ad-activate fn))
   (message "Turn off key-chord hack of guide-key"))
+
+(defun guide-key/get-pos-tip-size (string)
+  "Return (WIDTH . HEIGHT) of the tip of pos-tip.el generated from STRING."
+  (let* ((w-h (pos-tip-string-width-height string))
+         (width (pos-tip-tooltip-width (car w-h) (frame-char-width)))
+         (height (pos-tip-tooltip-height (cdr w-h) (frame-char-height))))
+    (cons width height)))
+
+(defun guide-key/get-pos-tip-location ()
+  "Return (WND RIGHT BOTTOM) as the location to show the tip of pos-tip.el."
+  (let ((leftpt 0)
+        (toppt 0)
+        wnd rightpt bottompt)
+    (dolist (w (window-list))
+      (let* ((edges (when (not (minibufferp (window-buffer w)))
+                      (window-pixel-edges w)))
+             (currleftpt (or (nth 0 edges) -1))
+             (currtoppt (or (nth 1 edges) -1)))
+        (when (and (= currleftpt 0)
+                   (= currtoppt 0))
+          (setq wnd w))
+        (when (or (> currleftpt leftpt)
+                  (> currtoppt toppt)
+                  (not rightpt)
+                  (not bottompt))
+          (setq rightpt (nth 2 edges))
+          (setq bottompt (nth 3 edges))
+          (setq leftpt currleftpt)
+          (setq toppt currtoppt))))
+    (list wnd rightpt bottompt)))
 
 ;;; debug
 (defun guide-key/message-events ()
