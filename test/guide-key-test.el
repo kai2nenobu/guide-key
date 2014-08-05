@@ -48,3 +48,12 @@
           (should (eq actual expected)))
     ))
 
+(defun same-keymap-p (keymap1 keymap2)
+  "Return if two KEYMAPs are the same.
+
+This matcher ignores an order of alist (cdr of keymap)."
+  (and (keymapp keymap1) (keymapp keymap2)
+       (flet ((keymap-sorter (e1 e2) (< (car e1) (car e2))))
+         (equal (sort (cdr keymap1) 'keymap-sorter)
+                (sort (cdr keymap2) 'keymap-sorter)))))
+
