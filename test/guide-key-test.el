@@ -26,6 +26,11 @@
            (global-unset-key (vconcat guide-key-test/prefix-key (vector event))))
      ))
 
+(guide-key-test/deftest setup-test
+  "Assert that setup is done successfully."
+  (should (same-keymap-p (keymap-canonicalize (key-binding guide-key-test/prefix-key))
+                         (cons 'keymap guide-key-test/global-keybindings))))
+
 (ert-deftest guide-key-test/get-highlight-face ()
   "Test of `guide-key/get-highlight-face'"
   (let ((guide-key/highlight-command-regexp
