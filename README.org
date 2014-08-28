@@ -1,4 +1,4 @@
-* guide-key.el [[https://travis-ci.org/kbkbkbkb1/guide-key][https://api.travis-ci.org/kbkbkbkb1/guide-key.png]]
+* guide-key.el [[https://travis-ci.org/kai2nenobu/guide-key][https://api.travis-ci.org/kai2nenobu/guide-key.png]]
 ** Overview
 guide-key.el displays the available key bindings automatically and dynamically.
 guide-key aims to be an alternative of [[http://www.emacswiki.org/emacs/OneKey][one-key.el]].
@@ -19,7 +19,7 @@ I added guide-key to [[http://melpa.milkbox.net/][MELPA]]. You can install guide
 Because guide-key depends on [[https://github.com/m2ym/popwin-el][popwin.el]], popwin.el is also installed.
 
 If you don't have package.el, please download [[https://github.com/m2ym/popwin-el][m2ym/popwin-el]] and
-[[https://github.com/kbkbkbkb1/guide-key][kbkbkbkb1/guide-key]] directly, and then put them in your =load-path=.
+[[https://github.com/kai2nenobu/guide-key][kai2nenobu/guide-key]] directly, and then put them in your =load-path=.
 ** Basic usage
 Just add your favorite prefix keys to =guide-key/guide-key-sequence= as
 below.

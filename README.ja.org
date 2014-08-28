@@ -1,4 +1,4 @@
-* guide-key.el [[https://travis-ci.org/kbkbkbkb1/guide-key][https://api.travis-ci.org/kbkbkbkb1/guide-key.png]]
+* guide-key.el [[https://travis-ci.org/kai2nenobu/guide-key][https://api.travis-ci.org/kai2nenobu/guide-key.png]]
 ** 概要
 guide-keyはキーバインドを自動的かつ動的に表示します。guide-keyは[[http://www.emacswiki.org/emacs/OneKey][one-key.el]]の置
 き換えを狙っています。
@@ -19,7 +19,7 @@ guide-keyは[[http://melpa.milkbox.net/][MELPA]]に追加されているので�
 
 guide-keyは[[https://github.com/m2ym/popwin-el][popwin.el]]に依存しているので、popwin.elも同時にインストールされます。
 
-package.elがない場合は、[[https://github.com/m2ym/popwin-el][m2ym/popwin-el]]と[[https://github.com/kbkbkbkb1/guide-key][kbkbkbkb1/guide-key]]から直接ダウンロー
+package.elがない場合は、[[https://github.com/m2ym/popwin-el][m2ym/popwin-el]]と[[https://github.com/kai2nenobu/guide-key][kai2nenobu/guide-key]]から直接ダウンロー
 ドして、 =load-path= 上においてください。
 ** 基本的な使い方
 =guide-key/guide-key-sequence= にお好きなプレイフィクスキーを追加してください。

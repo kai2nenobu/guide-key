@@ -2,8 +2,8 @@
 
 ;; Copyright (C) 2012, 2013 Tsunenobu Kai
 
-;; Author: Tsunenobu Kai <kbkbkbkb1@gmail.com>
-;; URL: https://github.com/kbkbkbkb1/guide-key
+;; Author: Tsunenobu Kai <kai2nenobu@gmail.com>
+;; URL: https://github.com/kai2nenobu/guide-key
 ;; Version: 1.2.3
 ;; Package-Requires: ((popwin "0.3.0"))
 ;; Keywords: help convenience
@@ -45,7 +45,7 @@
 ;;
 ;; If you don't have package.el, please download popwin.el and guide-key.el
 ;; directly from https://github.com/m2ym/popwin-el and
-;; https://github.com/kbkbkbkb1/guide-key, and then put them in your
+;; https://github.com/kai2nenobu/guide-key, and then put them in your
 ;; `load-path'.
 ;;
 ;;
