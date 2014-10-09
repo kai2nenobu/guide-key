@@ -7,4 +7,5 @@
 (development
  (depends-on "ert")
  (depends-on "ert-runner")
+ (depends-on "undercover")
  (depends-on "popwin"))

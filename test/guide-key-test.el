@@ -1,4 +1,7 @@
 (require 'ert)
+(require 'undercover)
+(undercover "guide-key.el")
+
 (require 'guide-key)
 (eval-when-compile
   (require 'cl))
