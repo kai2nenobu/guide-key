@@ -14,7 +14,7 @@ compile:
 	(setq byte-compile-error-on-warn t) \
 	(batch-byte-compile))" guide-key.el
 test:
-	${CASK} exec ${EMACS} -Q -batch -L . -l test/guide-key-test.el -f ert-run-tests-batch-and-exit
+	${CASK} exec ert-runner
 clean:
 	rm -f guide-key.elc
 
