@@ -58,6 +58,11 @@
 ;;   (setq guide-key/guide-key-sequence '("C-x r" "C-x 4"))
 ;;   (guide-key-mode 1) ; Enable guide-key-mode
 ;;
+;; To activate guide-key for any key sequence instead of just the ones
+;; listed above then use:
+;;
+;;   (setq guide-key/guide-key-sequence t)
+;;
 ;; When you press these prefix keys, key bindings are automatically
 ;; popped up after a short delay (1 second by default).
 ;;
@@ -210,7 +215,9 @@ are allowed.
 
 In addition, an element of this list can be a list whose car is
 the symbol for a certain mode, and whose cdr is a list of key
-sequences to consider only if that mode is active."
+sequences to consider only if that mode is active.
+
+Set this variable to `t' to enable for any key sequence."
   :type '(repeat (choice (string :tag "Prefix key sequence")
                          (cons :tag "Mode specific sequence"
                                (symbol :tag "Symbol for mode")
@@ -404,7 +411,9 @@ window.  Otherwise, return the width of popup window"
 (defun guide-key/popup-guide-buffer-p (key-seq)
   "Return t if guide buffer should be popped up."
   (and (> (length key-seq) 0)
-       (or (member key-seq (guide-key/buffer-key-seqences))
+       (or (eq guide-key/guide-key-sequence t)
+           (member key-seq (mapcar 'guide-key/convert-key-sequence-to-vector
+                                   guide-key/guide-key-sequence))
            (and guide-key/recursive-key-sequence-flag
                 (guide-key/popup-guide-buffer-p (guide-key/vbutlast key-seq))))))
 
