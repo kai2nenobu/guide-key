@@ -1,4 +1,4 @@
-* guide-key.el [[https://travis-ci.org/kai2nenobu/guide-key][https://api.travis-ci.org/kai2nenobu/guide-key.png]]
+* guide-key.el [[https://travis-ci.org/kai2nenobu/guide-key][https://api.travis-ci.org/kai2nenobu/guide-key.png]] [[https://coveralls.io/r/kai2nenobu/guide-key][https://coveralls.io/repos/kai2nenobu/guide-key/badge.png?branch=master]] [[http://melpa.org/#/guide-key][http://melpa.org/packages/guide-key-badge.svg]] [[http://stable.melpa.org/#/guide-key][http://stable.melpa.org/packages/guide-key-badge.svg]]
 ** 概要
 guide-keyはキーバインドを自動的かつ動的に表示します。guide-keyは[[http://www.emacswiki.org/emacs/OneKey][one-key.el]]の置
 き換えを狙っています。
