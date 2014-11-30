@@ -74,6 +74,7 @@ for longer than this delay, so it will keep out of your way when you
 are typing key sequences that you already know well.
 
 I've confirmed that guide-key works well in these environments.
+- Emacs 24.4, Ubuntu 14.04 or Windows 8.1 64bit
 - Emacs 24.2, Ubuntu 12.04 or Windows 7 64bit
 - Emacs 23.3, Ubuntu 12.04 or Windows 7 64bit
 - Emacs 22.3, Windows 7 64bit
@@ -193,6 +194,13 @@ Here are some issues and drawbacks.
 - [X] prefix argument processing
 - [X] define global minor mode
 ** ChangeLog
+- Version 1.2.4
+  - Change the format of tag name to suit [[http://stable.melpa.org/#/][MELPA Stable]] rule (=ver1.x.y= ->
+    =v1.x.y=)
+  - Add some tests and work with [[https://travis-ci.org/kai2nenobu/guide-key][Travis CI]] and [[https://coveralls.io/r/kai2nenobu/guide-key][Coveralls]]
+  - Fix a regression bug about a local highlight face ([[https://github.com/kai2nenobu/guide-key/pull/16][#16]])
+  - Add a feature to specify multiple highlight faces according to each
+    regular expression ([[https://github.com/kai2nenobu/guide-key/issues/14][#14]])
 - Version 1.2.3
   - Modify a link of one-key to more explanatory page
   - Allow key sequences with regexp special characters. (Thanks to @mrc)

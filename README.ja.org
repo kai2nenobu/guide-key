@@ -74,6 +74,7 @@ guide-keyは指定された正規表現に一致するコマンドをハイラ�
 までと変わらず、ポップアップが表示されることなく入力することができます。
 
 guide-keyは以下の環境で動くことを確認しています。
+- Emacs 24.4, Ubuntu 14.04 or Windows 8.1 64bit
 - Emacs 24.2, Ubuntu 12.04 or Windows 7 64bit
 - Emacs 23.3, Ubuntu 12.04 or Windows 7 64bit
 - Emacs 22.3, Windows 7 64bit
@@ -194,6 +195,13 @@ guide-keyを操作するその他の関数や変数を以下に示します。
 - [X] prefix argument processing
 - [X] define global minor mode
 ** ChangeLog
+- Version 1.2.4
+  - Change the format of tag name to suit [[http://stable.melpa.org/#/][MELPA Stable]] rule (=ver1.x.y= ->
+    =v1.x.y=)
+  - Add some tests and work with [[https://travis-ci.org/kai2nenobu/guide-key][Travis CI]] and [[https://coveralls.io/r/kai2nenobu/guide-key][Coveralls]]
+  - Fix a regression bug about a local highlight face ([[https://github.com/kai2nenobu/guide-key/pull/16][#16]])
+  - Add a feature to specify multiple highlight faces according to each
+    regular expression ([[https://github.com/kai2nenobu/guide-key/issues/14][#14]])
 - Version 1.2.3
   - Modify a link of one-key to more explanatory page
   - Allow key sequences with regexp special characters. (Thanks to @mrc)
