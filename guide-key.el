@@ -62,17 +62,24 @@
 ;; popped up after a short delay (1 second by default).
 ;;
 ;; guide-key can highlight commands which match a specified regular expression.
-;; Key bindings following "C-x r" are rectangle family and register family.
-;; If you want to highlight only rectangle family commands, put this setting
-;; in your init.el.
+;; Key bindings following "C-x r" are rectangle family, register family and
+;; bookmark family.  If you want to highlight only rectangle family
+;; commands, put this setting in your init.el.
 ;;
 ;;   (setq guide-key/highlight-command-regexp "rectangle")
 ;;
-;; This feature makes it easy to find commands and learn their key bindings. If
-;; you want to highlight both rectangle family and register family, set an
-;; adequate regular expression like this.
+;; This feature makes it easy to find commands and learn their key bindings.
+;; If you want to highlight all families, you can specify multiple regular
+;; expressions and faces as below.
 ;;
-;;   (setq guide-key/highlight-command-regexp "rectangle\\|register")
+;;   (setq guide-key/highlight-command-regexp
+;;         '("rectangle"
+;;           ("register" . font-lock-type-face)
+;;           ("bookmark" . font-lock-warning-face)))
+;;
+;; If an element of `guide-key/highlight-command-regexp' is cons, its car
+;; means a regular expression to highlight, and its cdr means a face put on
+;; command names.
 ;;
 ;; Moreover, prefix commands are automatically highlighted.
 ;;

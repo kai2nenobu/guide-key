@@ -34,9 +34,10 @@ package.elがない場合は、[[https://github.com/m2ym/popwin-el][m2ym/popwin-
 
 [[img/guide-key-example.png]]
 
-guide-keyは指定された正規表現に一致するコマンドをハイライトします。 =C-x r= に
-続くキーバインドはrectangle系とregister系に分かれます。もし、rectangle系のみ
-をハイライトしたい場合は、init.elに以下のように設定します。
+guide-keyは指定された正規表現に一致するコマンドをハイライトします。 =C-x r=
+に続くキーバインドは =rectangle= 系、 =register= 系、 =bookmark= 系に分かれま
+す。もし、 =rectangle= 系のみをハイライトしたい場合は、init.elに以下のように
+設定します。
 #+BEGIN_SRC emacs-lisp
 (setq guide-key/highlight-command-regexp "rectangle")
 #+END_SRC
@@ -44,11 +45,22 @@ guide-keyは指定された正規表現に一致するコマンドをハイラ�
 [[img/guide-key-example2.png]]
 
 この機能によりコマンドが見つけやすくなり、キーバインドを覚えやすくなります。も
-しrectangle系、register系の両方をハイライトしたい場合は、以下のように適切な正
-規表現にしてください。
+しすべての系統のコマンドをハイライトしたい場合は、複数の正規表現とフェイスを
+指定することができます。
+
 #+BEGIN_SRC emacs-lisp
-(setq guide-key/highlight-command-regexp "rectangle\\|register")
+(setq guide-key/highlight-command-regexp
+      '("rectangle"
+        ("register" . font-lock-type-face)
+        ("bookmark" . font-lock-warning-face)))
 #+END_SRC
+
+[[img/guide-key-multiple-highlight.png]]
+
+=guide-key/highlight-command-regexp= の要素がコンスセルの場合、carはハイライ
+トすべきコマンドの正規表現であり、cdrはハイライトに利用されるフェイスになりま
+す。
+
 さらにプレフィクスコマンドは自動的にハイライトされます。
 
 プレフィクスキーを押してからどのくらいの時間でキーバインドをポップアップさせる
