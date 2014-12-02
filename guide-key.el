@@ -245,14 +245,16 @@ If a command name matches this regexp, it is highlighted with
 `guide-key/highlight-command-face'.
 
 This variable can be a list and its element is either a regexp or
-a cons cell, its car is a regexp and its cdr is a face. If
-regexp, commands which match the regexp are highlighted with
-`guide-key/highlight-command-face'. If cons cell, commands
-which match the car regexp are highlighted with the cdr face."
+a cons cell, its car is a regexp and its cdr is face symbol or
+color name string.  If regexp, commands which match the regexp
+are highlighted with `guide-key/highlight-command-face'.  If cons
+cell, commands which match the car regexp are highlighted with
+the cdr face or color."
   :type '(choice (regexp :tag "Regexp to highlight")
                  (repeat (choice (regexp :tag "Regexp to highlight")
                                  (cons (regexp :tag "Regexp to highlight")
-                                       (face   :tag "Face on command")))))
+                                       (choice (face   :tag "Face on command")
+                                               (string :tag "Color name string"))))))
   :group 'guide-key)
 
 (defcustom guide-key/align-command-by-space-flag nil
@@ -539,7 +541,10 @@ appropriate face is not found."
                                'guide-key/highlight-command-face))
                             ((consp elm)
                              (when (string-match (car elm) string)
-                               (cdr elm))))
+                               (if (stringp (cdr elm))
+                                   ;; anonymous face, see (info "(elisp)Faces")
+                                   (list :foreground (cdr elm))
+                                 (cdr elm)))))
                    return it)))
       )))
 

@@ -40,6 +40,7 @@
          '("rectangle"
            ("register" . font-lock-type-face)
            ("bookmark" . font-lock-warning-face)
+           ("anonymous" . "hot pink") ; specify a color name
            ))
         (fixtures
          '(("Prefix Command" . guide-key/prefix-command-face)
@@ -47,13 +48,14 @@
            ("jump-to-register" . font-lock-type-face)
            ("bookmark-jump" . font-lock-warning-face)
            ("copy-rectangle-to-register" . guide-key/highlight-command-face)
+           ("anonymous-command" . (:foreground "hot pink")) ; anonymous face
            ("<NOTEXIST>" . nil)
            ))
         actual)
     (loop for (input . expected) in fixtures
           do
           (setq actual (guide-key/get-highlight-face input))
-          (should (eq actual expected)))
+          (should (equal actual expected)))
     ))
 
 (defun same-keymap-p (keymap1 keymap2)

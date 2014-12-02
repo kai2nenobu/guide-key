@@ -52,14 +52,14 @@ guide-keyは指定された正規表現に一致するコマンドをハイラ�
 (setq guide-key/highlight-command-regexp
       '("rectangle"
         ("register" . font-lock-type-face)
-        ("bookmark" . font-lock-warning-face)))
+        ("bookmark" . "hot pink")))
 #+END_SRC
 
 [[img/guide-key-multiple-highlight.png]]
 
 =guide-key/highlight-command-regexp= の要素がコンスセルの場合、carはハイライ
-トすべきコマンドの正規表現であり、cdrはハイライトに利用されるフェイスになりま
-す。
+トすべきコマンドの正規表現であり、cdrはハイライトに利用されるフェイスか色名に
+なります。
 
 さらにプレフィクスコマンドは自動的にハイライトされます。
 
@@ -195,6 +195,8 @@ guide-keyを操作するその他の関数や変数を以下に示します。
 - [X] prefix argument processing
 - [X] define global minor mode
 ** ChangeLog
+- Version 1.2.x
+  - Add a feature to specify a direct color name ([[https://github.com/kai2nenobu/guide-key/issues/25][#25]])
 - Version 1.2.4
   - Change the format of tag name to suit [[http://stable.melpa.org/#/][MELPA Stable]] rule (=ver1.x.y= ->
     =v1.x.y=)
