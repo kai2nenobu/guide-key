@@ -194,45 +194,45 @@ Here are some issues and drawbacks.
 - [X] prefix argument processing
 - [X] define global minor mode
 ** ChangeLog
-- Version 1.2.x
-  - Add a feature to specify a direct color name ([[https://github.com/kai2nenobu/guide-key/issues/25][#25]])
-- Version 1.2.4
-  - Change the format of tag name to suit [[http://stable.melpa.org/#/][MELPA Stable]] rule (=ver1.x.y= ->
-    =v1.x.y=)
-  - Add some tests and work with [[https://travis-ci.org/kai2nenobu/guide-key][Travis CI]] and [[https://coveralls.io/r/kai2nenobu/guide-key][Coveralls]]
-  - Fix a regression bug about a local highlight face ([[https://github.com/kai2nenobu/guide-key/pull/16][#16]])
-  - Add a feature to specify multiple highlight faces according to each
-    regular expression ([[https://github.com/kai2nenobu/guide-key/issues/14][#14]])
-- Version 1.2.3
-  - Modify a link of one-key to more explanatory page
-  - Allow key sequences with regexp special characters. (Thanks to @mrc)
-  - Allow popup function to be called directly. (Thanks to @mlf176f2)
-- Version 1.2.2
-  - Add a Japanese README.
-  - Add a documentation about key-chord hack.
-- Version 1.2.1
-  - Support for mode specific key sequences in
-    =guide-key/guide-key-sequence=. (Thanks to @Fuco1)
-- Version 1.2.0
-  - Add a feature to scale the text size in the guide buffer.
-  - Add a feature to popup the guide buffer with delay. (Thanks to
-    @deprecated)
-  - Fix up README. (Thanks to @haxney)
-- Version 1.1.1
-  - Suppress an annoying message, "No following key".
-- Version 1.1.0
-  - Add a functionality to check an input key sequence recursively. This
-    enables to avoid adding many prefixes to
-    =guide-key/guide-key-sequence=. (Thanks @kui)
-- Version 1.0.1
-  - Change to save and restore a last configuration of popwin
-- Version 1.0.0
-  - First release version
-  - Adjust names of functions and variables
-  - Add some documentations
-- Version 0.1.2
-  - Enable to guide key-chord bindings.
-- Version 0.1.1
-  - Make =guide-key-mode= global minor mode.
-- Version 0.1.0
-  - Initial version.
+*** Version 1.2.x
+- Add a feature to specify a direct color name ([[https://github.com/kai2nenobu/guide-key/issues/25][#25]])
+*** Version 1.2.4
+- Change the format of tag name to suit [[http://stable.melpa.org/#/][MELPA Stable]] rule (=ver1.x.y= ->
+  =v1.x.y=)
+- Add some tests and work with [[https://travis-ci.org/kai2nenobu/guide-key][Travis CI]] and [[https://coveralls.io/r/kai2nenobu/guide-key][Coveralls]]
+- Fix a regression bug about a local highlight face ([[https://github.com/kai2nenobu/guide-key/pull/16][#16]])
+- Add a feature to specify multiple highlight faces according to each
+  regular expression ([[https://github.com/kai2nenobu/guide-key/issues/14][#14]])
+*** Version 1.2.3
+- Modify a link of one-key to more explanatory page
+- Allow key sequences with regexp special characters. (Thanks to @mrc)
+- Allow popup function to be called directly. (Thanks to @mlf176f2)
+*** Version 1.2.2
+- Add a Japanese README.
+- Add a documentation about key-chord hack.
+*** Version 1.2.1
+- Support for mode specific key sequences in
+  =guide-key/guide-key-sequence=. (Thanks to @Fuco1)
+*** Version 1.2.0
+- Add a feature to scale the text size in the guide buffer.
+- Add a feature to popup the guide buffer with delay. (Thanks to
+  @deprecated)
+- Fix up README. (Thanks to @haxney)
+*** Version 1.1.1
+- Suppress an annoying message, "No following key".
+*** Version 1.1.0
+- Add a functionality to check an input key sequence recursively. This
+  enables to avoid adding many prefixes to
+  =guide-key/guide-key-sequence=. (Thanks @kui)
+*** Version 1.0.1
+- Change to save and restore a last configuration of popwin
+*** Version 1.0.0
+- First release version
+- Adjust names of functions and variables
+- Add some documentations
+*** Version 0.1.2
+- Enable to guide key-chord bindings.
+*** Version 0.1.1
+- Make =guide-key-mode= global minor mode.
+*** Version 0.1.0
+- Initial version.
