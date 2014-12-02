@@ -539,7 +539,10 @@ appropriate face is not found."
                                'guide-key/highlight-command-face))
                             ((consp elm)
                              (when (string-match (car elm) string)
-                               (cdr elm))))
+                               (if (stringp (cdr elm))
+                                   ;; anonymous face, see (info "(elisp)Faces")
+                                   (list :foreground (cdr elm))
+                                 (cdr elm)))))
                    return it)))
       )))
 
