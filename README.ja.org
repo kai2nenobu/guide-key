@@ -196,6 +196,7 @@ guide-keyを操作するその他の関数や変数を以下に示します。
 - [X] define global minor mode
 ** ChangeLog
 *** Version 1.2.x
+- Enable to guide key sequences with universal argument ([[https://github.com/kai2nenobu/guide-key/issues/6][#6]])
 - Add a feature to specify a direct color name ([[https://github.com/kai2nenobu/guide-key/issues/25][#25]])
 *** Version 1.2.4
 - Change the format of tag name to suit [[http://stable.melpa.org/#/][MELPA Stable]] rule (=ver1.x.y= ->

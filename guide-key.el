@@ -617,10 +617,11 @@ functions; this-command-keys and this-command-keys-vector."
 ;;; debug
 (defun guide-key/message-events ()
   ""
-  (message (format "lce:%S tck:%S tckv:%S lie:%S uce:%S"
+  (message (format "lce:%S tck:%S tckv:%S tsck:%S lie:%S uce:%S"
                    last-command-event
                    (this-command-keys)
                    (this-command-keys-vector)
+                   (this-single-command-keys)
                    last-input-event
                    unread-command-events
                    )))
