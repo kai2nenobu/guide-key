@@ -59,9 +59,9 @@ expressions and faces as below.
 
 [[img/guide-key-multiple-highlight.png]]
 
-If an element of =guide-key/highlight-command-regexp= is cons, its car means
-a regular expression to highlight, and its cdr means a face of a color name
-put on command names.
+If an element of =guide-key/highlight-command-regexp= is a cons cell, its car
+means a regular expression to highlight, and its cdr means a face or a color
+name put on command names.
 
 Moreover, prefix commands are automatically highlighted.
 
