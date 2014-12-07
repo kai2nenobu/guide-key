@@ -196,7 +196,7 @@ Here are some issues and drawbacks.
 - [X] prefix argument processing
 - [X] define global minor mode
 ** ChangeLog
-*** Version 1.2.x
+*** Version 1.2.5
 - Enable setting =guide-key/guide-key-sequence= to =t= so that any key
   sequence will pop up bindings ([[https://github.com/kai2nenobu/guide-key/pull/22][#22]])
 - Enable to guide key sequences with universal argument ([[https://github.com/kai2nenobu/guide-key/issues/6][#6]])
