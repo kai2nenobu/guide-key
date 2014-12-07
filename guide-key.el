@@ -421,12 +421,11 @@ window.  Otherwise, return the width of popup window"
   "Return t if guide buffer should be popped up."
   (and (> (length key-seq) 0)
        (or (eq guide-key/guide-key-sequence t)
-           (member key-seq (mapcar 'guide-key/convert-key-sequence-to-vector
-                                   guide-key/guide-key-sequence))
+           (member key-seq (guide-key/buffer-key-sequences))
            (and guide-key/recursive-key-sequence-flag
                 (guide-key/popup-guide-buffer-p (guide-key/vbutlast key-seq))))))
 
-(defun guide-key/buffer-key-seqences ()
+(defun guide-key/buffer-key-sequences ()
   "Return a list of key sequences (vector representation) in current buffer."
   (let (lst)
     ;; global key sequences
