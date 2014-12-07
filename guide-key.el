@@ -345,7 +345,7 @@ positive, otherwise disable."
 
 (defun guide-key/popup-function (&optional input)
   "Popup function called after delay of `guide-key/idle-delay' second."
-  (let ((key-seq (or input (this-command-keys-vector)))
+  (let ((key-seq (or input (this-single-command-keys)))
         (regexp guide-key/highlight-command-regexp))
     (let ((dsc-buf (current-buffer))
 	  (max-width 0))
@@ -364,7 +364,7 @@ positive, otherwise disable."
 ;;; internal functions
 (defun guide-key/polling-function ()
   "Polling function executed every `guide-key/polling-time' second."
-  (let ((key-seq (this-command-keys-vector)))
+  (let ((key-seq (this-single-command-keys)))
     (if (guide-key/popup-guide-buffer-p key-seq)
         (when (guide-key/update-guide-buffer-p key-seq)
           (guide-key/turn-on-idle-timer))
