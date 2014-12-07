@@ -34,6 +34,9 @@ package.elがない場合は、[[https://github.com/m2ym/popwin-el][m2ym/popwin-
 
 [[img/guide-key-example.png]]
 
+あるいは =guide-key/guide-key-sequence= を =t= に設定すれば、すべてのプレフィ
+クスキーに対してポップアップされます。
+
 guide-keyは指定された正規表現に一致するコマンドをハイライトします。 =C-x r=
 に続くキーバインドは =rectangle= 系、 =register= 系、 =bookmark= 系に分かれま
 す。もし、 =rectangle= 系のみをハイライトしたい場合は、init.elに以下のように
@@ -196,6 +199,8 @@ guide-keyを操作するその他の関数や変数を以下に示します。
 - [X] define global minor mode
 ** ChangeLog
 *** Version 1.2.x
+- Enable setting =guide-key/guide-key-sequence= to =t= so that any key
+  sequence will pop up bindings ([[https://github.com/kai2nenobu/guide-key/pull/22][#22]])
 - Enable to guide key sequences with universal argument ([[https://github.com/kai2nenobu/guide-key/issues/6][#6]])
 - Add a feature to specify a direct color name ([[https://github.com/kai2nenobu/guide-key/issues/25][#25]])
 *** Version 1.2.4

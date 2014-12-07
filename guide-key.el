@@ -58,13 +58,13 @@
 ;;   (setq guide-key/guide-key-sequence '("C-x r" "C-x 4"))
 ;;   (guide-key-mode 1) ; Enable guide-key-mode
 ;;
+;; When you press these prefix keys, key bindings are automatically
+;; popped up after a short delay (1 second by default).
+;;
 ;; To activate guide-key for any key sequence instead of just the ones
 ;; listed above then use:
 ;;
 ;;   (setq guide-key/guide-key-sequence t)
-;;
-;; When you press these prefix keys, key bindings are automatically
-;; popped up after a short delay (1 second by default).
 ;;
 ;; guide-key can highlight commands which match a specified regular expression.
 ;; Key bindings following "C-x r" are rectangle family, register family and

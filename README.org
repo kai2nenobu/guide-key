@@ -34,6 +34,8 @@ screenshot when you press "C-x r".
 
 [[img/guide-key-example.png]]
 
+If =guide-key/guide-key-sequence= is =t=, any prefixes will pop up bindings.
+
 guide-key can highlight commands which match a specified regular expression.
 Key bindings following "C-x r" are =rectangle= family, =register= family and
 =bookmark= family.  If you want to highlight only =rectangle= family
@@ -195,6 +197,8 @@ Here are some issues and drawbacks.
 - [X] define global minor mode
 ** ChangeLog
 *** Version 1.2.x
+- Enable setting =guide-key/guide-key-sequence= to =t= so that any key
+  sequence will pop up bindings ([[https://github.com/kai2nenobu/guide-key/pull/22][#22]])
 - Enable to guide key sequences with universal argument ([[https://github.com/kai2nenobu/guide-key/issues/6][#6]])
 - Add a feature to specify a direct color name ([[https://github.com/kai2nenobu/guide-key/issues/25][#25]])
 *** Version 1.2.4
