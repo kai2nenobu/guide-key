@@ -5,7 +5,7 @@
 ;; Author: Tsunenobu Kai <kai2nenobu@gmail.com>
 ;; URL: https://github.com/kai2nenobu/guide-key
 ;; Version: 1.2.5
-;; Package-Requires: ((popwin "0.3.0"))
+;; Package-Requires: ((dash "2.10.0") (popwin "0.3.0") (s "1.9.0"))
 ;; Keywords: help convenience
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -205,7 +205,9 @@
 (eval-when-compile
   (require 'cl))
 
+(require 'dash)
 (require 'popwin)
+(require 's)
 (require 'face-remap)
 
 ;;; variables
