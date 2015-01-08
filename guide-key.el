@@ -203,12 +203,12 @@
 ;;; Code:
 
 (eval-when-compile
-  (require 'cl))
+  (require 'cl)
+  (require 'face-remap))
 
 (require 'dash)
 (require 'popwin)
 (require 's)
-(require 'face-remap)
 
 ;;; variables
 (defgroup guide-key nil
