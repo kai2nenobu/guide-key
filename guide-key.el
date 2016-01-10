@@ -216,6 +216,11 @@
   :group 'help
   :prefix "guide-key/")
 
+(defcustom guide-key-mode-lighter " Guide"
+  "Lighter of guide-key-mode"
+  :type 'string
+  :group 'guide-key)
+
 (defcustom guide-key/guide-key-sequence nil
   "*Key sequences to guide in `guide-key-mode'.
 This variable is a list of string representation.
@@ -347,7 +352,7 @@ automatically and dynamically.
 With a prefix argument ARG, enable guide key mode if ARG is
 positive, otherwise disable."
   :global t
-  :lighter " Guide"
+  :lighter guide-key-mode-lighter
   (funcall (if guide-key-mode
                'guide-key/turn-on-timer
              'guide-key/turn-off-timer)))
