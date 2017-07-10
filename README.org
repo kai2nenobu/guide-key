@@ -1,4 +1,4 @@
-* guide-key.el [[https://travis-ci.org/kai2nenobu/guide-key][https://api.travis-ci.org/kai2nenobu/guide-key.png]] [[https://coveralls.io/r/kai2nenobu/guide-key][https://coveralls.io/repos/kai2nenobu/guide-key/badge.png?branch=master]] [[http://melpa.org/#/guide-key][http://melpa.org/packages/guide-key-badge.svg]] [[http://stable.melpa.org/#/guide-key][http://stable.melpa.org/packages/guide-key-badge.svg]]
+* guide-key.el [[https://travis-ci.org/kai2nenobu/guide-key][https://api.travis-ci.org/kai2nenobu/guide-key.png]] [[https://coveralls.io/r/kai2nenobu/guide-key][https://coveralls.io/repos/kai2nenobu/guide-key-badge.png?branch=master]] [[http://melpa.org/#/guide-key][http://melpa.org/packages/guide-key-badge.svg]] [[http://stable.melpa.org/#/guide-key][http://stable.melpa.org/packages/guide-key-badge.svg]]
 ** Overview
 guide-key.el displays the available key bindings automatically and dynamically.
 guide-key aims to be an alternative of [[http://www.emacswiki.org/emacs/OneKey][one-key.el]].
@@ -21,11 +21,11 @@ Because guide-key depends on [[https://github.com/m2ym/popwin-el][popwin.el]], p
 If you don't have package.el, please download [[https://github.com/m2ym/popwin-el][m2ym/popwin-el]] and
 [[https://github.com/kai2nenobu/guide-key][kai2nenobu/guide-key]] directly, and then put them in your =load-path=.
 ** Basic usage
-Just add your favorite prefix keys to =guide-key/guide-key-sequence= as
+Just add your favorite prefix keys to =guide-key-guide-key-sequence= as
 below.
 #+BEGIN_SRC emacs-lisp
 (require 'guide-key)
-(setq guide-key/guide-key-sequence '("C-x r" "C-x 4"))
+(setq guide-key-guide-key-sequence '("C-x r" "C-x 4"))
 (guide-key-mode 1)  ; Enable guide-key-mode
 #+END_SRC
 When you press these prefix keys, key bindings are automatically
@@ -34,14 +34,14 @@ screenshot when you press "C-x r".
 
 [[img/guide-key-example.png]]
 
-If =guide-key/guide-key-sequence= is =t=, any prefixes will pop up bindings.
+If =guide-key-guide-key-sequence= is =t=, any prefixes will pop up bindings.
 
 guide-key can highlight commands which match a specified regular expression.
 Key bindings following "C-x r" are =rectangle= family, =register= family and
 =bookmark= family.  If you want to highlight only =rectangle= family
 commands, put this setting in your init.el.
 #+BEGIN_SRC emacs-lisp
-(setq guide-key/highlight-command-regexp "rectangle")
+(setq guide-key-highlight-command-regexp "rectangle")
 #+END_SRC
 
 [[img/guide-key-example2.png]]
@@ -51,7 +51,7 @@ you want to highlight all families, you can specify multiple regular
 expressions and faces as below.
 
 #+BEGIN_SRC emacs-lisp
-(setq guide-key/highlight-command-regexp
+(setq guide-key-highlight-command-regexp
       '("rectangle"
         ("register" . font-lock-type-face)
         ("bookmark" . "hot pink")))
@@ -59,7 +59,7 @@ expressions and faces as below.
 
 [[img/guide-key-multiple-highlight.png]]
 
-If an element of =guide-key/highlight-command-regexp= is a cons cell, its car
+If an element of =guide-key-highlight-command-regexp= is a cons cell, its car
 means a regular expression to highlight, and its cdr means a face or a color
 name put on command names.
 
@@ -67,9 +67,9 @@ Moreover, prefix commands are automatically highlighted.
 
 Depending on your level of emacs experience, you may want a shorter or
 longer delay between pressing a key and the appearance of the guide
-buffer.  This can be controlled by setting =guide-key/idle-delay=:
+buffer.  This can be controlled by setting =guide-key-idle-delay=:
 #+BEGIN_SRC emacs-lisp
-(setq guide-key/idle-delay 0.1)
+(setq guide-key-idle-delay 0.1)
 #+END_SRC
 The guide buffer is displayed only when you pause between keystrokes
 for longer than this delay, so it will keep out of your way when you
@@ -85,44 +85,44 @@ If popwin works, I think guide-key will work as well. You can use
 guide-key with Emacs working in terminal.
 ** Advanced Usage
 *** Check key sequence recursively
-It is annoying to add many prefixes to =guide-key/guide-key-sequence=.
-=guide-key/recursive-key-sequence-flag= releases you from this problem.  If
-=guide-key/recursive-key-sequence-flag= is non-nil, guide-key checks an input
+It is annoying to add many prefixes to =guide-key-guide-key-sequence=.
+=guide-key-recursive-key-sequence-flag= releases you from this problem.  If
+=guide-key-recursive-key-sequence-flag= is non-nil, guide-key checks an input
 key sequence recursively. That is, if "C-x 8 ^" is an input key sequence,
-guide-key checks whether =guide-key/guide-key-sequence= includes "C-x 8" and
+guide-key checks whether =guide-key-guide-key-sequence= includes "C-x 8" and
 "C-x".
 
 For example, if you configure as below,
 #+BEGIN_SRC emacs-lisp
-(setq guide-key/guide-key-sequence '("C-x"))
-(setq guide-key/recursive-key-sequence-flag t)
+(setq guide-key-guide-key-sequence '("C-x"))
+(setq guide-key-recursive-key-sequence-flag t)
 #+END_SRC
 the guide buffer is popped up when you input "C-x r", "C-x 8" and
 any other prefixes following "C-x".
 *** Add settings in a particular mode
 You can add extra settings in a particular mode. Please use
-=guide-key/add-local-guide-key-sequence=,
-=guide-key/add-local-highlight-command-regexp= and the hook of
+=guide-key-add-local-guide-key-sequence=,
+=guide-key-add-local-highlight-command-regexp= and the hook of
 that mode.
 
 This code is an example for org-mode.
 #+BEGIN_SRC emacs-lisp
-(defun guide-key/my-hook-function-for-org-mode ()
-  (guide-key/add-local-guide-key-sequence "C-c")
-  (guide-key/add-local-guide-key-sequence "C-c C-x")
-  (guide-key/add-local-highlight-command-regexp "org-"))
-(add-hook 'org-mode-hook 'guide-key/my-hook-function-for-org-mode)
+(defun guide-key-my-hook-function-for-org-mode ()
+  (guide-key-add-local-guide-key-sequence "C-c")
+  (guide-key-add-local-guide-key-sequence "C-c C-x")
+  (guide-key-add-local-highlight-command-regexp "org-"))
+(add-hook 'org-mode-hook 'guide-key-my-hook-function-for-org-mode)
 #+END_SRC
 If you execute =org-set-property= by pressing "C-c C-x p" in org-mode buffer,
 Emacs behaves as below.
 
 [[img/guide-key-example-org-anime.gif]]
 
-In respect of =guide-key/guide-key-sequence=, you can add mode specific key
-sequences without =guide-key/add-local-guide-key-sequence=. For example,
+In respect of =guide-key-guide-key-sequence=, you can add mode specific key
+sequences without =guide-key-add-local-guide-key-sequence=. For example,
 configure as below.
 #+BEGIN_SRC emacs-lisp
-(setq guide-key/guide-key-sequence
+(setq guide-key-guide-key-sequence
       '("C-x r" "C-x 4"
         (org-mode "C-c C-x")
         (outline-minor-mode "C-c @")))
@@ -133,20 +133,20 @@ following "C-c @".
 *** Work with =key-chord=
 guide-key can work with [[http://www.emacswiki.org/emacs/KeyChord][key-chord.el]].  If you want to guide key bindings
 following key chord, you need to execute
-=guide-key/key-chord-hack-on=.  Then, add your favorite key chord to
-=guide-key/guide-key-sequence= as below.
+=guide-key-key-chord-hack-on=.  Then, add your favorite key chord to
+=guide-key-guide-key-sequence= as below.
 #+BEGIN_SRC emacs-lisp
 (key-chord-define global-map "@4" 'ctl-x-4-prefix)
 
-(guide-key/key-chord-hack-on)
-(setq guide-key/guide-key-sequence '("<key-chord> @ 4" "<key-chord> 4 @"))
+(guide-key-key-chord-hack-on)
+(setq guide-key-guide-key-sequence '("<key-chord> @ 4" "<key-chord> 4 @"))
 #+END_SRC
 
-If =guide-key/recursive-key-sequence-flag= is non-nil, more simple.
+If =guide-key-recursive-key-sequence-flag= is non-nil, more simple.
 #+BEGIN_SRC emacs-lisp
-(guide-key/key-chord-hack-on)
-(setq guide-key/recursive-key-sequence-flag t)
-(setq guide-key/guide-key-sequence '("<key-chord>"))
+(guide-key-key-chord-hack-on)
+(setq guide-key-recursive-key-sequence-flag t)
+(setq guide-key-guide-key-sequence '("<key-chord>"))
 #+END_SRC
 In this case, key bindings are popped up when you type any of key chords.
 
@@ -158,17 +158,17 @@ Here are some functions and variables which control guide-key.
      Executing "M-x =guide-key-mode=" toggles whether guide-key is enabled or not.
      Because =guide-key-mode= is a global minor mode, =guide-key-mode= is enabled
      in all buffers or disabled in all buffers.
-- =guide-key/popup-window-position=: This variable controls where a guide-key
+- =guide-key-popup-window-position=: This variable controls where a guide-key
      buffer is popped up. A value of this variable is one of =right=, =bottom=,
      =left=, =top=. The default value is =right=.
-- =guide-key/polling-time=: This variable controls a polling time. The
+- =guide-key-polling-time=: This variable controls a polling time. The
      default value is 0.1 (in seconds).
-- =guide-key/idle-delay=: This variable controls the delay between
+- =guide-key-idle-delay=: This variable controls the delay between
   starting a key sequence and popping up the guide buffer. The default
   value is 1.0 (in seconds), which means that guide-key will keep out
   of your way unless you hesitate in the middle of a key sequence .
   Set this to 0.0 to revert to the old default behavior.
-- =guide-key/text-scale-amount=: This variable controls the size of text in
+- =guide-key-text-scale-amount=: This variable controls the size of text in
   guide buffer. The default value is 0 (it means default size in Emacs). If
   you want to enlarge text, set positive number. Otherwise, set negative
   number.
@@ -197,17 +197,17 @@ Here are some issues and drawbacks.
 - [X] define global minor mode
 ** ChangeLog
 *** Version 1.2.5
-- Enable setting =guide-key/guide-key-sequence= to =t= so that any key
-  sequence will pop up bindings ([[https://github.com/kai2nenobu/guide-key/pull/22][#22]])
-- Enable to guide key sequences with universal argument ([[https://github.com/kai2nenobu/guide-key/issues/6][#6]])
-- Add a feature to specify a direct color name ([[https://github.com/kai2nenobu/guide-key/issues/25][#25]])
+- Enable setting =guide-key-guide-key-sequence= to =t= so that any key
+  sequence will pop up bindings ([[https://github.com/kai2nenobu/guide-key-pull/22][#22]])
+- Enable to guide key sequences with universal argument ([[https://github.com/kai2nenobu/guide-key-issues/6][#6]])
+- Add a feature to specify a direct color name ([[https://github.com/kai2nenobu/guide-key-issues/25][#25]])
 *** Version 1.2.4
 - Change the format of tag name to suit [[http://stable.melpa.org/#/][MELPA Stable]] rule (=ver1.x.y= ->
   =v1.x.y=)
 - Add some tests and work with [[https://travis-ci.org/kai2nenobu/guide-key][Travis CI]] and [[https://coveralls.io/r/kai2nenobu/guide-key][Coveralls]]
-- Fix a regression bug about a local highlight face ([[https://github.com/kai2nenobu/guide-key/pull/16][#16]])
+- Fix a regression bug about a local highlight face ([[https://github.com/kai2nenobu/guide-key-pull/16][#16]])
 - Add a feature to specify multiple highlight faces according to each
-  regular expression ([[https://github.com/kai2nenobu/guide-key/issues/14][#14]])
+  regular expression ([[https://github.com/kai2nenobu/guide-key-issues/14][#14]])
 *** Version 1.2.3
 - Modify a link of one-key to more explanatory page
 - Allow key sequences with regexp special characters. (Thanks to @mrc)
@@ -217,7 +217,7 @@ Here are some issues and drawbacks.
 - Add a documentation about key-chord hack.
 *** Version 1.2.1
 - Support for mode specific key sequences in
-  =guide-key/guide-key-sequence=. (Thanks to @Fuco1)
+  =guide-key-guide-key-sequence=. (Thanks to @Fuco1)
 *** Version 1.2.0
 - Add a feature to scale the text size in the guide buffer.
 - Add a feature to popup the guide buffer with delay. (Thanks to
@@ -228,7 +228,7 @@ Here are some issues and drawbacks.
 *** Version 1.1.0
 - Add a functionality to check an input key sequence recursively. This
   enables to avoid adding many prefixes to
-  =guide-key/guide-key-sequence=. (Thanks @kui)
+  =guide-key-guide-key-sequence=. (Thanks @kui)
 *** Version 1.0.1
 - Change to save and restore a last configuration of popwin
 *** Version 1.0.0

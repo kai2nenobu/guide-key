@@ -35,26 +35,26 @@
                          (cons 'keymap guide-key-test/global-keybindings))))
 
 (ert-deftest guide-key-test/get-highlight-face ()
-  "Test of `guide-key/get-highlight-face'"
-  (let ((guide-key/highlight-command-regexp
+  "Test of `guide-key-get-highlight-face'"
+  (let ((guide-key-highlight-command-regexp
          '("rectangle"
            ("register" . font-lock-type-face)
            ("bookmark" . font-lock-warning-face)
            ("anonymous" . "hot pink") ; specify a color name
            ))
         (fixtures
-         '(("Prefix Command" . guide-key/prefix-command-face)
-           ("string-rectangle" . guide-key/highlight-command-face)
+         '(("Prefix Command" . guide-key-prefix-command-face)
+           ("string-rectangle" . guide-key-highlight-command-face)
            ("jump-to-register" . font-lock-type-face)
            ("bookmark-jump" . font-lock-warning-face)
-           ("copy-rectangle-to-register" . guide-key/highlight-command-face)
+           ("copy-rectangle-to-register" . guide-key-highlight-command-face)
            ("anonymous-command" . (:foreground "hot pink")) ; anonymous face
            ("<NOTEXIST>" . nil)
            ))
         actual)
     (loop for (input . expected) in fixtures
           do
-          (setq actual (guide-key/get-highlight-face input))
+          (setq actual (guide-key-get-highlight-face input))
           (should (equal actual expected)))
     ))
 
