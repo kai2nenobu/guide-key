@@ -6,35 +6,35 @@
 (eval-when-compile
   (require 'cl))
 
-(defconst guide-key-test/global-keybindings
-  '((1 . guide-key-test/global-keybinding1)
-    (2 . guide-key-test/global-keybinding2)))
+(defconst guide-key-test-global-keybindings
+  '((1 . guide-key-test-global-keybinding1)
+    (2 . guide-key-test-global-keybinding2)))
 
-(defconst guide-key-test/prefix-key (kbd "s-S-C-M-x"))
+(defconst guide-key-test-prefix-key (kbd "s-S-C-M-x"))
 
-(defmacro guide-key-test/deftest (name doc-string &rest body)
+(defmacro guide-key-test-deftest (name doc-string &rest body)
   (declare (indent 1)
            (doc-string 2))
-  `(ert-deftest ,(intern (concat "guide-key-test/" (symbol-name name))) ()
+  `(ert-deftest ,(intern (concat "guide-key-test-" (symbol-name name))) ()
      ,doc-string
      ;; setup
-     (loop for (event . definition) in guide-key-test/global-keybindings
+     (loop for (event . definition) in guide-key-test-global-keybindings
            do
-           (global-set-key (vconcat guide-key-test/prefix-key (vector event)) definition))
+           (global-set-key (vconcat guide-key-test-prefix-key (vector event)) definition))
      ;; test
      ,@body
      ;; teardown
-     (loop for (event . definition) in guide-key-test/global-keybindings
+     (loop for (event . definition) in guide-key-test-global-keybindings
            do
-           (global-unset-key (vconcat guide-key-test/prefix-key (vector event))))
+           (global-unset-key (vconcat guide-key-test-prefix-key (vector event))))
      ))
 
-(guide-key-test/deftest setup-test
+(guide-key-test-deftest setup-test
   "Assert that setup is done successfully."
-  (should (same-keymap-p (keymap-canonicalize (key-binding guide-key-test/prefix-key))
-                         (cons 'keymap guide-key-test/global-keybindings))))
+  (should (same-keymap-p (keymap-canonicalize (key-binding guide-key-test-prefix-key))
+                         (cons 'keymap guide-key-test-global-keybindings))))
 
-(ert-deftest guide-key-test/get-highlight-face ()
+(ert-deftest guide-key-test-get-highlight-face ()
   "Test of `guide-key-get-highlight-face'"
   (let ((guide-key-highlight-command-regexp
          '("rectangle"
