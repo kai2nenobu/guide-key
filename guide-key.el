@@ -4,7 +4,7 @@
 
 ;; Author: Tsunenobu Kai <kai2nenobu@gmail.com>
 ;; URL: https://github.com/kai2nenobu/guide-key
-;; Version: 1.2.5
+;; Version: 1.2.6
 ;; Package-Requires: ((dash "2.10.0") (popwin "0.3.0") (s "1.9.0"))
 ;; Keywords: help convenience
 
@@ -368,7 +368,8 @@ positive, otherwise disable."
 	(when (> (guide-key-format-guide-buffer key-seq regexp) 0)
 	  (guide-key-close-guide-buffer)
 	  (guide-key-popup-guide-buffer))))))
-
+(define-obsolete-function-alias 'guide-key/popup-function
+  'guide-key-popup-function "1.2.6")
 
 ;;; internal functions
 (defun guide-key-polling-function ()
@@ -379,6 +380,8 @@ positive, otherwise disable."
           (guide-key-turn-on-idle-timer))
       (guide-key-close-guide-buffer))
     (setq guide-key-last-key-sequence-vector key-seq)))
+(define-obsolete-function-alias 'guide-key/polling-function
+  'guide-key-polling-function "1.2.6")
 
 (defun guide-key-popup-guide-buffer ()
   "Pop up guide buffer at `guide-key-popup-window-position'."
@@ -391,6 +394,8 @@ positive, otherwise disable."
                  ((popwin:position-vertical-p guide-key-popup-window-position)
                   `(:height ,(guide-key-popup-window-size)))))
     (setq popwin:popup-last-config last-config)))
+(define-obsolete-function-alias 'guide-key/popup-guide-buffer
+  'guide-key-popup-guide-buffer "1.2.6")
 
 (defun guide-key-popup-window-size (&optional horizontal)
   "Return an enough height or width of popup window to display
@@ -405,6 +410,8 @@ window.  Otherwise, return the width of popup window"
           (ceiling (* scale (+ (guide-key-buffer-max-width) margin)))
         (ceiling (* scale (+ (count-lines (point-min) (point-max)) margin))))
       )))
+(define-obsolete-function-alias 'guide-key/popup-window-size
+  'guide-key-popup-window-size "1.2.6")
 
 (defun guide-key-close-guide-buffer ()
   "Close guide buffer."
@@ -412,12 +419,16 @@ window.  Otherwise, return the width of popup window"
     (popwin:close-popup-window))
   (guide-key-turn-off-idle-timer)
   )
+(define-obsolete-function-alias 'guide-key/close-guide-buffer
+  'guide-key-close-guide-buffer "1.2.6")
 
 (add-hook 'pre-command-hook 'guide-key-close-guide-buffer)
 
 (defun guide-key-update-guide-buffer-p (key-seq)
   "Return t if guide buffer should be updated."
   (not (equal guide-key-last-key-sequence-vector key-seq)))
+(define-obsolete-function-alias 'guide-key/update-guide-buffer-p
+  'guide-key-update-guide-buffer-p "1.2.6")
 
 (defun guide-key-popup-guide-buffer-p (key-seq)
   "Return t if guide buffer should be popped up."
@@ -426,6 +437,8 @@ window.  Otherwise, return the width of popup window"
            (member key-seq (guide-key-buffer-key-sequences))
            (and guide-key-recursive-key-sequence-flag
                 (guide-key-popup-guide-buffer-p (guide-key-vbutlast key-seq))))))
+(define-obsolete-function-alias 'guide-key/popup-guide-buffer-p
+  'guide-key-popup-guide-buffer-p "1.2.6")
 
 (defun guide-key-buffer-key-sequences ()
   "Return a list of key sequences (vector representation) in current buffer."
@@ -442,15 +455,21 @@ window.  Otherwise, return the width of popup window"
         (setq lst (append (assoc-default mmode guide-key-guide-key-sequence) lst))))
     ;; convert key sequences to vector representation
     (mapcar 'guide-key-convert-key-sequence-to-vector lst)))
+(define-obsolete-function-alias 'guide-key/buffer-key-sequences
+  'guide-key-buffer-key-sequences "1.2.6")
 
 (defun guide-key-vbutlast (vec &optional n)
   "Return a copy of vector VEC with the last N elements removed."
   (vconcat (butlast (append vec nil) n)))
+(define-obsolete-function-alias 'guide-key/vbutlast
+  'guide-key-vbutlast "1.2.6")
 
 (defun guide-key-convert-key-sequence-to-vector (key-seq)
   "Convert key sequence KEY-SEQ to vector representation.
 For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
   (vconcat (read-kbd-macro key-seq)))
+(define-obsolete-function-alias 'guide-key/convert-key-sequence-to-vector
+  'guide-key-convert-key-sequence-to-vector "1.2.6")
 
 (defun guide-key-turn-on-idle-timer ()
   "Turn on an idle timer for popping up guide buffer."
@@ -458,12 +477,16 @@ For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
     (setq guide-key-idle-timer
           (run-with-idle-timer guide-key-idle-delay t 'guide-key-popup-function))
     ))
+(define-obsolete-function-alias 'guide-key/turn-on-idle-timer
+  'guide-key-turn-on-idle-timer "1.2.6")
 
 (defun guide-key-turn-off-idle-timer ()
   "Turn off the idle timer."
   (when guide-key-idle-timer
     (cancel-timer guide-key-idle-timer))
   (setq guide-key-idle-timer nil))
+(define-obsolete-function-alias 'guide-key/turn-off-idle-timer
+  'guide-key-turn-off-idle-timer "1.2.6")
 
 
 (defun guide-key-turn-on-timer ()
@@ -471,11 +494,15 @@ For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
   (when (null guide-key-polling-timer)
     (setq guide-key-polling-timer
           (run-at-time t guide-key-polling-time 'guide-key-polling-function))))
+(define-obsolete-function-alias 'guide-key/turn-on-timer
+  'guide-key-turn-on-timer "1.2.6")
 
 (defun guide-key-turn-off-timer ()
   "Turn off a polling timer."
   (cancel-timer guide-key-polling-timer)
   (setq guide-key-polling-timer nil))
+(define-obsolete-function-alias 'guide-key/turn-off-timer
+  'guide-key-turn-off-timer "1.2.6")
 
 (defun guide-key-format-guide-buffer (key-seq &optional regexp)
   "Format guide buffer. This function returns the number of following keys."
@@ -501,6 +528,8 @@ For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
                                       (popwin:position-horizontal-p guide-key-popup-window-position))
       (goto-char (point-min)))
     fkey-list-len))
+(define-obsolete-function-alias 'guide-key/format-guide-buffer
+  'guide-key-format-guide-buffer "1.2.6")
 
 (defun guide-key-insert-following-key (fkey-str-list horizontal)
   "Insert a few following keys per line.
@@ -521,6 +550,8 @@ is popped up at left or right."
           for column from 1
           do (insert fkey-str (if (= (mod column columns) 0) "\n" " ")))
     (align-regexp (point-min) (point-max) "\\(\\s-*\\) \\[" 1 1 t)))
+(define-obsolete-function-alias 'guide-key/insert-following-key
+  'guide-key-insert-following-key "1.2.6")
 
 (defun guide-key-fontified-string (key space command &optional regexp)
   "Return fontified string of following key"
@@ -530,6 +561,8 @@ is popped up at left or right."
             (propertize "]" 'face 'guide-key-key-face)
             (if guide-key-align-command-by-space-flag space " ") ; white space
             (if highlight-face (propertize command 'face highlight-face) command))))
+(define-obsolete-function-alias 'guide-key/fontified-string
+  'guide-key-fontified-string "1.2.6")
 
 (defun guide-key-get-highlight-face (string &optional regexp)
   "Return an appropriate face for highlighting STRING according
@@ -557,14 +590,20 @@ appropriate face is not found."
                                  (cdr elm)))))
                    return it)))
       )))
+(define-obsolete-function-alias 'guide-key/get-highlight-face
+  'guide-key-get-highlight-face "1.2.6")
 
 (defun guide-key-buffer-max-width ()
   "Return max width in current buffer."
   (let ((buf-str (buffer-substring-no-properties (point-min) (point-max))))
     (apply 'max (mapcar 'length (split-string buf-str "\n")))))
+(define-obsolete-function-alias 'guide-key/buffer-max-width
+  'guide-key-buffer-max-width "1.2.6")
 
 (defun guide-key-add-local-guide-key-sequence (key)
   (add-to-list (make-local-variable 'guide-key-guide-key-sequence) key))
+(define-obsolete-function-alias 'guide-key/add-local-guide-key-sequence
+  'guide-key-add-local-guide-key-sequence "1.2.6")
 
 (defun guide-key-add-local-highlight-command-regexp (regexp)
   (make-local-variable 'guide-key-highlight-command-regexp)
@@ -573,6 +612,8 @@ appropriate face is not found."
                (list regexp guide-key-highlight-command-regexp)))
         ((listp guide-key-highlight-command-regexp)
          (add-to-list 'guide-key-highlight-command-regexp regexp))))
+(define-obsolete-function-alias 'guide-key/add-local-highlight-command-regexp
+  'guide-key-add-local-highlight-command-regexp "1.2.6")
 
 ;;; key-chord hack
 (defadvice this-command-keys (after key-chord-hack disable)
@@ -615,6 +656,8 @@ functions; this-command-keys and this-command-keys-vector."
     (ad-enable-advice fn 'after 'key-chord-hack)
     (ad-activate fn))
   (message "Turn on key-chord hack of guide-key"))
+(define-obsolete-function-alias 'guide-key/key-chord-hack-on
+  'guide-key-key-chord-hack-on "1.2.6")
 
 (defun guide-key-key-chord-hack-off ()
   "Turn off key-chord hack of guide-key."
@@ -623,6 +666,8 @@ functions; this-command-keys and this-command-keys-vector."
     (ad-disable-advice fn 'after 'key-chord-hack)
     (ad-activate fn))
   (message "Turn off key-chord hack of guide-key"))
+(define-obsolete-function-alias 'guide-key/key-chord-hack-off
+  'guide-key-key-chord-hack-off "1.2.6")
 
 ;;; debug
 (defun guide-key-message-events ()
@@ -635,6 +680,9 @@ functions; this-command-keys and this-command-keys-vector."
                    last-input-event
                    unread-command-events
                    )))
+(define-obsolete-function-alias 'guide-key/message-events
+  'guide-key-message-events "1.2.6")
+
 ;; (setq ttt (run-at-time t 1 'guide-key-message-events))
 ;; (cancel-timer ttt)
 
