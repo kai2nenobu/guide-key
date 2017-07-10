@@ -1,4 +1,4 @@
-* guide-key.el [[https://travis-ci.org/kai2nenobu/guide-key][https://api.travis-ci.org/kai2nenobu/guide-key.png]] [[https://coveralls.io/r/kai2nenobu/guide-key][https://coveralls.io/repos/kai2nenobu/guide-key/badge.png?branch=master]] [[http://melpa.org/#/guide-key][http://melpa.org/packages/guide-key-badge.svg]] [[http://stable.melpa.org/#/guide-key][http://stable.melpa.org/packages/guide-key-badge.svg]]
+* guide-key.el [[https://travis-ci.org/kai2nenobu/guide-key][https://api.travis-ci.org/kai2nenobu/guide-key.png]] [[https://coveralls.io/r/kai2nenobu/guide-key][https://coveralls.io/repos/kai2nenobu/guide-key-badge.png?branch=master]] [[http://melpa.org/#/guide-key][http://melpa.org/packages/guide-key-badge.svg]] [[http://stable.melpa.org/#/guide-key][http://stable.melpa.org/packages/guide-key-badge.svg]]
 ** 概要
 guide-keyはキーバインドを自動的かつ動的に表示します。guide-keyは[[http://www.emacswiki.org/emacs/OneKey][one-key.el]]の置
 き換えを狙っています。
@@ -22,10 +22,10 @@ guide-keyは[[https://github.com/m2ym/popwin-el][popwin.el]]に依存してい�
 package.elがない場合は、[[https://github.com/m2ym/popwin-el][m2ym/popwin-el]]と[[https://github.com/kai2nenobu/guide-key][kai2nenobu/guide-key]]から直接ダウンロー
 ドして、 =load-path= 上においてください。
 ** 基本的な使い方
-=guide-key/guide-key-sequence= にお好きなプレイフィクスキーを追加してください。
+=guide-key-guide-key-sequence= にお好きなプレイフィクスキーを追加してください。
 #+BEGIN_SRC emacs-lisp
 (require 'guide-key)
-(setq guide-key/guide-key-sequence '("C-x r" "C-x 4"))
+(setq guide-key-guide-key-sequence '("C-x r" "C-x 4"))
 (guide-key-mode 1)  ; Enable guide-key-mode
 #+END_SRC
 ここで設定したプレフィクスキーを押すと、それに続くキーバインドが少し遅れて（デ
@@ -34,7 +34,7 @@ package.elがない場合は、[[https://github.com/m2ym/popwin-el][m2ym/popwin-
 
 [[img/guide-key-example.png]]
 
-あるいは =guide-key/guide-key-sequence= を =t= に設定すれば、すべてのプレフィ
+あるいは =guide-key-guide-key-sequence= を =t= に設定すれば、すべてのプレフィ
 クスキーに対してポップアップされます。
 
 guide-keyは指定された正規表現に一致するコマンドをハイライトします。 =C-x r=
@@ -42,7 +42,7 @@ guide-keyは指定された正規表現に一致するコマンドをハイラ�
 す。もし、 =rectangle= 系のみをハイライトしたい場合は、init.elに以下のように
 設定します。
 #+BEGIN_SRC emacs-lisp
-(setq guide-key/highlight-command-regexp "rectangle")
+(setq guide-key-highlight-command-regexp "rectangle")
 #+END_SRC
 
 [[img/guide-key-example2.png]]
@@ -52,7 +52,7 @@ guide-keyは指定された正規表現に一致するコマンドをハイラ�
 指定することができます。
 
 #+BEGIN_SRC emacs-lisp
-(setq guide-key/highlight-command-regexp
+(setq guide-key-highlight-command-regexp
       '("rectangle"
         ("register" . font-lock-type-face)
         ("bookmark" . "hot pink")))
@@ -60,17 +60,17 @@ guide-keyは指定された正規表現に一致するコマンドをハイラ�
 
 [[img/guide-key-multiple-highlight.png]]
 
-=guide-key/highlight-command-regexp= の要素がコンスセルの場合、carはハイライ
+=guide-key-highlight-command-regexp= の要素がコンスセルの場合、carはハイライ
 トすべきコマンドの正規表現であり、cdrはハイライトに利用されるフェイスか色名に
 なります。
 
 さらにプレフィクスコマンドは自動的にハイライトされます。
 
 プレフィクスキーを押してからどのくらいの時間でキーバインドをポップアップさせる
-かは、Emacsの経験によって変わってくるでしょう。これは =guide-key/idle-delay=
+かは、Emacsの経験によって変わってくるでしょう。これは =guide-key-idle-delay=
 で変更することができます。
 #+BEGIN_SRC emacs-lisp
-(setq guide-key/idle-delay 0.1)
+(setq guide-key-idle-delay 0.1)
 #+END_SRC
 プレフィクスキーを押してから、ここで設定した時間何も入力しなかった時だけキー
 バインドが表示されます。このためすばやく入力できるキーバインドの場合は、いま
@@ -86,44 +86,44 @@ popwinが動けばguide-keyも動作すると思います。また端末内で�
 guide-keyは問題なく動作します。
 ** 発展的な使い方
 *** 再帰的なチェック
-たくさんのプレフィクスを =guide-key/guide-key-sequence= に追加するのは大変です。
-=guide-key/recursive-key-sequence-flag= を使えばこの問題が解決します。
-=guide-key/recursive-key-sequence-flag= がnon-nilの時、guide-keyは入力されたキー
+たくさんのプレフィクスを =guide-key-guide-key-sequence= に追加するのは大変です。
+=guide-key-recursive-key-sequence-flag= を使えばこの問題が解決します。
+=guide-key-recursive-key-sequence-flag= がnon-nilの時、guide-keyは入力されたキー
 を再帰的にチェックします。つまり =C-x 8 ^= が入力されている時、guide-keyは
-=guide-key/guide-key-sequence= に =C-x 8= や =C-x= が含まれているかをチェック
+=guide-key-guide-key-sequence= に =C-x 8= や =C-x= が含まれているかをチェック
 します。
 
 例えば以下のように設定した場合
 #+BEGIN_SRC emacs-lisp
-(setq guide-key/guide-key-sequence '("C-x"))
-(setq guide-key/recursive-key-sequence-flag t)
+(setq guide-key-guide-key-sequence '("C-x"))
+(setq guide-key-recursive-key-sequence-flag t)
 #+END_SRC
 =C-x r= や =C-x 8= など =C-x= に続くプレフィクスキーを押した際に、キーバイン
 ドがポップされます。
 *** 特定のモードに関する設定
 特定のモードのみに追加の設定をすることができます。
-=guide-key/add-local-guide-key-sequence= 、
-=guide-key/add-local-highlight-command-regexp= とモードのフックを使ってくださ
+=guide-key-add-local-guide-key-sequence= 、
+=guide-key-add-local-highlight-command-regexp= とモードのフックを使ってくださ
 い。
 
 以下のコードは =org-mode= の設定例です。
 #+BEGIN_SRC emacs-lisp
-(defun guide-key/my-hook-function-for-org-mode ()
-  (guide-key/add-local-guide-key-sequence "C-c")
-  (guide-key/add-local-guide-key-sequence "C-c C-x")
-  (guide-key/add-local-highlight-command-regexp "org-"))
-(add-hook 'org-mode-hook 'guide-key/my-hook-function-for-org-mode)
+(defun guide-key-my-hook-function-for-org-mode ()
+  (guide-key-add-local-guide-key-sequence "C-c")
+  (guide-key-add-local-guide-key-sequence "C-c C-x")
+  (guide-key-add-local-highlight-command-regexp "org-"))
+(add-hook 'org-mode-hook 'guide-key-my-hook-function-for-org-mode)
 #+END_SRC
 =org-mode= バッファで =C-c C-x p= を押して =org-set-property= を実行すると、
 以下のようになります。
 
 [[img/guide-key-example-org-anime.gif]]
 
-=guide-key/guide-key-sequence= については
-=guide-key/add-local-guide-key-sequence= を使わずに設定することもできます。例
+=guide-key-guide-key-sequence= については
+=guide-key-add-local-guide-key-sequence= を使わずに設定することもできます。例
 えば以下のように設定してください。
 #+BEGIN_SRC emacs-lisp
-(setq guide-key/guide-key-sequence
+(setq guide-key-guide-key-sequence
       '("C-x r" "C-x 4"
         (org-mode "C-c C-x")
         (outline-minor-mode "C-c @")))
@@ -133,26 +133,26 @@ guide-keyは問題なく動作します。
 プアップされます。
 *** =key-chord= との連携
 guide-keyは[[http://www.emacswiki.org/emacs/KeyChord][key-chord.el]]と連携することができます。key chordに続くキーバインドを
-ポップアップしたい場合、 =guide-key/key-chord-hack-on= を実行する必要がありま
-す。その上で以下のように =guide-key/guide-key-sequence= にkey chordを追加して
+ポップアップしたい場合、 =guide-key-key-chord-hack-on= を実行する必要がありま
+す。その上で以下のように =guide-key-guide-key-sequence= にkey chordを追加して
 ください。
 #+BEGIN_SRC emacs-lisp
 (key-chord-define global-map "@4" 'ctl-x-4-prefix)
 
-(guide-key/key-chord-hack-on)
-(setq guide-key/guide-key-sequence '("<key-chord> @ 4" "<key-chord> 4 @"))
+(guide-key-key-chord-hack-on)
+(setq guide-key-guide-key-sequence '("<key-chord> @ 4" "<key-chord> 4 @"))
 #+END_SRC
 
-=guide-key/recursive-key-sequence-flag= がnon-nilの場合、さらにシンプルになり
+=guide-key-recursive-key-sequence-flag= がnon-nilの場合、さらにシンプルになり
 ます。
 #+BEGIN_SRC emacs-lisp
-(guide-key/key-chord-hack-on)
-(setq guide-key/recursive-key-sequence-flag t)
-(setq guide-key/guide-key-sequence '("<key-chord>"))
+(guide-key-key-chord-hack-on)
+(setq guide-key-recursive-key-sequence-flag t)
+(setq guide-key-guide-key-sequence '("<key-chord>"))
 #+END_SRC
 この設定の場合は、すべてのkey chordに続くキーバインドがポップアップされます。
 
-=guide-key/key-chord-hack-on= は =this-command-keys= と
+=guide-key-key-chord-hack-on= は =this-command-keys= と
 =this-command-keys-vector= という原始的な関数をアドバイスしているため、 *危
 険* な可能性があります。
 *** その他の関数や変数
@@ -161,16 +161,16 @@ guide-keyを操作するその他の関数や変数を以下に示します。
   ます。"M-x =guide-key-mode="を実行するとguide-keyの有効無効を切り替えます。
   =guide-key-mode= はグローバルマイナーモードであるため、バッファ個別に有効無
   効を切り替えることはできません。
-- =guide-key/popup-window-position=: この変数はキーバインドがポップアップされ
+- =guide-key-popup-window-position=: この変数はキーバインドがポップアップされ
   る位置を設定します。この変数の値は =right=, =bottom=, =left=, =top= のいず
   れかです。デフォルト値は =right= です。
-- =guide-key/polling-time=: この変数はポーリング時間を設定します。デフォルト
+- =guide-key-polling-time=: この変数はポーリング時間を設定します。デフォルト
   値は0.1秒です。
-- =guide-key/idle-delay=: この変数はプレフィクスキーを押してからキーバインドが
+- =guide-key-idle-delay=: この変数はプレフィクスキーを押してからキーバインドが
   ポップアップされるまでの時間を設定します。デフォルト値は1.0秒です。キー入力
   の途中で止まらない限りは、いつもどおり入力することができます。0.0に設定すれ
   ば旧来の動作と同様になります。
-- =guide-key/text-scale-amount=: この変数はポップアップするキーバインドの文字
+- =guide-key-text-scale-amount=: この変数はポップアップするキーバインドの文字
   の大きさを設定します。デフォルト値は0です（文字の大きさはEmacsでのデフォル
   トの大きさになります）。テキストを大きくしたい場合は正の数、小さくしたい場
   合は負の数に設定してください。
@@ -199,17 +199,17 @@ guide-keyを操作するその他の関数や変数を以下に示します。
 - [X] define global minor mode
 ** ChangeLog
 *** Version 1.2.5
-- Enable setting =guide-key/guide-key-sequence= to =t= so that any key
-  sequence will pop up bindings ([[https://github.com/kai2nenobu/guide-key/pull/22][#22]])
-- Enable to guide key sequences with universal argument ([[https://github.com/kai2nenobu/guide-key/issues/6][#6]])
-- Add a feature to specify a direct color name ([[https://github.com/kai2nenobu/guide-key/issues/25][#25]])
+- Enable setting =guide-key-guide-key-sequence= to =t= so that any key
+  sequence will pop up bindings ([[https://github.com/kai2nenobu/guide-key-pull/22][#22]])
+- Enable to guide key sequences with universal argument ([[https://github.com/kai2nenobu/guide-key-issues/6][#6]])
+- Add a feature to specify a direct color name ([[https://github.com/kai2nenobu/guide-key-issues/25][#25]])
 *** Version 1.2.4
 - Change the format of tag name to suit [[http://stable.melpa.org/#/][MELPA Stable]] rule (=ver1.x.y= ->
   =v1.x.y=)
 - Add some tests and work with [[https://travis-ci.org/kai2nenobu/guide-key][Travis CI]] and [[https://coveralls.io/r/kai2nenobu/guide-key][Coveralls]]
-- Fix a regression bug about a local highlight face ([[https://github.com/kai2nenobu/guide-key/pull/16][#16]])
+- Fix a regression bug about a local highlight face ([[https://github.com/kai2nenobu/guide-key-pull/16][#16]])
 - Add a feature to specify multiple highlight faces according to each
-  regular expression ([[https://github.com/kai2nenobu/guide-key/issues/14][#14]])
+  regular expression ([[https://github.com/kai2nenobu/guide-key-issues/14][#14]])
 *** Version 1.2.3
 - Modify a link of one-key to more explanatory page
 - Allow key sequences with regexp special characters. (Thanks to @mrc)
@@ -219,7 +219,7 @@ guide-keyを操作するその他の関数や変数を以下に示します。
 - Add a documentation about key-chord hack.
 *** Version 1.2.1
 - Support for mode specific key sequences in
-  =guide-key/guide-key-sequence=. (Thanks to @Fuco1)
+  =guide-key-guide-key-sequence=. (Thanks to @Fuco1)
 *** Version 1.2.0
 - Add a feature to scale the text size in the guide buffer.
 - Add a feature to popup the guide buffer with delay. (Thanks to
@@ -230,7 +230,7 @@ guide-keyを操作するその他の関数や変数を以下に示します。
 *** Version 1.1.0
 - Add a functionality to check an input key sequence recursively. This
   enables to avoid adding many prefixes to
-  =guide-key/guide-key-sequence=. (Thanks @kui)
+  =guide-key-guide-key-sequence=. (Thanks @kui)
 *** Version 1.0.1
 - Change to save and restore a last configuration of popwin
 *** Version 1.0.0
