@@ -1,3 +1,7 @@
+This package *is not maintained actively*. [[https://github.com/justbur/emacs-which-key][which-key]] is a better altenative.
+
+-----
+
 * guide-key.el [[https://travis-ci.org/kai2nenobu/guide-key][https://api.travis-ci.org/kai2nenobu/guide-key.png]] [[https://coveralls.io/r/kai2nenobu/guide-key][https://coveralls.io/repos/kai2nenobu/guide-key/badge.png?branch=master]] [[http://melpa.org/#/guide-key][http://melpa.org/packages/guide-key-badge.svg]] [[http://stable.melpa.org/#/guide-key][http://stable.melpa.org/packages/guide-key-badge.svg]]
 ** Overview
 guide-key.el displays the available key bindings automatically and dynamically.
