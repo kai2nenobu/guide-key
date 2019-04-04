@@ -574,6 +574,46 @@ appropriate face is not found."
         ((listp guide-key/highlight-command-regexp)
          (add-to-list 'guide-key/highlight-command-regexp regexp))))
 
+(defmacro* guide-key/setup-local-keystroke (mode &key kbd not-highlight)
+  "Setup hook for MODE about the keystroke for popup guide on MODE.
+
+MODE is a symbol like 'org-mode.
+KBD is a string or list of string as keystroke.
+If NOT-HIGHLIGHT is non-nil, the MODE commands is not highlighted.
+In default, highlight the commands that matches the beginning of the name is MODE."
+  (let ((forms (loop for keystroke in (if (stringp (eval kbd))
+                                          (list (eval kbd))
+                                        (eval kbd))
+                     collect `(guide-key/add-local-guide-key-sequence ,keystroke)))
+        (hook (intern-soft (concat (symbol-name (eval mode)) "-hook")))
+        (func (intern (concat "guide-key/setup-keystroke-for-" (symbol-name (eval mode)))))
+        (re (when (not not-highlight)
+              (concat "\\`"
+                      (replace-regexp-in-string "-mode\\'" "" (symbol-name (eval mode)))
+                      "[:/\\-][a-zA-Z0-9]"))))
+     (when (symbolp hook)
+       `(progn
+          (defun ,func ()
+            ,@forms
+            (when (stringp ,re)
+              (guide-key/add-local-highlight-command-regexp ,re)))
+          (add-hook ',hook ',func t)))))
+
+(defmacro guide-key/setup-local-highlight (mode &rest regexp-list)
+  "Setup hook for MODE about the highlight of guide on MODE.
+
+MODE is a symbol like 'org-mode.
+REGEXP-LIST is argument for `guide-key/add-local-highlight-command-regexp'."
+  (let ((forms (loop for re in regexp-list
+                     collect `(guide-key/add-local-highlight-command-regexp ,re)))
+        (hook (intern-soft (concat (symbol-name (eval mode)) "-hook")))
+        (func (intern (concat "guide-key/setup-highlight-for-" (symbol-name (eval mode))))))
+    (when (symbolp hook)
+      `(progn
+         (defun ,func ()
+           ,@forms)
+         (add-hook ',hook ',func t)))))
+
 ;;; key-chord hack
 (defadvice this-command-keys (after key-chord-hack disable)
   "Add key chord to the key sequence returned by `this-command-keys'.
