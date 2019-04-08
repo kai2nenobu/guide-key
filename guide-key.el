@@ -352,23 +352,23 @@ positive, otherwise disable."
                'guide-key/turn-on-timer
              'guide-key/turn-off-timer)))
 
-(defun guide-key/popup-function (&optional input)
+(defun guide-key/popup-function (&optional input filter)
   "Popup function called after delay of `guide-key/idle-delay' second."
   (let ((key-seq (or input (this-single-command-keys)))
         (regexp guide-key/highlight-command-regexp))
     (let ((dsc-buf (current-buffer))
-	  (max-width 0))
-      (with-current-buffer (get-buffer-create guide-key/guide-buffer-name)
-	(unless truncate-lines (setq truncate-lines t))   ; don't fold line
-	(when indent-tabs-mode (setq indent-tabs-mode nil)) ; don't use tab as white space
-	(setq mode-line-format nil)
-	(text-scale-set guide-key/text-scale-amount)
-	(erase-buffer)
-	(describe-buffer-bindings dsc-buf key-seq)
-	(when (> (guide-key/format-guide-buffer key-seq regexp) 0)
-	  (guide-key/close-guide-buffer)
-	  (guide-key/popup-guide-buffer))))))
-
+          (max-width 0)
+          (keybindings (guide-key/list-keybindings key-seq)))
+      (if filter (setq keybindings (funcall filter keybindings)))
+      (if (> (length keybindings) 0)
+          (with-current-buffer (get-buffer-create guide-key/guide-buffer-name)
+            (unless truncate-lines (setq truncate-lines t))   ; don't fold line
+            (when indent-tabs-mode (setq indent-tabs-mode nil)) ; don't use tab as white space
+            (setq mode-line-format nil)
+            (text-scale-set guide-key/text-scale-amount)
+            (erase-buffer)
+            (guide-key/format-guide-buffer keybindings regexp)
+            (guide-key/popup-guide-buffer))))))
 
 ;;; internal functions
 (defun guide-key/polling-function ()
@@ -477,19 +477,27 @@ For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
   (cancel-timer guide-key/polling-timer)
   (setq guide-key/polling-timer nil))
 
-(defun guide-key/format-guide-buffer (key-seq &optional regexp)
-  "Format guide buffer. This function returns the number of following keys."
+(defun guide-key/list-keybindings (key-seq)
+  "Return a complete list of currently active keybindings starting with KEY-SEQ. Every keybinding is given as a three-element list (key separator commandname), e.g. '(\"C-x\" \"    \" \"some-command\")."
   (let ((fkey-list nil)      ; list of (following-key space command)
-        (fkey-str-list nil)  ; fontified string of `fkey-list'
+        (key-dsc (key-description key-seq))
+        (dsc-buf (current-buffer)))
+    (with-temp-buffer
+      (describe-buffer-bindings dsc-buf key-seq)
+      (untabify (point-min) (point-max))
+      (goto-char (point-min))
+      ;; extract following keys from buffer bindings
+      (while (re-search-forward
+              (format "^%s \\([^ \t]+\\)\\([ \t]+\\)\\(\\(?:[^ \t\n]+ ?\\)+\\)$"
+                      (regexp-quote key-dsc)) nil t)
+        (add-to-list 'fkey-list (list (match-string 1) (match-string 2) (match-string 3)) t))
+      fkey-list)))
+
+(defun guide-key/format-guide-buffer (fkey-list &optional regexp)
+  "Format guide buffer. This function returns the number of following keys."
+  (let ((fkey-str-list nil)             ; fontified string of `fkey-list'
         (fkey-list-len 0)    ; length of above lists
         (key-dsc (key-description key-seq)))
-    (untabify (point-min) (point-max))  ; replace tab to space
-    (goto-char (point-min))
-    ;; extract following keys from buffer bindings
-    (while (re-search-forward
-            (format "^%s \\([^ \t]+\\)\\([ \t]+\\)\\(\\(?:[^ \t\n]+ ?\\)+\\)$" (regexp-quote key-dsc)) nil t)
-      (add-to-list 'fkey-list
-                   (list (match-string 1) (match-string 2) (match-string 3)) t))
     (erase-buffer)
     (when (> (setq fkey-list-len (length fkey-list)) 0)
       ;; fontify following keys as string
@@ -497,8 +505,9 @@ For example, both \"C-x r\" and \"\\C-xr\" are converted to [24 114]"
             (loop for (key space command) in fkey-list
                   collect (guide-key/fontified-string key space command regexp)))
       ;; insert a few following keys per line
-      (guide-key/insert-following-key fkey-str-list
-                                      (popwin:position-horizontal-p guide-key/popup-window-position))
+      (guide-key/insert-following-key
+       fkey-str-list
+       (popwin:position-horizontal-p guide-key/popup-window-position))
       (goto-char (point-min)))
     fkey-list-len))
 
